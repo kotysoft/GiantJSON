@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Giant JSON Viewer - High-Performance JSON Viewer for Android</title>
+    <meta name="title" content="Giant JSON Viewer - High-Performance JSON Viewer for Android">
+    <meta name="description"
+        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.">
+    <meta name="keywords"
+        content="JSON viewer, Android, large files, gigabyte JSON, NDJSON, JSON browser, mobile development, API response viewer">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0D0D0D">
+    <meta name="msapplication-TileColor" content="#0D0D0D">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kotysoft.github.io/GiantJSON/">
+    <meta property="og:title" content="Giant JSON Viewer - High-Performance JSON Viewer for Android">
+    <meta property="og:description"
+        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.">
+    <meta property="og:image" content="https://kotysoft.github.io/GiantJSON/icon.png">
+    <meta property="og:site_name" content="Giant JSON Viewer">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kotysoft.github.io/GiantJSON/">
+    <meta property="twitter:title" content="Giant JSON Viewer - High-Performance JSON Viewer for Android">
+    <meta property="twitter:description"
+        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.">
+    <meta property="twitter:image" content="https://kotysoft.github.io/GiantJSON/icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <img src="icon.png" alt="Giant JSON Viewer" class="hero-icon hero-animate">
+            <h1 class="hero-animate">Giant JSON Viewer</h1>
+            <p class="hero-tagline hero-animate">High-Performance JSON Viewer for Android</p>
+            <p class="hero-description hero-animate">
+                Engineered for developers and data analysts who need to inspect huge JSON files on the go.
+                While standard market viewers crash on files larger than 50MB, Giant JSON Viewer reliably
+                handles multi-hundred megabyte files and has been tested with files up to several gigabytes.
+            </p>
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer" class="btn-primary hero-animate"
+                target="_blank" rel="noopener">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                Download on Google Play
+            </a>
+        </div>
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll to explore</span>
+            <div class="scroll-arrow">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Why Section -->
+    <section class="section why-section">
+        <div class="container">
+            <h2 class="section-title">Why Giant JSON Viewer?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-blue">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19M13,17V15.28L16.16,14L13,12.72V11L18,13V15L13,17M6,13V11L11,8.72V11L7.84,12.28L11,13.56V15.28L6,13Z" />
+                        </svg>
+                    </div>
+                    <h3>Massive File Support</h3>
+                    <p>Uses advanced streaming techniques to open files far exceeding the Android RAM limit.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-gold">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z" />
+                        </svg>
+                    </div>
+                    <h3>Smart Indexing</h3>
+                    <p>Builds a rapid-access index on first open. Once indexed, even multi-gigabyte files open with
+                        minimal loading time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-cyan">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M13,2.03C17.73,2.5 21.5,6.25 21.95,11C22.5,16.5 18.5,21.38 13,21.93V19.93C16.64,19.5 19.5,16.61 19.96,12.97C20.5,8.58 17.39,4.59 13,4.05V2.03M11,2.06V4.06C9.57,4.26 8.22,4.84 7.1,5.74L5.67,4.26C7.19,3 9.05,2.25 11,2.06M4.26,5.67L5.69,7.1C4.8,8.23 4.24,9.58 4.05,11H2.05C2.25,9.04 3,7.19 4.26,5.67M2.06,13H4.06C4.24,14.42 4.81,15.77 5.69,16.9L4.27,18.33C3.03,16.81 2.26,14.96 2.06,13M7.1,18.37C8.23,19.25 9.58,19.82 11,20V22C9.04,21.79 7.18,21 5.67,19.74L7.1,18.37M12,16.5L7.5,12H11V8H13V12H16.5L12,16.5Z" />
+                        </svg>
+                    </div>
+                    <h3>High Performance</h3>
+                    <p>Navigate through millions of lines rapidly with optimized rendering and memory management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-green">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z" />
+                        </svg>
+                    </div>
+                    <h3>Data Reliability</h3>
+                    <p>Built for stability, ensuring critical data is always accessible offline.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Viewing Modes Section -->
+    <section class="section modes-section">
+        <div class="container">
+            <h2 class="section-title">Three Specialized Viewing Modes</h2>
+            <div class="modes-grid">
+                <!-- Text Mode -->
+                <div class="mode-card">
+                    <div class="mode-header">
+                        <span class="mode-badge mode-badge-text">Text Mode</span>
+                        <span class="mode-subtitle">Raw Viewer</span>
+                    </div>
+                    <div class="mode-screenshot">
+                        <img src="screenshots/text-mode.jpg" alt="Text Mode with syntax highlighting">
+                    </div>
+                    <p class="mode-description">
+                        A high-performance raw text viewer optimized for log analysis and deep search operations.
+                        Supported for JSON, NDJSON, and Plain Text.
+                    </p>
+                    <ul class="mode-features">
+                        <li><strong>Advanced Search:</strong> Use Regex or standard search to find data instantly</li>
+                        <li><strong>Occurrence Counter:</strong> Efficiently count matches across the entire file</li>
+                        <li><strong>Long Line Handling:</strong> Detects extremely long lines and offers options to
+                            truncate or hide them</li>
+                        <li><strong>Syntax Highlighting:</strong> Color-coded syntax for JSON readability</li>
+                        <li><strong>Persistent Highlights:</strong> Mark specific terms to track them as you scroll</li>
+                        <li><strong>GenAI Regex Helper:</strong> Describe your search intent in natural language, and
+                            the AI generates the precise Regex pattern</li>
+                    </ul>
+                </div>
+
+                <!-- Browser Mode -->
+                <div class="mode-card mode-card-featured">
+                    <div class="mode-header">
+                        <span class="mode-badge mode-badge-browser">Browser Mode</span>
+                        <span class="mode-subtitle">Tree Viewer</span>
+                    </div>
+                    <div class="mode-screenshot">
+                        <img src="screenshots/browser-mode.png" alt="Browser Mode tree view with bookmarks">
+                    </div>
+                    <p class="mode-description">
+                        An interactive hierarchical view designed for navigating deeply nested structures like API
+                        responses.
+                        Supported for JSON and NDJSON.
+                    </p>
+                    <ul class="mode-features">
+                        <li><strong>Bookmarks:</strong> Save deep paths to revisit later</li>
+                        <li><strong>Hidden Paths:</strong> Hide irrelevant fields to focus on the data that matters</li>
+                        <li><strong>Sibling Navigation:</strong> Quickly jump between adjacent objects in an array</li>
+                        <li><strong>Breadcrumbs:</strong> Track your exact location in the JSON hierarchy</li>
+                        <li><strong>Jump to Path/Index:</strong> Full JSONPath syntax support or jump directly to
+                            specific array indices</li>
+                        <li><strong>Infinite Scrolling:</strong> Seamlessly navigate through arrays with millions of
+                            items</li>
+                    </ul>
+                </div>
+
+                <!-- Structure Mode -->
+                <div class="mode-card">
+                    <div class="mode-header">
+                        <span class="mode-badge mode-badge-structure">Structure Mode</span>
+                        <span class="mode-subtitle">Schema Viewer</span>
+                    </div>
+                    <div class="mode-screenshot">
+                        <img src="screenshots/structure-mode.png" alt="Structure Mode interactive graph">
+                    </div>
+                    <p class="mode-description">
+                        A "bird's eye view" visualization of your JSON schema, essential for understanding the shape of
+                        unfamiliar data.
+                        Supported for JSON and NDJSON.
+                    </p>
+                    <ul class="mode-features">
+                        <li><strong>Interactive Graph:</strong> Visualize your JSON structure as a zoomable, pannable
+                            tree diagram</li>
+                        <li><strong>Schema Analysis:</strong> Analyze key types and hierarchy without loading values
+                        </li>
+                        <li><strong>Visual Export:</strong> Save the structure graph as a high-resolution PNG image</li>
+                        <li><strong>Schema Export:</strong> Generate TypeScript interfaces or JSON Schema (Draft-07)
+                            definitions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Analysis Section -->
+    <section class="section analysis-section">
+        <div class="container">
+            <h2 class="section-title">Advanced Data Analysis</h2>
+            <div class="analysis-content">
+                <div class="analysis-screenshot">
+                    <img src="screenshots/filter-builder.png" alt="Graphical Query Builder with AND/OR logic">
+                </div>
+                <div class="analysis-main">
+                    <h3>Graphical Query Builder (Smart Filter)</h3>
+                    <p>Designed for speed and ease of use, the Browser Mode features a powerful visual query builder.
+                    </p>
+                    <div class="analysis-features">
+                        <div class="analysis-feature">
+                            <span class="analysis-feature-icon">&#9679;</span>
+                            <div>
+                                <strong>Visual Logic</strong>
+                                <p>Build complex queries using a graphical interface with nested logic (AND, OR,
+                                    Parentheses)</p>
+                            </div>
+                        </div>
+                        <div class="analysis-feature">
+                            <span class="analysis-feature-icon">&#9679;</span>
+                            <div>
+                                <strong>No Code Required</strong>
+                                <p>Select keys, operators (Equals, Contains, Regex, etc.), and values from dropdowns</p>
+                            </div>
+                        </div>
+                        <div class="analysis-feature">
+                            <span class="analysis-feature-icon">&#9679;</span>
+                            <div>
+                                <strong>Instant Re-use</strong>
+                                <p>Every filter run is cached as a "smart index". Re-applying a previous filter on a
+                                    massive file is instant.</p>
+                            </div>
+                        </div>
+                        <div class="analysis-feature">
+                            <span class="analysis-feature-icon">&#9679;</span>
+                            <div>
+                                <strong>Export Results</strong>
+                                <p>Export the filtered dataset directly to JSON, CSV, or SQL</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="section tools-section">
+        <div class="container">
+            <h2 class="section-title">Dedicated Tools</h2>
+            <p class="section-subtitle">Quick-access utilities available directly from the Recent Files menu</p>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h4>Unescape JSON</h4>
+                    <p>Clean up stringified JSON strings (removing backslashes) to perform analysis</p>
+                </div>
+                <div class="tool-card">
+                    <h4>Just Make Pretty</h4>
+                    <p>A simple tool to format/beautify JSON text without opening the full viewer</p>
+                </div>
+                <div class="tool-card">
+                    <h4>Schema Validation</h4>
+                    <p>Validate your JSON content against a standard JSON Schema (Draft-07)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Export Section -->
+    <section class="section export-section">
+        <div class="container">
+            <h2 class="section-title">Data Conversion & Export</h2>
+            <p class="section-subtitle">Transform your JSON data into compatible formats for analysis</p>
+            <div class="export-content">
+                <div class="export-features">
+                    <div class="export-feature">
+                        <h4>Customizable Export</h4>
+                        <p>Select specific keys to include and rename fields during the export process</p>
+                    </div>
+                    <div class="export-feature">
+                        <h4>SQL Analyzer</h4>
+                        <p>Analyzes records to automatically detect column types and schema for SQL export</p>
+                    </div>
+                    <div class="export-feature">
+                        <h4>SQL Export</h4>
+                        <p>Generate INSERT statements for SQLite, MySQL, PostgreSQL, SQL Server, Oracle, and MariaDB</p>
+                    </div>
+                    <div class="export-feature">
+                        <h4>CSV Export</h4>
+                        <p>Flatten extracted data into spreadsheet-compatible CSV files</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formats Section -->
+    <section class="section formats-section">
+        <div class="container">
+            <h2 class="section-title">Supported Formats</h2>
+            <div class="formats-grid">
+                <div class="format-badge format-json">JSON</div>
+                <div class="format-badge format-ndjson">NDJSON</div>
+                <div class="format-badge format-text">Plain Text</div>
+            </div>
+            <p class="formats-note">Standard, Minified, and Large-Value JSON files supported</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Support Indie Development</h2>
+                <p>
+                    We are solo developers and this project is our baby. We have engineered it from the ground up
+                    to handle data scales that others said were impossible on mobile.
+                </p>
+                <p>
+                    We invite you to give it a try! If you enjoy using Giant JSON Viewer, please support us by
+                    leaving a review on Google Play.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer"
+                        class="btn-primary btn-large" target="_blank" rel="noopener">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                        </svg>
+                        Download on Google Play
+                    </a>
+                    <a href="https://github.com/kotysoft/GiantJSON/issues" class="btn-secondary" target="_blank"
+                        rel="noopener">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                        </svg>
+                        Report Bug / Suggest Feature
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Kotysoft. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
