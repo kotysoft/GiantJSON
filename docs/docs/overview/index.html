@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Giant JSON Viewer: Complete Overview - Giant JSON Viewer Docs</title>
+    <meta name="title" content="Giant JSON Viewer: Complete Overview - Giant JSON Viewer Docs">
+    <meta name="description"
+        content="A complete guide to Giant JSON Viewer — explore the three viewing modes, powerful filtering, export tools, and learn how indexing enables smooth navigation through multi-gigabyte JSON files on Android.">
+    <meta name="keywords"
+        content="Giant JSON Viewer, JSON viewer guide, Android JSON app, view large JSON, JSON modes, JSON filtering">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/overview/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/overview/">
+    <meta property="og:title" content="Giant JSON Viewer: Complete Overview">
+    <meta property="og:description"
+        content="A complete guide to the three viewing modes, indexing, storage, tools, and more.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-01-10T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/overview/">
+    <meta property="twitter:title" content="Giant JSON Viewer: Complete Overview">
+    <meta property="twitter:description"
+        content="A complete guide to the three viewing modes, indexing, storage, tools, and more.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Giant JSON Viewer: Complete Overview",
+        "description": "A complete guide to Giant JSON Viewer — explore the three viewing modes, powerful filtering, export tools, and learn how indexing enables smooth navigation through multi-gigabyte JSON files on Android.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Giant JSON Viewer",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-01-10",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/overview/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Complete Overview",
+                "item": "https://giantjson.com/docs/overview/"
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="Giant JSON Viewer" class="docs-logo-icon">
+                <span>Giant JSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=overview"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">Complete Overview</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>Giant JSON Viewer: Complete Overview</h1>
+                    <div class="docs-article-meta">
+                        <span>10 min read</span>
+                        <span>Updated Jan 10, 2026</span>
+                    </div>
+                </header>
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+                    <p>Giant JSON Viewer is built for one purpose: viewing JSON files that other apps can't handle.
+                        Whether you're inspecting a 50MB API response or navigating a 5GB database export, the app
+                        uses a native Rust engine that operates outside Android's memory limits to keep things
+                        smooth.</p>
+
+                    <p>This guide covers everything you need to know to get the most out of the app — from
+                        understanding how indexing works to mastering the three viewing modes.</p>
+
+                    <h2 id="how-indexing-works">How Indexing Works</h2>
+
+                    <p>When you first open a file, the app builds a <strong>structural index</strong> that maps
+                        where every object and array begins and ends (primitives like strings and numbers are not
+                        indexed individually). Indexing time depends on file complexity, device capabilities, and
+                        the number of nodes in the structure. A file with deeply nested structures takes longer
+                        than a large file with simple content — for example, a huge JSON with lots of encoded
+                        images will index faster than a smaller file with thousands of nested objects.</p>
+
+                    <p><strong>What the index enables:</strong></p>
+                    <ul>
+                        <li><strong>Instant navigation</strong>: Jump to any element without scanning from the
+                            beginning</li>
+                        <li><strong>Smooth scrolling</strong>: Only the visible portion is loaded into memory</li>
+                        <li><strong>Nearly instant reopening</strong>: Previously indexed files open almost
+                            immediately</li>
+                    </ul>
+
+                    <p>The index is always stored in the app's cache directory, never alongside your files. You
+                        can see index status on each file's card in the Recent Files screen — the small badge
+                        shows whether an index exists. If the source file changes, the index is automatically
+                        invalidated and rebuilt on next open.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Index Storage Size
+                        </div>
+                        <p>Index size depends on node count, not file size. Each node (object or array) costs
+                            approximately 40 bytes to index.</p>
+                    </div>
+
+                    <h2 id="storage-breakdown">Storage Breakdown</h2>
+
+                    <p>Beyond the main index, the app creates additional data to enhance your experience:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data Type</th>
+                                <th>Purpose</th>
+                                <th>Typical Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Main Index</strong></td>
+                                <td>Structural map for navigation</td>
+                                <td>~40 bytes per node</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Keys Cache</strong></td>
+                                <td>Speeds up key auto-complete in filters</td>
+                                <td>~50KB per file</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Filter Indexes</strong></td>
+                                <td>Cached results for each unique filter</td>
+                                <td>Varies by results</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bookmarks</strong></td>
+                                <td>Saved positions within files</td>
+                                <td>~200 bytes each</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="docs-callout docs-callout-warning">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                            </svg>
+                            Remote API Files
+                        </div>
+                        <p>Files downloaded via Remote API are stored locally in the app's data folder. They are
+                            deleted when removed from the app or when the app is uninstalled.</p>
+                    </div>
+
+                    <p>You can view the complete storage breakdown for any file by tapping the index badge on its
+                        card in Recent Files. The dialog shows exactly what's using space.</p>
+
+                    <h2 id="the-three-viewing-modes">The Three Viewing Modes</h2>
+
+                    <p>After opening a file and building the index, you choose how to view it. Each mode is
+                        optimized for different tasks.</p>
+
+                    <h2 id="text-mode">Text Mode</h2>
+
+                    <p>The raw text viewer with powerful search capabilities.</p>
+
+                    <h3 id="text-mode-what-its-for">What it's for</h3>
+                    <ul>
+                        <li>String and regex-based searching across the entire file</li>
+                        <li>Counting search results nearly instantly across huge files</li>
+                        <li>Deep inspection of specific values (values below 50KB are shown in full)</li>
+                    </ul>
+
+                    <h3 id="text-mode-key-features">Key features</h3>
+                    <ul>
+                        <li><strong>Syntax highlighting</strong>: Color-coded JSON elements (strings, numbers,
+                            objects, arrays, booleans)</li>
+                        <li><strong>String and regex search</strong>: Find text or patterns using Rust-compatible
+                            regular expressions</li>
+                        <li><strong>Occurrence counter</strong>: Count matches across the entire file without
+                            loading it all</li>
+                        <li><strong>Go to line</strong>: Jump directly to any line number</li>
+                        <li><strong>Line selection</strong>: Click line numbers to set a selection range. Long-tap
+                            the line counter to copy the entire selected lines to clipboard</li>
+                        <li><strong>Custom highlight profiles</strong>: Create reusable highlighting rules — define
+                            patterns to highlight (e.g., "error" in red, "warning" in yellow) and save as profiles
+                            for quick switching</li>
+                    </ul>
+
+                    <h3 id="text-mode-examples">Example use cases</h3>
+                    <ul>
+                        <li>Searching for all occurrences of a specific error code in server logs</li>
+                        <li>Counting how many times a particular field or value appears</li>
+                        <li>Examining the structure of an API response</li>
+                    </ul>
+
+                    <div class="docs-callout docs-callout-tip">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+                            </svg>
+                            Tip
+                        </div>
+                        <p>For interactive browsing of nested structures, use Browser Mode. For understanding
+                            overall schema, use Structure Mode.</p>
+                    </div>
+
+                    <h2 id="browser-mode">Browser Mode</h2>
+
+                    <p>The interactive tree view. Navigate through your JSON like a file explorer.</p>
+
+                    <h3 id="browser-mode-what-its-for">What it's for</h3>
+                    <ul>
+                        <li>Exploring data structures</li>
+                        <li>Drilling down into nested objects and arrays</li>
+                        <li>Filtering to find specific records</li>
+                        <li>Exporting subsets to CSV, SQL, or JSON</li>
+                        <li>Bookmarking specific elements for later reference</li>
+                    </ul>
+
+                    <h3 id="browser-mode-key-features">Key features</h3>
+                    <ul>
+                        <li><strong>Collapsible nodes</strong>: Expand and collapse objects/arrays with the +/-
+                            buttons on the right side</li>
+                        <li><strong>Value previews</strong>: See truncated content without expanding</li>
+                        <li><strong>JSONPath display</strong>: Long-tap a card to expand it and see the full
+                            JSONPath (e.g., <code>$.users[42].profile.name</code>)</li>
+                        <li><strong>Copy path or value</strong>: Long-press to copy the path or raw value</li>
+                        <li><strong>Sibling navigation</strong>: Jump between array elements with Previous/Next
+                            buttons</li>
+                        <li><strong>Jump to path/index</strong>: Navigate directly to a specific JSONPath or array
+                            index</li>
+                        <li><strong>Bookmarks</strong>: Swipe a card left to bookmark that specific element</li>
+                        <li><strong>Hide elements</strong>: Swipe a card right to hide it</li>
+                    </ul>
+
+                    <div class="docs-callout docs-callout-warning">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                            </svg>
+                            Hide vs Bookmark
+                        </div>
+                        <p>Bookmarking saves one specific element. Hiding removes ALL similar elements (same key at
+                            same depth) — useful for removing noisy fields that clutter your view.</p>
+                    </div>
+
+                    <h3 id="smart-filter">Filtering (Smart Filter)</h3>
+
+                    <p>The graphical filter builder lets you find exactly what you need without writing code:</p>
+
+                    <ol>
+                        <li><strong>Create a rule</strong>: Select KEY + OPERATOR + VALUE (e.g., <code>status</code>
+                            <code>equals</code> <code>active</code>)
+                        </li>
+                        <li><strong>Add more rules</strong>: Tap the ghost rule (+) to add another condition</li>
+                        <li><strong>Set logical relations</strong>: Choose AND/OR between rules</li>
+                        <li><strong>Group with parentheses</strong>: Tap the <code>()</code> button on rule cards to
+                            create logical groups</li>
+                    </ol>
+
+                    <p><strong>Example filter:</strong></p>
+                    <pre><code>(gender = female
+ AND
+ isActive <> false)
+OR
+balance > 32242</code></pre>
+
+                    <p><strong>Saved Filters</strong>: Filter results are cached per file. To re-run a previous
+                        filter, tap "SAVED FILTERS" at the top of the Filter screen.</p>
+
+                    <h3 id="export-subset">Export Subset</h3>
+
+                    <p>When viewing an array of objects with consistent structure, the Export option appears:</p>
+                    <ul>
+                        <li><strong>CSV</strong>: Tabular format for spreadsheets</li>
+                        <li><strong>SQL</strong>: INSERT statements for databases (SQLite, MySQL, PostgreSQL)</li>
+                        <li><strong>JSON</strong>: Pretty-printed, minified, or NDJSON</li>
+                    </ul>
+
+                    <p>You can select which fields to include and rename keys during export.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Note
+                        </div>
+                        <p>Export requires deeper analysis of the JSON structure than basic indexing. Large files
+                            may take additional time.</p>
+                    </div>
+
+                    <h3 id="browser-mode-examples">Example use cases</h3>
+                    <ul>
+                        <li>Finding all users with a specific status and exporting them to a spreadsheet</li>
+                        <li>Navigating to a deeply nested configuration value</li>
+                        <li>Bookmarking interesting values (e.g., server log entries to check later)</li>
+                        <li>Hiding non-relevant cards that cause noise while investigating</li>
+                    </ul>
+
+                    <div class="docs-callout docs-callout-tip">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+                            </svg>
+                            Tip
+                        </div>
+                        <p>Need to search values without knowing the key? Use Smart Filter with the "*ANY" key to
+                            search across all fields.</p>
+                    </div>
+
+                    <h2 id="structure-mode">Structure Mode</h2>
+
+                    <p>The schema visualizer. Understand the shape of your data at a glance.</p>
+
+                    <h3 id="structure-mode-what-its-for">What it's for</h3>
+                    <ul>
+                        <li>Understanding unfamiliar data structures</li>
+                        <li>Documenting API response formats</li>
+                        <li>Exporting schema definitions for development</li>
+                        <li>Getting a bird's-eye view before diving into the data</li>
+                    </ul>
+
+                    <h3 id="structure-mode-key-features">Key features</h3>
+                    <ul>
+                        <li><strong>Zoomable tree diagram</strong>: Pan and zoom through the entire structure</li>
+                        <li><strong>Type indicators</strong>: See data types at each level (object, array, string,
+                            number, boolean, null)</li>
+                    </ul>
+
+                    <h3 id="schema-export">Schema Export (with sampling options)</h3>
+
+                    <p>When exporting the schema, you can choose how to analyze the file (especially important for
+                        large files >100MB):</p>
+                    <ul>
+                        <li><strong>First N</strong>: Analyze samples from the beginning</li>
+                        <li><strong>Random</strong>: Analyze samples spread throughout the file</li>
+                        <li><strong>All</strong>: Full scan (slower but complete analysis)</li>
+                    </ul>
+
+                    <p><strong>Export formats</strong> (experimental — please report issues on our GitHub):</p>
+                    <ul>
+                        <li><strong>PNG</strong>: High-resolution image of the tree diagram</li>
+                        <li><strong>TypeScript</strong>: Interface definitions with JSDoc comments</li>
+                        <li><strong>JSON Schema</strong>: Draft-07 compatible schema</li>
+                        <li><strong>Markdown</strong>: Human-readable documentation</li>
+                    </ul>
+
+                    <p>The analyzer detects 43 semantic patterns to infer likely meanings (dates, URLs, emails,
+                        UUIDs, etc.) and uses majority-wins frequency tracking to determine the most common type at
+                        each path.</p>
+
+                    <h2 id="tools">Tools</h2>
+
+                    <p>The Tools menu (accessible from the arc FAB on the Recent Files screen) provides standalone
+                        utilities:</p>
+
+                    <h3 id="just-make-pretty">Just Make Pretty</h3>
+                    <p>Formats JSON with proper indentation. Select a source file and output destination —
+                        it formats on the fly and saves the result. Faster than the full viewer because it
+                        doesn't build an index.</p>
+                    <p><em>Use case:</em> Quickly formatting a minified JSON file for easier reading.</p>
+
+                    <h3 id="unescape-json">Unescape JSON</h3>
+                    <p>Cleans up stringified JSON — the kind where quotes and special characters are escaped
+                        (<code>\"</code>, <code>\\n</code>). Common in logs and API responses where JSON is
+                        embedded within JSON strings.</p>
+                    <p><em>Use case:</em> Extracting readable JSON from a log entry like
+                        <code>{"payload": "{\"user\":\"alice\"}"}</code>.
+                    </p>
+
+                    <h3 id="schema-validation">Schema Validation</h3>
+                    <p>Validates JSON files against a JSON Schema (Draft-07). Requires the file to be indexed
+                        first. Works on files of any size using streaming validation.</p>
+                    <p>The key advantage: it doesn't just say VALID or NOT — it shows ALL validation errors with
+                        specific reasons and locations. And yes, you can export the error report... as JSON.</p>
+                    <p><em>Use case:</em> Verifying that a data export matches the expected schema before importing
+                        it elsewhere.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            PRO Features
+                        </div>
+                        <p>All tools require PRO access, but you can try them during the 10-day free trial.</p>
+                    </div>
+
+                    <h2 id="recent-files-storage">Recent Files & Storage</h2>
+
+                    <p>The main screen shows your recently opened files with useful metadata:</p>
+                    <ul>
+                        <li><strong>File name</strong>: At-a-glance identification</li>
+                        <li><strong>File size</strong>: Know what you're working with</li>
+                        <li><strong>Index status</strong>: Badge shows if an index exists and is valid</li>
+                        <li><strong>Remote indicator</strong>: Cloud icon for files downloaded via Remote API</li>
+                    </ul>
+
+                    <p><strong>Storage dialog</strong> (tap the index badge): See exactly how much space each
+                        file's data uses — index, cache, filters, bookmarks, and for remote files, the downloaded
+                        file itself.</p>
+
+                    <p><strong>Remote files</strong>: Files downloaded via Remote API are stored locally in the
+                        app's data folder. Removing a remote file from Recent Files permanently deletes the local
+                        copy. Uninstalling the app also removes these files.</p>
+
+                    <h2 id="meet-bracey">Meet Bracey</h2>
+
+                    <p>You might have noticed the friendly curly brace character <code>{}</code> that appears
+                        throughout the app. That's <strong>Bracey</strong>, Giant JSON Viewer's mascot.</p>
+
+                    <p>Think of Bracey as a helpful companion: a little tribute to those classic assistant guides
+                        from the '90s, but less intrusive and with better taste in file formats.</p>
+
+                    <h2 id="summary">Summary</h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Best For</th>
+                                <th>Key Feature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Text</strong></td>
+                                <td>Raw inspection, regex search</td>
+                                <td>Pattern counting, line selection</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Browser</strong></td>
+                                <td>Navigation, filtering, export</td>
+                                <td>Smart Filter + Export Subset</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Structure</strong></td>
+                                <td>Schema understanding, documentation</td>
+                                <td>TypeScript/JSON Schema export</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>Giant JSON Viewer is designed to do one thing well: handle JSON files that other apps can't.
+                        The combination of native indexing, streaming access, and purpose-built tools makes it
+                        possible to work with multi-gigabyte files on a mobile device without crashes or freezes.</p>
+
+                    <!-- Google Play CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Handle Any JSON File With Confidence</h3>
+                        <p>Try Giant JSON Viewer free — no registration, no uploads, no limits on file size.</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=article_cta&utm_campaign=overview"
+                            class="btn-primary" target="_blank" rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                            </svg>
+                            Get Giant JSON Viewer
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">Giant JSON Viewer Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

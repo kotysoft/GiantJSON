@@ -1,6 +1,14 @@
 {
   "articles": [
     {
+      "slug": "overview",
+      "title": "Giant JSON Viewer: Complete Overview",
+      "description": "A complete guide to the three viewing modes, indexing, storage, tools, and getting the most out of the app.",
+      "category": "getting-started",
+      "date": "2026-01-10",
+      "readTime": 10
+    },
+    {
       "slug": "viewing-large-files",
       "title": "How to View Large JSON Files on Android",
       "description": "Discover why most apps fail with large JSON files, what alternatives exist, and how streaming viewers handle large datasets.",

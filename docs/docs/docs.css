@@ -405,6 +405,14 @@
     padding-left: var(--spacing-xl);
 }
 
+.docs-article-body ul {
+    list-style-type: disc;
+}
+
+.docs-article-body ol {
+    list-style-type: decimal;
+}
+
 .docs-article-body li {
     margin-bottom: var(--spacing-sm);
     color: var(--text-secondary);
@@ -444,6 +452,45 @@
     line-height: 1.6;
     word-break: break-word;
     white-space: pre-wrap;
+}
+
+/* Tables */
+.docs-article-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--spacing-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--stroke-default);
+}
+
+.docs-article-body thead {
+    background: var(--bg-elevated);
+}
+
+.docs-article-body th {
+    text-align: left;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--stroke-default);
+    font-size: 0.875rem;
+}
+
+.docs-article-body td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--stroke-default);
+    font-size: 0.875rem;
+}
+
+.docs-article-body tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.docs-article-body tbody tr:hover {
+    background: var(--bg-elevated);
 }
 
 /* Callouts/Tips */
