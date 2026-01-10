@@ -4,7 +4,7 @@
       "slug": "viewing-large-files",
       "title": "How to View Large JSON Files on Android",
       "description": "Discover why most apps fail with large JSON files, what alternatives exist, and how streaming viewers handle large datasets.",
-      "category": "features",
+      "category": "topics",
       "date": "2026-01-10",
       "readTime": 7
     },
@@ -12,7 +12,7 @@
       "slug": "json-to-csv-export",
       "title": "Convert JSON to CSV on Android: The Secure Offline Way",
       "description": "Export JSON arrays to CSV format on your Android phone without uploading data to external services.",
-      "category": "features",
+      "category": "topics",
       "date": "2026-01-11",
       "readTime": 6
     }
@@ -24,9 +24,9 @@
       "description": "Begin here to learn the basics"
     },
     {
-      "id": "features",
-      "name": "Features",
-      "description": "Deep dive into specific features"
+      "id": "topics",
+      "name": "Topics",
+      "description": "In-depth exploration of JSON-related subjects"
     },
     {
       "id": "troubleshooting",
