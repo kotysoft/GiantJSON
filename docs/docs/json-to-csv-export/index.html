@@ -220,7 +220,7 @@
                     <p>On a computer, developers often reach for <code>jq</code>, the Swiss Army knife of JSON
                         processing:</p>
 
-                    <pre><code>jq -r '.[] | [.id, .name, .email] | @csv' data.json</code></pre>
+                    <pre><code>jq '.[] | [.id, .name] | @csv' data.json</code></pre>
 
                     <p>Python with <code>pandas</code> is another popular choice:</p>
 
