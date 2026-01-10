@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     initScrollAnimations();
     initLightbox();
+    initPlayStoreTracking();
 });
 
 /* Scroll-triggered fade-in animations with staggered delays */
@@ -94,4 +95,27 @@ function initLightbox() {
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
     }
+}
+
+/* Track Play Store and GitHub link clicks */
+function initPlayStoreTracking() {
+    // Track Play Store button clicks
+    document.querySelectorAll('a[href*="play.google.com"]').forEach(link => {
+        link.addEventListener('click', () => {
+            gtag('event', 'play_store_click', {
+                'event_category': 'conversion',
+                'event_label': 'Google Play Download'
+            });
+        });
+    });
+
+    // Track GitHub Issues link clicks
+    document.querySelectorAll('a[href*="github.com"][href*="issues"]').forEach(link => {
+        link.addEventListener('click', () => {
+            gtag('event', 'github_issues_click', {
+                'event_category': 'engagement',
+                'event_label': 'GitHub Issues'
+            });
+        });
+    });
 }
