@@ -183,7 +183,7 @@
 
 /* Article Grid */
 .docs-grid-container {
-    max-width: var(--container-max);
+    max-width: 1400px;
     margin: 0 auto;
     padding: var(--spacing-xxl) var(--spacing-xl);
 }
