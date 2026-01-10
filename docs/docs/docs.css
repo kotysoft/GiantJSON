@@ -433,6 +433,7 @@
     padding: var(--spacing-lg);
     overflow-x: auto;
     margin-bottom: var(--spacing-lg);
+    max-width: 100%;
 }
 
 .docs-article-body pre code {
@@ -441,6 +442,8 @@
     color: var(--text-primary);
     font-size: 0.875rem;
     line-height: 1.6;
+    word-break: break-word;
+    white-space: pre-wrap;
 }
 
 /* Callouts/Tips */

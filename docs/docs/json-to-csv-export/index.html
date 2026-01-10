@@ -183,9 +183,9 @@
                     <p>The conversion works best when your JSON is already tabular in nature:</p>
 
                     <pre><code>[
-  {"id": 1, "name": "Alice", "email": "alice@example.com"},
-  {"id": 2, "name": "Bob", "email": "bob@example.com"},
-  {"id": 3, "name": "Carol", "email": "carol@example.com"}
+  {"id": 1, "name": "Alice"},
+  {"id": 2, "name": "Bob"},
+  {"id": 3, "name": "Carol"}
 ]</code></pre>
 
                     <p>This array of objects with consistent keys maps directly to rows and columns. Each object
@@ -194,9 +194,9 @@
                     <p>Compare that to this structure, which doesn't map well to a spreadsheet:</p>
 
                     <pre><code>{
-  "metadata": {"version": 2, "generated": "2026-01-10"},
-  "users": [{"name": "Alice", "roles": ["admin", "editor"]}],
-  "settings": {"theme": "dark", "notifications": {"email": true}}
+  "meta": {"v": 2},
+  "users": [{"roles": ["admin"]}],
+  "config": {"nested": {"deep": true}}
 }</code></pre>
 
                     <p><em>Nested objects, arrays inside objects, and mixed structures don't have a natural tabular
