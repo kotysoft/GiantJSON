@@ -31,6 +31,14 @@
       "category": "issues",
       "date": "2026-01-11",
       "readTime": 5
+    },
+    {
+      "slug": "privacy-policy",
+      "title": "Privacy Policy",
+      "description": "How Giant JSON Viewer protects your data and what information we collect (spoiler: almost nothing).",
+      "category": "legal",
+      "date": "2026-01-11",
+      "readTime": 4
     }
   ],
   "categories": [
@@ -48,6 +56,11 @@
       "id": "issues",
       "name": "Issues",
       "description": "Feedback, bugs, and future plans"
+    },
+    {
+      "id": "legal",
+      "name": "Legal",
+      "description": "Privacy, terms, and policies"
     }
   ]
 }
