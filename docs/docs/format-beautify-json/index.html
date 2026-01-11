@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Format and Beautify Minified JSON on Android - Giant JSON Viewer Docs</title>
+    <meta name="title" content="Format and Beautify Minified JSON on Android - Giant JSON Viewer Docs">
+    <meta name="description"
+        content="Convert compact minified JSON and NDJSON files to human-readable format on your phone. Learn about JSON formats and when to prettify your data.">
+    <meta name="keywords"
+        content="beautify JSON Android, format minified JSON, prettify JSON, NDJSON, JSON Lines, JSON formatter mobile">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/format-beautify-json/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/format-beautify-json/">
+    <meta property="og:title" content="Format and Beautify Minified JSON on Android - Giant JSON Viewer">
+    <meta property="og:description"
+        content="Convert compact minified JSON and NDJSON files to human-readable format on your phone.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-01-11T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/format-beautify-json/">
+    <meta property="twitter:title" content="Format and Beautify Minified JSON on Android - Giant JSON Viewer">
+    <meta property="twitter:description"
+        content="Convert compact minified JSON and NDJSON files to human-readable format on your phone.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Format and Beautify Minified JSON on Android",
+        "description": "Convert compact minified JSON and NDJSON files to human-readable format on your phone. Learn about JSON formats and when to prettify your data.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Giant JSON Viewer",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-01-11",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/format-beautify-json/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Format and Beautify Minified JSON on Android",
+                "item": "https://giantjson.com/docs/format-beautify-json/"
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="Giant JSON Viewer" class="docs-logo-icon">
+                <span>Giant JSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=article"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">Format and Beautify Minified JSON on Android</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>Format and Beautify Minified JSON on Android</h1>
+                    <div class="docs-article-meta">
+                        <span>5 min read</span>
+                        <span>Updated Jan 11, 2026</span>
+                    </div>
+                </header>
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+                    <p>JSON files come in different shapes. Sometimes they're neatly formatted with proper indentation.
+                        Other times, they're compressed into a single, unreadable line. If you've ever tried to inspect
+                        a file and been met with a wall of text, you know the frustration.</p>
+
+                    <p>This guide explains the different JSON formats you might encounter, why they matter, and how to
+                        convert them into something readable on your Android device.</p>
+
+                    <h2 id="understanding-json-formats">Understanding JSON Formats</h2>
+
+                    <h3 id="pretty-printed-json">Pretty-Printed JSON</h3>
+
+                    <p>Pretty-printed (or "beautified") JSON uses indentation and line breaks to make the structure
+                        visible at a glance:</p>
+
+                    <pre><code>{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "orders": [
+    { "id": 1001, "total": 59.99 },
+    { "id": 1002, "total": 124.50 }
+  ]
+}</code></pre>
+
+                    <p>This format is designed for human readability. You can immediately see the hierarchy, spot nested
+                        objects, and understand the data structure.</p>
+
+                    <h3 id="minified-json">Minified JSON</h3>
+
+                    <p>Minified JSON removes all unnecessary whitespace to reduce file size:</p>
+
+                    <pre><code>{"name":"John Doe","email":"john@example.com","orders":[{"id":1001,"total":59.99},{"id":1002,"total":124.50}]}</code></pre>
+
+                    <p>The same data, but compressed into a single line. This format is common in:</p>
+
+                    <ul>
+                        <li><strong>API responses</strong>: Servers send minified JSON to reduce bandwidth</li>
+                        <li><strong>Database exports</strong>: Compact storage saves space</li>
+                        <li><strong>Production builds</strong>: Web applications often minify JSON configurations</li>
+                    </ul>
+
+                    <p>While efficient for machines, minified JSON is nearly impossible for humans to read or debug.</p>
+
+                    <h3 id="ndjson">NDJSON (Newline-Delimited JSON)</h3>
+
+                    <p>NDJSON (also called JSON Lines or JSONL) is a format where each line contains a separate,
+                        complete JSON object:</p>
+
+                    <pre><code>{"event":"login","user":"alice","timestamp":"2026-01-10T14:30:00Z"}
+{"event":"purchase","user":"alice","amount":49.99}
+{"event":"logout","user":"alice","timestamp":"2026-01-10T15:45:00Z"}</code></pre>
+
+                    <p>Note that this is <em>not</em> a JSON array. Each line stands alone. This format is popular for:
+                    </p>
+
+                    <ul>
+                        <li><strong>Log files</strong>: Easy to append new entries without rewriting the file</li>
+                        <li><strong>Streaming data</strong>: Process records one at a time without loading everything
+                        </li>
+                        <li><strong>Large datasets</strong>: BigQuery, machine learning pipelines, and analytics tools
+                            often use NDJSON</li>
+                    </ul>
+
+                    <p>The trade-off is that NDJSON files aren't valid JSON as a whole, so standard JSON viewers may not
+                        handle them well.</p>
+
+                    <h2 id="why-beautify-json">Why Beautify JSON?</h2>
+
+                    <p>Converting minified JSON to pretty-printed format makes it:</p>
+
+                    <ul>
+                        <li><strong>Readable</strong>: See the structure at a glance</li>
+                        <li><strong>Debuggable</strong>: Find specific values or spot errors quickly</li>
+                        <li><strong>Shareable</strong>: Send formatted snippets to colleagues</li>
+                        <li><strong>Analyzable</strong>: Understand unfamiliar data structures</li>
+                    </ul>
+
+                    <p>For NDJSON, converting to a proper JSON array with pretty-printing makes the entire dataset
+                        browsable and easier to work with.</p>
+
+                    <h2 id="finding-the-right-tool">Finding the Right Tool</h2>
+
+                    <p>Several Android apps can format JSON, each with different strengths. When choosing a tool,
+                        consider:</p>
+
+                    <ul>
+                        <li><strong>File size limits</strong>: Can it handle your file without crashing?</li>
+                        <li><strong>Format support</strong>: Does it recognize NDJSON, or only standard JSON?</li>
+                        <li><strong>Privacy</strong>: Does it process locally or upload to external servers?</li>
+                        <li><strong>Output options</strong>: Can you save the result to a file?</li>
+                    </ul>
+
+                    <p>A quick search on the Play Store will show various options. Look for apps that explicitly mention
+                        support for large files and offline processing if you work with sensitive data.</p>
+
+                    <h2 id="how-giant-json-viewer-handles-formatting">How Giant JSON Viewer Handles Formatting</h2>
+
+                    <p>Giant JSON Viewer takes two approaches to JSON beautification:</p>
+
+                    <h3 id="automatic-formatting-while-viewing">Automatic Formatting While Viewing</h3>
+
+                    <p>When you open <em>any</em> JSON file in Giant JSON Viewer, it's displayed in a readable,
+                        pretty-printed format. The original file remains untouched. Whether your source file is
+                        minified or NDJSON, the viewer presents it with proper indentation and structure.</p>
+
+                    <p>This means you don't need to think about formatting just to inspect a file.</p>
+
+                    <h3 id="dedicated-prettify-tool">Dedicated Prettify Tool</h3>
+
+                    <p>For cases where you need a formatted <em>output file</em>, the app includes a standalone tool:
+                    </p>
+
+                    <ol>
+                        <li>Open the Tools menu</li>
+                        <li>Select <strong>Just Make Pretty</strong></li>
+                        <li>Choose your input file (minified JSON or NDJSON)</li>
+                        <li>Select the output location</li>
+                        <li>Tap <strong>Prettify</strong></li>
+                    </ol>
+
+                    <p>The tool:</p>
+
+                    <ul>
+                        <li><strong>Auto-detects the format</strong>: Handles both minified JSON and NDJSON
+                            automatically</li>
+                        <li><strong>Streams the data</strong>: Uses constant memory regardless of file size</li>
+                        <li><strong>Creates a new file</strong>: Your original remains unchanged</li>
+                        <li><strong>Converts NDJSON to array</strong>: Wraps individual objects into a proper JSON array
+                            structure</li>
+                    </ul>
+
+                    <div class="docs-callout docs-callout-tip">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+                            </svg>
+                            Tip
+                        </div>
+                        <p>Because the prettify tool uses streaming processing, it can handle multi-gigabyte files
+                            without running out of memory.</p>
+                    </div>
+
+                    <h2 id="summary">Summary</h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Format</th>
+                                <th>Description</th>
+                                <th>Human Readable?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pretty JSON</td>
+                                <td>Indented with line breaks</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Minified JSON</td>
+                                <td>All whitespace removed</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>NDJSON</td>
+                                <td>One JSON object per line</td>
+                                <td>Partially</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>If you're working with minified or NDJSON files, converting them to pretty-printed format is
+                        often the first step to understanding the data. Whether you need to just <em>view</em> the
+                        content or <em>save</em> a formatted copy, having the right tool makes the difference.</p>
+
+                    <!-- Google Play CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Format JSON Files With Ease</h3>
+                        <p>Try Giant JSON Viewer free and beautify minified JSON or NDJSON files of any size.</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=article_cta&utm_campaign=format_beautify_json"
+                            class="btn-primary" target="_blank" rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                            </svg>
+                            Get Giant JSON Viewer
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">Giant JSON Viewer Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

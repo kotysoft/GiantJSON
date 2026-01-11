@@ -39,6 +39,14 @@
       "category": "legal",
       "date": "2026-01-11",
       "readTime": 4
+    },
+    {
+      "slug": "format-beautify-json",
+      "title": "Format and Beautify Minified JSON on Android",
+      "description": "Convert compact minified JSON and NDJSON files to human-readable format on your phone.",
+      "category": "topics",
+      "date": "2026-01-11",
+      "readTime": 5
     }
   ],
   "categories": [
