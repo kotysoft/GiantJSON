@@ -23,6 +23,14 @@
       "category": "topics",
       "date": "2026-01-11",
       "readTime": 6
+    },
+    {
+      "slug": "roadmap",
+      "title": "Bugs, Issues and Roadmap",
+      "description": "Our commitment to stability, how to submit feedback, and features we're considering for the future.",
+      "category": "issues",
+      "date": "2026-01-11",
+      "readTime": 5
     }
   ],
   "categories": [
@@ -37,9 +45,9 @@
       "description": "In-depth exploration of JSON-related subjects"
     },
     {
-      "id": "troubleshooting",
-      "name": "Troubleshooting",
-      "description": "Solutions to common issues"
+      "id": "issues",
+      "name": "Issues",
+      "description": "Feedback, bugs, and future plans"
     }
   ]
 }
