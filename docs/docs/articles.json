@@ -47,6 +47,14 @@
       "category": "topics",
       "date": "2026-01-11",
       "readTime": 5
+    },
+    {
+      "slug": "known-limitations",
+      "title": "Known Limitations",
+      "description": "Understanding the architectural boundaries of Giant JSON Viewer and when they might affect you.",
+      "category": "topics",
+      "date": "2026-01-13",
+      "readTime": 5
     }
   ],
   "categories": [
