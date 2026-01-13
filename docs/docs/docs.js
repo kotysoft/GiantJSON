@@ -1,6 +1,7 @@
 /* Documentation JavaScript */
 
 document.addEventListener('DOMContentLoaded', function () {
+    sortArticlesByDate();
     initSearch();
     initFilters();
     initTableOfContents();
@@ -8,6 +9,31 @@ document.addEventListener('DOMContentLoaded', function () {
     initMobileSidebar();
     initPlayStoreTracking();
 });
+
+/* Sort article cards by date, newest first */
+function sortArticlesByDate() {
+    const grid = document.getElementById('articles-grid');
+    if (!grid) return;
+
+    const cards = Array.from(grid.querySelectorAll('.docs-card'));
+    if (cards.length < 2) return;
+
+    // Parse date from card meta (format: "Jan 13, 2026")
+    function parseDate(card) {
+        const metaSpans = card.querySelectorAll('.docs-card-meta span');
+        if (metaSpans.length < 2) return new Date(0);
+
+        const dateText = metaSpans[1].textContent.trim();
+        const parsed = new Date(dateText);
+        return isNaN(parsed.getTime()) ? new Date(0) : parsed;
+    }
+
+    // Sort newest first
+    cards.sort((a, b) => parseDate(b) - parseDate(a));
+
+    // Reorder in DOM
+    cards.forEach(card => grid.appendChild(card));
+}
 
 /* Search functionality for index page */
 function initSearch() {
