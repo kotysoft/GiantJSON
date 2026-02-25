@@ -9,7 +9,7 @@
     <title>Giant JSON Viewer - High-Performance JSON Viewer for Android</title>
     <meta name="title" content="Giant JSON Viewer - High-Performance JSON Viewer for Android">
     <meta name="description"
-        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.">
+        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, export to SQL/CSV, built-in API client, and local file transfer.">
     <meta name="keywords"
         content="JSON viewer, Android, large files, gigabyte JSON, NDJSON, JSON browser, mobile development, API response viewer">
     <meta name="author" content="Kotysoft">
@@ -30,7 +30,7 @@
     <meta property="og:url" content="https://giantjson.com/">
     <meta property="og:title" content="Giant JSON Viewer - High-Performance JSON Viewer for Android">
     <meta property="og:description"
-        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.">
+        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, export to SQL/CSV, built-in API client, and local file transfer.">
     <meta property="og:image" content="https://giantjson.com/icon.png">
     <meta property="og:site_name" content="Giant JSON Viewer">
 
@@ -39,7 +39,7 @@
     <meta property="twitter:url" content="https://giantjson.com/">
     <meta property="twitter:title" content="Giant JSON Viewer - High-Performance JSON Viewer for Android">
     <meta property="twitter:description"
-        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.">
+        content="Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, export to SQL/CSV, built-in API client, and local file transfer.">
     <meta property="twitter:image" content="https://giantjson.com/icon.png">
 
     <!-- Fonts -->
@@ -65,7 +65,7 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "Giant JSON Viewer",
-        "description": "Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, and export to SQL/CSV.",
+        "description": "Native Android app for opening huge JSON files. Handles multi-gigabyte files that crash other viewers. Features tree navigation, regex search, smart filtering, export to SQL/CSV, built-in API client, and local file transfer.",
         "operatingSystem": "Android",
         "applicationCategory": "DeveloperApplication",
         "url": "https://giantjson.com/",
@@ -193,6 +193,8 @@
                         <li><strong>Persistent Highlights:</strong> Mark specific terms to track them as you scroll</li>
                         <li><strong>GenAI Regex Helper:</strong> Describe your search intent in natural language, and
                             the AI generates the precise Regex pattern</li>
+                        <li><strong>Base64 Detection:</strong> Identifies Base64-encoded content and the embedded file
+                            format (40+ formats). Preview images inline, play media, or extract the decoded file</li>
                     </ul>
                 </div>
 
@@ -219,6 +221,8 @@
                             specific array indices</li>
                         <li><strong>Infinite Scrolling:</strong> Seamlessly navigate through arrays with millions of
                             items</li>
+                        <li><strong>Base64 Detection:</strong> Identifies Base64-encoded content and the embedded file
+                            format (40+ formats). Preview images inline, play media, or extract the decoded file</li>
                     </ul>
                 </div>
 
@@ -299,11 +303,11 @@
         </div>
     </section>
 
-    <!-- Tools Section -->
+    <!-- Developer Tools Section -->
     <section class="section tools-section">
         <div class="container">
-            <h2 class="section-title">Dedicated Tools</h2>
-            <p class="section-subtitle">Quick-access utilities available directly from the Recent Files menu</p>
+            <h2 class="section-title">Developer Tools</h2>
+            <p class="section-subtitle">Built-in utilities beyond file viewing</p>
             <div class="tools-grid">
                 <div class="tool-card">
                     <h4>Unescape JSON</h4>
@@ -316,6 +320,29 @@
                 <div class="tool-card">
                     <h4>Schema Validation</h4>
                     <p>Validate your JSON content against a standard JSON Schema (Draft-07)</p>
+                </div>
+                <div class="tool-card">
+                    <span class="experimental-badge">Experimental</span>
+                    <h4>Local Receive</h4>
+                    <p>Transfer files from your computer directly to the app over local WiFi. The app hosts a
+                        web page where you can drag and drop files — no cables, no cloud, no desktop install.
+                        Add the Quick Settings tile for one-tap server access.</p>
+                </div>
+                <div class="tool-card">
+                    <span class="experimental-badge">Experimental</span>
+                    <h4>API Client</h4>
+                    <p>Built-in REST and GraphQL client. Supports GET, POST, PUT, DELETE, PATCH, HEAD, and
+                        OPTIONS methods. Configure headers, body (JSON, form data, multipart, binary), and
+                        authentication (Basic, Bearer, API Key). Import/export via cURL, save and organize
+                        requests. JSON responses open directly in the viewer.</p>
+                </div>
+                <div class="tool-card">
+                    <span class="experimental-badge">Experimental</span>
+                    <h4>Mock API Server</h4>
+                    <p>Host mock API endpoints from your phone. Define custom paths, methods, status codes,
+                        and response headers per endpoint. Serve any JSON file as a response body. Includes
+                        a web dashboard listing all endpoints and request logs. Save and load server
+                        configurations as presets.</p>
                 </div>
             </div>
         </div>

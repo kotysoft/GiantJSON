@@ -670,6 +670,7 @@ img {
     border-radius: var(--radius-md);
     padding: var(--spacing-xl);
     transition: all var(--transition-normal);
+    position: relative;
 }
 
 .tool-card:hover {
@@ -683,6 +684,22 @@ img {
 
 .tool-card p {
     font-size: 0.9375rem;
+}
+
+/* Experimental badge for WiP features */
+.experimental-badge {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #FFB74D;
+    border: 1px solid rgba(255, 183, 77, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+    line-height: 1.4;
 }
 
 /* ============================================== */
