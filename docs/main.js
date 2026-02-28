@@ -106,18 +106,40 @@ function initTracking() {
     if (typeof gtag === 'undefined') return;
 
     const trackMap = [
-        { id: 'hero-play-btn', category: 'engagement', label: 'hero_play_store' },
-        { id: 'hero-docs-btn', category: 'engagement', label: 'hero_docs' },
-        { id: 'cta-play-btn', category: 'engagement', label: 'cta_play_store' },
-        { id: 'cta-docs-btn', category: 'engagement', label: 'cta_docs' },
-        { id: 'cta-github-btn', category: 'engagement', label: 'cta_github_issues' },
+        { id: 'hero-play-btn', category: 'engagement', label: 'hero_play_store', isPlayStore: true },
+        { id: 'hero-docs-btn', category: 'engagement', label: 'hero_docs', isPlayStore: false },
+        { id: 'cta-play-btn', category: 'engagement', label: 'cta_play_store', isPlayStore: true },
+        { id: 'cta-docs-btn', category: 'engagement', label: 'cta_docs', isPlayStore: false },
+        { id: 'cta-github-btn', category: 'engagement', label: 'cta_github_issues', isPlayStore: false },
     ];
 
-    trackMap.forEach(({ id, category, label }) => {
+    trackMap.forEach(({ id, category, label, isPlayStore }) => {
         const el = document.getElementById(id);
         if (!el) return;
         el.addEventListener('click', () => {
+            // Google Analytics
             gtag('event', 'click', { event_category: category, event_label: label });
+
+            // Reddit Pixel - Track Play Store clicks as conversions
+            if (isPlayStore && typeof rdt !== 'undefined') {
+                const conversionId = generateConversionId(label);
+                rdt('track', 'SignUp', {
+                    conversionId: conversionId,
+                    value: 1.00,
+                    currency: 'USD',
+                    customEventName: 'play_store_click'
+                });
+            }
         });
     });
+}
+
+/**
+ * Generate unique conversion ID for deduplication
+ * Format: timestamp_location_random
+ */
+function generateConversionId(location) {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 9);
+    return `${timestamp}_${location}_${random}`;
 }
