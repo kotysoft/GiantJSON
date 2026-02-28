@@ -533,6 +533,48 @@
 }
 
 /* ============================================== */
+/* OUTDATED CONTENT BANNER                        */
+/* ============================================== */
+
+.docs-outdated-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    background: rgba(255, 179, 0, 0.08);
+    border: 1px solid rgba(255, 179, 0, 0.25);
+    border-left: 4px solid var(--accent-gold);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.docs-outdated-banner svg {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    color: var(--accent-gold);
+    margin-top: 1px;
+}
+
+.docs-outdated-banner-content {
+    flex: 1;
+}
+
+.docs-outdated-banner-title {
+    font-weight: 600;
+    color: var(--accent-gold);
+    font-size: 0.9375rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.docs-outdated-banner-text {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ============================================== */
 /* GOOGLE PLAY CTA                                */
 /* ============================================== */
 
