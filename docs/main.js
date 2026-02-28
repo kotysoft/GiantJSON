@@ -1,62 +1,65 @@
-/* Main JavaScript for Giant JSON Viewer website */
+'use strict';
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initLightbox();
-    initPlayStoreTracking();
+    initTracking();
 });
 
-/* Scroll-triggered fade-in animations with staggered delays */
+/* ------------------------------------------ */
+/* Scroll Animations                           */
+/* ------------------------------------------ */
+
 function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll(
-        '.feature-card, .mode-card, .tool-card, .export-feature, .analysis-feature'
+    const animatableSelectors = [
+        '.feature-card',
+        '.persona-card',
+        '.mode-card',
+        '.tool-card',
+        '.api-feature-group',
+        '.feature-row',
+        '.analysis-card',
+        '.format-badge',
+    ];
+
+    const elements = document.querySelectorAll(animatableSelectors.join(', '));
+
+    elements.forEach(el => {
+        el.classList.add('fade-in');
+        // Stagger siblings within same parent
+        const siblings = Array.from(el.parentElement.children).filter(
+            c => c.classList.contains(el.className.split(' ')[0])
+        );
+        const idx = siblings.indexOf(el);
+        el.style.transitionDelay = `${idx * 0.08}s`;
+    });
+
+    const observer = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
 
-    animatedElements.forEach(el => {
-        el.classList.add('fade-in');
-    });
-
-    // Group elements by their parent to create staggered effect
-    const groups = {};
-    animatedElements.forEach(el => {
-        const parent = el.parentElement;
-        if (!groups[parent]) {
-            groups[parent] = [];
-        }
-        groups[parent].push(el);
-    });
-
-    // Apply staggered delays within each group
-    Object.values(groups).forEach(group => {
-        group.forEach((el, index) => {
-            el.style.transitionDelay = `${index * 0.1}s`;
-        });
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    animatedElements.forEach(el => {
-        observer.observe(el);
-    });
+    elements.forEach(el => observer.observe(el));
 }
 
-/* Lightbox for fullscreen screenshot viewing */
+/* ------------------------------------------ */
+/* Lightbox                                    */
+/* ------------------------------------------ */
+
 function initLightbox() {
-    // Create lightbox overlay
+    // Build the lightbox DOM
     const lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
     lightbox.innerHTML = `
         <div class="lightbox-content">
-            <button class="lightbox-close" aria-label="Close">&times;</button>
+            <button class="lightbox-close" aria-label="Close image">&times;</button>
             <img class="lightbox-image" src="" alt="">
         </div>
     `;
@@ -65,57 +68,56 @@ function initLightbox() {
     const lightboxImage = lightbox.querySelector('.lightbox-image');
     const closeBtn = lightbox.querySelector('.lightbox-close');
 
-    // Add click handlers to all screenshot images
-    const screenshots = document.querySelectorAll('.mode-screenshot img, .analysis-screenshot img');
+    // Attach click to all clickable screenshots
+    const screenshots = document.querySelectorAll(
+        '.screenshot-phone, .mode-screenshot img, .analysis-card-screenshot img'
+    );
+
     screenshots.forEach(img => {
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', function () {
-            lightboxImage.src = this.src;
-            lightboxImage.alt = this.alt;
+        img.addEventListener('click', () => {
+            lightboxImage.src = img.src;
+            lightboxImage.alt = img.alt;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
-    });
-
-    // Close lightbox on overlay click
-    lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox || e.target === closeBtn) {
-            closeLightbox();
-        }
-    });
-
-    // Close on escape key
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-            closeLightbox();
-        }
     });
 
     function closeLightbox() {
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
     }
-}
 
-/* Track Play Store and GitHub link clicks */
-function initPlayStoreTracking() {
-    // Track Play Store button clicks
-    document.querySelectorAll('a[href*="play.google.com"]').forEach(link => {
-        link.addEventListener('click', () => {
-            gtag('event', 'play_store_click', {
-                'event_category': 'conversion',
-                'event_label': 'Google Play Download'
-            });
-        });
+    closeBtn.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) closeLightbox();
     });
 
-    // Track GitHub Issues link clicks
-    document.querySelectorAll('a[href*="github.com"][href*="issues"]').forEach(link => {
-        link.addEventListener('click', () => {
-            gtag('event', 'github_issues_click', {
-                'event_category': 'engagement',
-                'event_label': 'GitHub Issues'
-            });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+}
+
+/* ------------------------------------------ */
+/* Analytics Tracking                          */
+/* ------------------------------------------ */
+
+function initTracking() {
+    if (typeof gtag === 'undefined') return;
+
+    const trackMap = [
+        { id: 'hero-play-btn', category: 'engagement', label: 'hero_play_store' },
+        { id: 'hero-docs-btn', category: 'engagement', label: 'hero_docs' },
+        { id: 'cta-play-btn', category: 'engagement', label: 'cta_play_store' },
+        { id: 'cta-docs-btn', category: 'engagement', label: 'cta_docs' },
+        { id: 'cta-github-btn', category: 'engagement', label: 'cta_github_issues' },
+    ];
+
+    trackMap.forEach(({ id, category, label }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click', () => {
+            gtag('event', 'click', { event_category: category, event_label: label });
         });
     });
 }
