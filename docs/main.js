@@ -126,8 +126,7 @@ function initTracking() {
                 rdt('track', 'SignUp', {
                     conversionId: conversionId,
                     value: 1.00,
-                    currency: 'USD',
-                    customEventName: 'play_store_click'
+                    currency: 'USD'
                 });
             }
         });
