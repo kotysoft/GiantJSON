@@ -124,9 +124,7 @@ function initTracking() {
             if (isPlayStore && typeof rdt !== 'undefined') {
                 const conversionId = generateConversionId(label);
                 rdt('track', 'SignUp', {
-                    conversionId: conversionId,
-                    value: 1.00,
-                    currency: 'USD'
+                    conversionId: conversionId
                 });
             }
         });
