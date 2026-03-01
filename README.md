@@ -1,91 +1,115 @@
-# Giant JSON Viewer
+# GiantJSON Viewer+
 
-**High-Performance JSON Viewer & Analyzer for Android**
+A JSON viewer and analysis toolkit built for files that crash everything else.
 
-Giant JSON Viewer is a native Android application engineered for developers and data analysts who need to inspect huge JSON files on the go. While standard market viewers crash on files larger than 50MB, Giant JSON Viewer reliably handles multi-hundred megabyte files and has been tested with files up to several gigabytes.
+Made for developers, analysts, and QA engineers who work with massive datasets — multi-GB logs, database dumps, API responses — directly on Android. **No cloud, no account, no limits.**
 
-It provides a desktop-class environment for browsing, searching, and converting massive datasets directly on your mobile device.
+> This is a read-only viewer and analysis tool — built for inspecting and understanding data, not editing it.
 
-## Why Giant JSON Viewer?
-
-*   **Massive File Support:** Uses advanced streaming techniques to open files far exceeding the Android RAM limit.
-*   **Smart Indexing:** Builds a rapid-access index on first open. Once indexed, even multi-gigabyte files open with minimal loading time.
-*   **High Performance:** Navigate through millions of lines rapidly.
-*   **Data Reliability:** Built for stability, ensuring critical data is always accessible offline.
-
-## Viewing Modes
-
-The application provides three specialized modes to interact with your data:
-
-### 1. Text Mode (Raw Viewer)
-A high-performance raw text viewer optimized for log analysis and deep search operations. Supported for **JSON, NDJSON, and Plain Text**.
-*   **Advanced Search:** Use Regex or standard search to find data instantly.
-*   **Occurrence Counter:** Efficiently count matches across the entire file.
-*   **Visual Tools:**
-    *   **Long Line Handling:** Detects extremely long lines and offers options to truncate (5KB preview) or hide them completely to prevent crashes.
-    *   **Syntax Highlighting:** Color-coded syntax (JSON Only) for readability.
-    *   **Persistent Highlights:** Mark specific terms to track them as you scroll.
-*   **Navigation:** Go To Line, Tree View Toggle (JSON Only).
-*   **Integrated Tools:**
-    *   **GenAI Regex Helper:** Describe your search intent in natural language, and the AI generates the precise Regex pattern for you.
-    *   **Regex Builder:** A dedicated UI to test and refine complex regular expressions before applying them.
-
-### 2. Browser Mode (Tree Viewer)
-An interactive hierarchical view designed for navigating deeply nested structures like API responses. Supported for **JSON and NDJSON**.
-*   **Organization:**
-    *   **Bookmarks:** Save deep paths to revisit later.
-    *   **Hidden Paths:** Hide irrelevant fields (e.g., "metadata") to focus on the data that matters.
-*   **Smart Navigation:**
-    *   **Sibling Navigation:** Quickly jump between adjacent objects in an array (Previous/Next Sibling).
-    *   **Breadcrumbs:** Track your exact location in the JSON hierarchy.
-    *   **Jump to Path/Index:** Utilize full JSONPath syntax or jump directly to specific items in massive arrays (e.g., `$.store.book[0]` or just `500000`).
-    *   **Infinite Scrolling:** Seamlessly navigate through arrays with millions of items.
-
-### 3. Structure Mode (Schema Viewer)
-A "bird's eye view" visualization of your JSON schema, essential for understanding the shape of unfamiliar data. Supported for **JSON and NDJSON**.
-*   **Interactive Graph:** Visualize your JSON structure as a zoomable, pannable tree diagram.
-*   **Schema Analysis:** Analyze key types and hierarchy without loading values.
-*   **Visual Export:** Save the structure graph as a high-resolution PNG image.
-*   **Schema Export:** Generate TypeScript interfaces or JSON Schema (Draft-07) definitions.
-
-## Advanced Data Analysis
-
-### Graphical Query Builder (Smart Filter)
-Designed for speed and ease of use, the Browser Mode features a powerful visual query builder.
-*   **Visual Logic:** Build complex queries using a graphical interface with nested logic (AND, OR, Parentheses).
-*   **No Code Required:** Select keys, operators (Equals, Contains, Regex, etc.), and values from dropdowns instead of writing manual queries.
-*   **Instant Re-use:** Every filter run is cached as a "smart index". Re-applying a previous filter on a massive file is instant.
-*   **Export Results:** You can export the filtered dataset directly to JSON, CSV, or SQL.
-
-## Dedicated Tools
-Quick-access utilities available directly from the Recent Files menu:
-*   **Unescape JSON:** Clean up stringified JSON strings (removing backslashes) to perform analysis.
-*   **Just Make Pretty:** A simple tool to format/beautify JSON text without opening the full viewer.
-*   **Schema Validation:** Validate your JSON content against a standard JSON Schema (Draft-07).
-
-## Data Conversion & Export
-Transform your JSON data into compatible formats for analysis.
-*Note: Export options are context-aware and appear when viewing arrays or objects compatible with tabular conversion.*
-
-*   **Customizable Export:** It's not just a blind dump. You can **select specific keys** to include and **rename fields** during the export process.
-*   **SQL Analyzer:** (During Export) Analyzes the first batch of records to automatically detect column types and schema for SQL export.
-*   **SQL Export:** Generate `INSERT` statements for SQLite, MySQL, PostgreSQL, SQL Server, Oracle, and MariaDB.
-*   **CSV Export:** Flatten extracted data into spreadsheet-compatible CSV files.
-
-
-## Supported Formats
-*   **JSON** (Standard, Minified, and Large-Value)
-*   **NDJSON** (Newline Delimited JSON / JSONL)
-*   **Plain Text** (Text Mode Only)
+While most viewers struggle above 50MB, GiantJSON uses a native **Rust + SIMD engine** to handle multi-gigabyte files without running out of memory. Built and maintained by a solo indie developer.
 
 ---
 
-## Support Indie Development ❤️
+## Private & Secure
 
-We are solo developers and this project is our baby. We have engineered it from the ground up to handle data scales that others said were impossible on mobile.
+Everything runs locally on your device.
 
-We invite you to give it a try! If you enjoy using Giant JSON Viewer, please support us by leaving a **review on Google Play**. Your feedback ensures we can keep improving the tool you rely on.
+- All search, analysis, and export happens offline
+- No cloud uploads, no tracking servers
+- GenAI Regex only calls AI to generate patterns — your data never leaves
 
-Encountered a bug or have a suggestion? **[Report it on GitHub](https://github.com/kotysoft/GiantJSON/issues)**.
+---
 
-**[Download on Google Play](https://play.google.com/store/apps/details?id=com.giantjsonviewer)**
+## Built for Performance
+
+- **Multi-GB Support:** Open files that other viewers can't handle
+- **Smart Indexing:** First load builds an index for instant navigation
+- **Memory Safe:** Designed to prevent Out-Of-Memory crashes on any device
+- **Rust + SIMD Core:** Native speed, not a JavaScript wrapper
+
+---
+
+## Developer Toolkit
+
+- **SQL & CSV Export:** Convert to SQL queries or CSV tables
+- **Data Masking:** Redact fields during export for safe sharing
+- **Search & Regex:** Full-text search with regex support
+- **Advanced Filter:** Visual query builder with field-level conditions
+- **GenAI Regex Builder:** Describe what you need, AI writes the regex
+- **Path Navigation:** Jump directly to any node
+- **Schema Export:** Export structure as JSON Schema, TypeScript, or Markdown
+- **Schema Analysis:** Auto-detect field types and data patterns for export
+- **Formatter:** Auto-prettify and syntax highlight raw content
+
+---
+
+## API Client
+
+Full-featured REST and GraphQL client, right on your phone:
+
+- GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS + GraphQL queries
+- **Auth:** Basic, Bearer, OAuth 2.0 (with PKCE), AWS Signature V4
+- Postman collection import with folder structure and variables
+- Environment support with variable precedence
+- File attachments, binary uploads, session cookies
+- Import/export via cURL
+- Responses open directly in the viewer
+
+---
+
+## HAR Analyzer
+
+Drop a `.har` file and get a full network analysis dashboard:
+
+- Overview stats: request count, response times, errors, transfer size
+- Timing breakdown, status distribution, domain summary
+- Filter by method, status, content type, domain, or response time
+- Request detail tabs: headers, cookies, body, timing waterfall, TLS
+- Clone any request to API Client or copy as cURL
+
+---
+
+## Basic Mock API Server
+
+Turn your phone into a mock API server:
+
+- Custom endpoints with method, status code, and headers
+- Point responses to local files
+- Web dashboard with request logging
+
+---
+
+## Local Receive
+
+Transfer files from desktop to phone over WiFi:
+
+- Drag and drop from your browser — no cables, no cloud
+- No account or desktop app needed
+
+---
+
+## 3 View Modes
+
+1. **Browser:** Stream through gigabytes like a feed
+2. **Structure:** Visualize data as a graph to understand its shape
+3. **Text:** Raw view with syntax highlighting and formatting
+
+---
+
+## More
+
+- **Markdown Viewer:** Render `.md` files
+- **Bookmarks:** Save locations in huge files to find later in Browser Mode
+- **Unescape & Prettify:** Fix serialized JSON in one tap
+- **Hide Paths:** Collapse irrelevant arrays or objects
+- **Validator:** Validate against a schema file
+
+**Supports:** `.json`, `.jsonl`, `.ndjson`, `.har`, `.md`
+
+---
+
+This app is a one-person project under active development. If you find it useful, a review on Google Play helps more than you'd think. And if something isn't working right, the in-app feedback goes straight to the developer.
+
+---
+
+**Keywords:** json viewer, json reader, large json, big json, json formatter, json parser, json to sql, json to csv, log viewer, developer tools, offline json, api client, graphql, postman, mock api, mock server, har viewer, data masking, file transfer, markdown viewer, json schema, json validator, json path, huge file opener, json tool
