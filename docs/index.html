@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary Meta Tags -->
-    <title>GiantJSON Viewer+ — Multi-GB JSON Viewer, HAR Analyzer & API Client for Android</title>
-    <meta name="title" content="GiantJSON Viewer+ — Multi-GB JSON Viewer, HAR Analyzer & API Client for Android">
+    <title>GiantJSON Viewer+ — Multi-GB JSON, CBOR & MsgPack Viewer, HAR Analyzer & API Client for Android</title>
+    <meta name="title"
+        content="GiantJSON Viewer+ — Multi-GB JSON, CBOR & MsgPack Viewer, HAR Analyzer & API Client for Android">
     <meta name="description"
-        content="Open multi-gigabyte JSON files on Android without crashes. Powered by a native Rust + SIMD engine. Includes a full HAR analyzer, REST & GraphQL API client with Postman import, advanced filters, SQL/CSV export, and offline privacy.">
+        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats are transcoded to JSON on first open. Powered by a native Rust + SIMD engine. Includes a full HAR analyzer, REST & GraphQL API client with Postman import, advanced filters, SQL/CSV export, and offline privacy.">
     <meta name="keywords"
-        content="JSON viewer Android, large JSON file viewer, HAR analyzer Android, API client Android, REST client mobile, Postman alternative Android, NDJSON viewer, JSON log viewer, multi-GB JSON, JSON parser mobile, GraphQL client Android, HAR file analyzer, JSON to SQL export, JSON to CSV export, JSON schema viewer">
+        content="JSON viewer Android, large JSON file viewer, CBOR viewer Android, MessagePack viewer Android, MsgPack viewer, binary JSON viewer, HAR analyzer Android, API client Android, REST client mobile, Postman alternative Android, NDJSON viewer, JSON log viewer, multi-GB JSON, JSON parser mobile, GraphQL client Android, HAR file analyzer, JSON to SQL export, JSON to CSV export, JSON schema viewer">
     <meta name="author" content="Kotysoft">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://giantjson.com/">
@@ -28,9 +29,10 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://giantjson.com/">
-    <meta property="og:title" content="GiantJSON Viewer+ — Multi-GB JSON Viewer, HAR Analyzer & API Client for Android">
+    <meta property="og:title"
+        content="GiantJSON Viewer+ — Multi-GB JSON, CBOR & MsgPack Viewer, HAR Analyzer & API Client for Android">
     <meta property="og:description"
-        content="Open multi-gigabyte JSON files on Android without crashes. Native Rust + SIMD engine. HAR analyzer, REST/GraphQL API client with Postman import, advanced filters, SQL/CSV export. 100% offline.">
+        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats auto-transcoded to JSON. Native Rust + SIMD engine. HAR analyzer, REST/GraphQL API client with Postman import, advanced filters, SQL/CSV export. 100% offline.">
     <meta property="og:image" content="https://giantjson.com/icon.png">
     <meta property="og:site_name" content="GiantJSON Viewer+">
 
@@ -38,9 +40,9 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://giantjson.com/">
     <meta property="twitter:title"
-        content="GiantJSON Viewer+ — Multi-GB JSON Viewer, HAR Analyzer & API Client for Android">
+        content="GiantJSON Viewer+ — Multi-GB JSON, CBOR & MsgPack Viewer, HAR Analyzer & API Client for Android">
     <meta property="twitter:description"
-        content="Open multi-gigabyte JSON files on Android without crashes. Native Rust + SIMD engine. HAR analyzer, REST/GraphQL API client with Postman import, advanced filters.">
+        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats auto-transcoded. Native Rust + SIMD engine. HAR analyzer, REST/GraphQL API client with Postman import.">
     <meta property="twitter:image" content="https://giantjson.com/icon.png">
 
     <!-- Fonts -->
@@ -62,7 +64,7 @@
 
     <!-- Reddit Pixel -->
     <script>
-        !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_ild9z7zy15gd",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_ild9z7zy15gd');rdt('track', 'PageVisit');
+        !function (w, d) { if (!w.rdt) { var p = w.rdt = function () { p.sendEvent ? p.sendEvent.apply(p, arguments) : p.callQueue.push(arguments) }; p.callQueue = []; var t = d.createElement("script"); t.src = "https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_ild9z7zy15gd", t.async = !0; var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(t, s) } }(window, document); rdt('init', 'a2_ild9z7zy15gd'); rdt('track', 'PageVisit');
     </script>
     <!-- DO NOT MODIFY UNLESS TO REPLACE A USER IDENTIFIER -->
     <!-- End Reddit Pixel -->
@@ -74,7 +76,7 @@
         "@type": "SoftwareApplication",
         "name": "GiantJSON Viewer+",
         "alternateName": "GiantJSON",
-        "description": "Native Android app for opening multi-gigabyte JSON files without crashes. Powered by a Rust + SIMD engine. Features HAR analyzer, REST and GraphQL API client with Postman collection import, advanced visual query builder, SQL and CSV export, schema export, data masking, regex search with AI-generated patterns, and local file transfer.",
+        "description": "Native Android app for opening multi-gigabyte JSON, CBOR, and MessagePack files without crashes. Binary formats are automatically transcoded to JSON on first open. Powered by a Rust + SIMD engine. Features HAR analyzer, REST and GraphQL API client with Postman collection import, advanced visual query builder, SQL and CSV export, schema export, data masking, regex search with AI-generated patterns, and local file transfer.",
         "operatingSystem": "Android",
         "applicationCategory": "DeveloperApplication",
         "applicationSubCategory": "Developer Tools",
@@ -86,6 +88,8 @@
         },
         "featureList": [
             "Multi-gigabyte JSON file support",
+            "CBOR binary JSON support with auto-transcoding",
+            "MessagePack binary JSON support with auto-transcoding",
             "HAR file analyzer with timing breakdown",
             "REST and GraphQL API client",
             "Postman collection import",
@@ -361,9 +365,10 @@
         <div class="container">
             <div class="split-section-header">
                 <div class="split-section-label label-blue">API Client</div>
-                <h2>Full-Featured REST &amp; GraphQL Client on Your Phone</h2>
-                <p>A complete API development and testing environment. Import Postman collections, configure
-                    environments, authenticate with OAuth 2.0 — and open every response directly in the JSON viewer.</p>
+                <h2>REST &amp; GraphQL Client on Your Phone</h2>
+                <p>An API development and testing environment built for mobile. Import Postman collections, configure
+                    environments, authenticate with OAuth 2.0 — and open every response directly in the JSON viewer.
+                    No pre-request or test scripts (no JS engine), but covers most real-world workflows.</p>
             </div>
             <div class="api-content">
                 <div class="api-features">
@@ -684,12 +689,14 @@
                 <div class="format-badge format-json">JSON</div>
                 <div class="format-badge format-ndjson">NDJSON</div>
                 <div class="format-badge format-jsonl">JSONL</div>
+                <div class="format-badge format-cbor">CBOR</div>
+                <div class="format-badge format-msgpack">MsgPack</div>
                 <div class="format-badge format-har">HAR</div>
                 <div class="format-badge format-md">Markdown</div>
-                <div class="format-badge format-text">Plain Text</div>
             </div>
             <p class="formats-note">Standard, minified, and large-value JSON files supported. NDJSON and JSONL for
-                line-delimited datasets and event logs.</p>
+                line-delimited datasets and event logs. CBOR and MessagePack binary formats are automatically transcoded
+                to JSON on first open.</p>
         </div>
     </section>
 

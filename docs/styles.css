@@ -1084,6 +1084,13 @@ code {
     color: var(--type-array);
 }
 
+.format-cbor,
+.format-msgpack {
+    background: rgba(255, 112, 67, 0.15);
+    border: 1px solid #FF7043;
+    color: #FF7043;
+}
+
 .format-har {
     background: rgba(255, 193, 7, 0.15);
     border: 1px solid var(--accent-gold);

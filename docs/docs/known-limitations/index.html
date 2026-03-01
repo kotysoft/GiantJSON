@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary Meta Tags -->
-    <title>Known Limitations - Giant JSON Viewer Docs</title>
-    <meta name="title" content="Known Limitations - Giant JSON Viewer Docs">
+    <title>Known Limitations — GiantJSON Viewer+ | JSON File Size Limits, Format Support</title>
+    <meta name="title" content="Known Limitations — GiantJSON Viewer+ | JSON File Size Limits, Format Support">
     <meta name="description"
-        content="Understanding the architectural boundaries of Giant JSON Viewer and when they might affect you.">
+        content="Architectural limits of GiantJSON Viewer+ — file size caps, nesting depth, supported formats (JSON, CBOR, MsgPack, HAR), structure mode analysis, and what the app doesn't do.">
     <meta name="keywords"
-        content="JSON viewer limits, large JSON limitations, JSON file size limit, mobile JSON viewer">
+        content="JSON viewer limits, large JSON limitations, JSON file size limit, mobile JSON viewer, CBOR limitations, MessagePack viewer, binary JSON limits, JSON nesting depth, mobile JSON file size limit">
     <meta name="author" content="Kotysoft">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://giantjson.com/docs/known-limitations/">
@@ -19,18 +19,19 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://giantjson.com/docs/known-limitations/">
-    <meta property="og:title" content="Known Limitations - Giant JSON Viewer">
+    <meta property="og:title" content="Known Limitations — GiantJSON Viewer+">
     <meta property="og:description"
-        content="Understanding the architectural boundaries of Giant JSON Viewer and when they might affect you.">
+        content="Architectural limits of GiantJSON Viewer+ — file size caps, nesting depth, supported formats (JSON, CBOR, MsgPack, HAR), structure mode analysis, and what the app doesn't do.">
     <meta property="og:image" content="https://giantjson.com/icon.png">
     <meta property="article:published_time" content="2026-01-13T00:00:00Z">
+    <meta property="article:modified_time" content="2026-03-01T00:00:00Z">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://giantjson.com/docs/known-limitations/">
-    <meta property="twitter:title" content="Known Limitations - Giant JSON Viewer">
+    <meta property="twitter:title" content="Known Limitations — GiantJSON Viewer+">
     <meta property="twitter:description"
-        content="Understanding the architectural boundaries of Giant JSON Viewer and when they might affect you.">
+        content="Architectural limits of GiantJSON Viewer+ — file size caps, nesting depth, supported formats (JSON, CBOR, MsgPack, HAR), structure mode analysis, and what the app doesn't do.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../icon.png">
@@ -59,7 +60,7 @@
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": "Known Limitations",
-        "description": "Understanding the architectural boundaries of Giant JSON Viewer and when they might affect you.",
+        "description": "Architectural limits of GiantJSON Viewer+ — file size caps, nesting depth, supported formats, structure mode analysis, and what the app doesn't do.",
         "image": "https://giantjson.com/icon.png",
         "author": {
             "@type": "Organization",
@@ -67,13 +68,14 @@
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Giant JSON Viewer",
+            "name": "GiantJSON Viewer+",
             "logo": {
                 "@type": "ImageObject",
                 "url": "https://giantjson.com/icon.png"
             }
         },
         "datePublished": "2026-01-13",
+        "dateModified": "2026-03-01",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://giantjson.com/docs/known-limitations/"
@@ -116,8 +118,8 @@
     <header class="docs-header">
         <div class="docs-header-inner">
             <a href="../" class="docs-logo">
-                <img src="../../icon.png" alt="Giant JSON Viewer" class="docs-logo-icon">
-                <span>Giant JSON</span>
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
                 <span class="docs-logo-divider">/</span>
                 <span class="docs-logo-text">Docs</span>
             </a>
@@ -162,28 +164,14 @@
                 <header class="docs-article-header">
                     <h1>Known Limitations</h1>
                     <div class="docs-article-meta">
-                        <span>5 min read</span>
-                        <span>Updated Jan 13, 2026</span>
+                        <span>6 min read</span>
+                        <span>Updated Mar 1, 2026</span>
                     </div>
                 </header>
 
-                <!-- Outdated Content Banner -->
-                <div class="docs-outdated-banner">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                    </svg>
-                    <div class="docs-outdated-banner-content">
-                        <div class="docs-outdated-banner-title">Content Update Pending</div>
-                        <p class="docs-outdated-banner-text">This article was written for v1.6.0. The app is now at
-                            v1.8.0 with significant new features and improvements. An updated version of this article is
-                            coming soon.</p>
-                    </div>
-                </div>
-
                 <!-- Article Body -->
                 <div class="docs-article-body">
-                    <p>Giant JSON Viewer is built to handle files that crash other apps. It uses memory mapping,
+                    <p>GiantJSON Viewer+ is built to handle files that crash other apps. It uses memory mapping,
                         native code, and a structural index to navigate multi-gigabyte JSON files on mobile devices
                         with constant memory usage.</p>
 
@@ -249,29 +237,33 @@
 
                     <p>These limits exist as guardrails for system stability, not as practical constraints.</p>
 
-                    <h2 id="structure-mode-sampling">Structure Mode: Sampling Behavior</h2>
+                    <h2 id="structure-mode">Structure Mode: Configurable Analysis</h2>
 
                     <p>When you view a file in <strong>Structure Mode</strong> (the tree view), the app analyzes the
-                        JSON to show you a collapsible schema. For performance on huge files, this analysis uses smart
-                        sampling rather than exhaustive scanning.</p>
+                        JSON to show you a collapsible schema. All analysis parameters are configurable from the
+                        Settings screen.</p>
 
-                    <h3 id="how-sampling-works">How it works</h3>
+                    <h3 id="how-it-works">How it works</h3>
 
                     <ol>
-                        <li><strong>Arrays</strong>: The engine samples up to <strong>100 items</strong> from each
-                            array to determine the element type pattern. It uses majority voting: if 95 of 100 sampled
-                            items are objects with similar keys, the structure view shows that pattern.</li>
-                        <li><strong>Objects</strong>: All keys are displayed, but type inference samples the values. If
-                            a key sometimes contains a string and sometimes a number, the type shown is the majority
-                            type from the sample.</li>
-                        <li><strong>Depth limits</strong>: The structure tree analyzes up to <strong>30 levels
-                                deep</strong> and displays up to <strong>500 children per level</strong>, with a global
-                            cap of <strong>10,000 nodes</strong> in the tree.</li>
+                        <li><strong>Arrays</strong>: The engine samples elements from each array to determine the type
+                            pattern. Default: <strong>1,000 elements</strong>, configurable from 10 to 1 million.</li>
+                        <li><strong>Objects</strong>: All keys are displayed, but type inference is based on the sampled
+                            values. If a key sometimes contains a string and sometimes a number, the type shown is the
+                            majority type from the sample.</li>
+                        <li><strong>Display limits</strong> (all configurable in Settings):
+                            <ul>
+                                <li><strong>Max depth</strong>: 50 levels (options: 10 / 25 / 50 / 100 / 255)</li>
+                                <li><strong>Max children per level</strong>: 50 (options: 20 / 50 / 100 / 200)</li>
+                                <li><strong>Max total nodes rendered</strong>: 1,000 (options: 500 / 1,000 / 2,000 /
+                                    5,000)</li>
+                            </ul>
+                        </li>
                     </ol>
 
                     <h3 id="what-sampling-means">What this means for you</h3>
 
-                    <p>If your array contains 1 million items where the first 100 are objects but items 101+ are
+                    <p>If your array contains 1 million items where the first 1,000 are objects but items 1,001+ are
                         strings, the Structure Mode will show the array as containing objects (since that was 100% of
                         the sample).</p>
 
@@ -288,9 +280,52 @@
                             significant memory.</p>
                     </div>
 
-                    <p>For precise type checking across all items, consider using <strong>export filtering</strong> or
-                        <strong>search</strong> to validate specific patterns.
+                    <h2 id="unique-jsonpath-limit">Unique JSONPath Limit</h2>
+
+                    <p>During indexing, the app collects every unique JSONPath in your file (e.g.,
+                        <code>$.users[*].name</code>, <code>$.users[*].address.city</code>). These paths power Structure
+                        Mode rendering, Browser Mode filter key selection, and export features.
                     </p>
+
+                    <h3 id="why-path-limit">Why there is a limit</h3>
+
+                    <p>Files with extremely complex or deeply nested structures can generate hundreds of thousands of
+                        unique paths. Each path is held in memory during index building, and collecting all of them on a
+                        mobile device can cause out-of-memory crashes.</p>
+
+                    <h3 id="path-limit-options">Default and options</h3>
+
+                    <p>The default limit is <strong>200,000 unique paths</strong>, configurable in Settings:</p>
+
+                    <ul>
+                        <li><strong>100K</strong>: Handles virtually all real-world files. Even complex APIs and large
+                            datasets rarely exceed a few thousand unique paths &mdash; 100K is already far beyond what
+                            typical JSON structures produce.</li>
+                        <li><strong>200K (default)</strong>: Extra headroom for edge cases</li>
+                        <li><strong>500K</strong>: For moderately complex files on devices with 6 GB+ RAM</li>
+                        <li><strong>1M</strong>: For very complex files on high-end devices with 8 GB+ RAM</li>
+                        <li><strong>Unlimited</strong>: No cap. Use only on powerful devices with very complex files
+                        </li>
+                    </ul>
+
+                    <h3 id="path-limit-exceeded">What happens when the limit is reached</h3>
+
+                    <p>If the number of unique paths exceeds the configured limit during indexing, the schema collection
+                        phase stops and returns an error. The file still opens and is fully navigable in Text Mode and
+                        Browser Mode &mdash; only Structure Mode and filter key suggestions are affected.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            When does this happen?
+                        </div>
+                        <p>This is rare. Most JSON files, even multi-gigabyte ones, contain a few hundred unique paths
+                            at most. You'll typically only hit this limit with auto-generated schemas, deeply nested
+                            configuration files, or files where every object has unique key names.</p>
+                    </div>
 
                     <h2 id="long-lines-large-values">Long Lines and Large Values</h2>
 
@@ -298,24 +333,52 @@
                         viewing modes apply truncation:</p>
 
                     <ul>
-                        <li><strong>Text Mode</strong> detects lines longer than <strong>10 KB</strong> and shows a
-                            warning before rendering</li>
-                        <li><strong>Browser Mode</strong> also truncates value previews to <strong>5 KB</strong> with an
-                            indicator showing the original size</li>
+                        <li><strong>Text Mode</strong> detects lines longer than <strong>4 KB</strong> and offers
+                            truncation options (partial preview or hide completely)</li>
+                        <li><strong>Browser Mode</strong> always shows truncated value previews by design &mdash; it
+                            displays the first portion of each value inline, which keeps navigation instant regardless
+                            of value size</li>
                     </ul>
 
-                    <h3 id="encoded-data-detection">What about the actual data?</h3>
+                    <p>During indexing, a large value index is built that flags all values exceeding 4,096 bytes. This
+                        allows both modes to make instant truncation decisions without scanning the file at read
+                        time.</p>
 
-                    <p>Since version 1.6.0, Browser Mode includes <strong>Encoded Data Detection</strong>. When a value
-                        contains base64-encoded content matching one of 50+ known file formats (images, documents,
-                        archives, etc.), the app displays a special indicator and allows you to <strong>extract and
-                            download</strong> the original file.</p>
+                    <h3 id="viewing-full-content">Viewing the full content</h3>
 
-                    <p>This means even if a 10 MB embedded image is truncated in the preview, you can still save it to
-                        your device.</p>
+                    <p>Truncation does not mean the data is inaccessible. Both Text Mode and Browser Mode include a
+                        <strong>Large Content Viewer</strong> &mdash; a dedicated screen for viewing the full value
+                        separately. If the value contains a stringified JSON, it is displayed unescaped and formatted
+                        for readability.
+                    </p>
 
-                    <p>If you work primarily with minified JSON (single-line files) or base64-encoded data, Browser
-                        Mode with Encoded Data Detection enabled is the recommended approach.</p>
+                    <p>Additionally, <strong>Encoded Data Detection</strong> recognizes base64-encoded content matching
+                        50+ known file formats (images, documents, archives, etc.) and lets you extract and download the
+                        original file directly.</p>
+
+                    <h2 id="binary-format-support">Binary Format Support (CBOR &amp; MessagePack)</h2>
+
+                    <p>Since version 1.8.1, GiantJSON Viewer+ can open CBOR and MessagePack binary JSON files.</p>
+
+                    <h3 id="binary-how-it-works">How it works</h3>
+
+                    <p>On first open, the binary file is converted to standard JSON using a streaming Rust converter.
+                        The conversion runs token-by-token with constant memory usage &mdash; no intermediate
+                        allocation, regardless of file size. The resulting JSON file is stored locally, so subsequent
+                        opens skip the conversion entirely.</p>
+
+                    <h3 id="binary-limitations">Limitations</h3>
+
+                    <ul>
+                        <li><strong>Output size</strong>: The converted JSON file will be larger than the original
+                            binary, since binary formats are more compact by design.</li>
+                        <li><strong>Type mapping</strong>: Binary-specific types without a JSON equivalent are handled
+                            best-effort. Byte arrays are encoded as hex strings, CBOR tags are unwrapped, and MsgPack
+                            extension types are represented as strings.</li>
+                        <li><strong>Storage</strong>: The converted JSON file is stored in the app's cache and counts
+                            toward your storage usage. You can clear all converted files from the Recent Files storage
+                            breakdown.</li>
+                    </ul>
 
                     <h2 id="index-storage">Index Storage</h2>
 
@@ -324,15 +387,17 @@
 
                     <h3 id="storage-usage">How much storage does indexing use?</h3>
 
-                    <p>Each indexed node (object or array) costs exactly <strong>32 bytes</strong> of storage. Primitive
-                        values (strings, numbers, booleans) are not indexed.</p>
+                    <p>Each indexed node (object or array) costs exactly <strong>32 bytes</strong> of on-disk storage.
+                        Primitive values (strings, numbers, booleans) are not indexed. During indexing, temporary files
+                        require additional disk space that is automatically cleaned up when indexing completes.</p>
 
                     <table>
                         <thead>
                             <tr>
                                 <th>File description</th>
                                 <th>Indexed nodes</th>
-                                <th>Index size</th>
+                                <th>Final index size</th>
+                                <th>Peak temp storage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -340,27 +405,39 @@
                                 <td>Simple API response (50 objects)</td>
                                 <td>50</td>
                                 <td>~1.6 KB</td>
+                                <td>~5 KB</td>
                             </tr>
                             <tr>
                                 <td>Medium dataset (10,000 arrays/objects)</td>
                                 <td>10,000</td>
                                 <td>~320 KB</td>
+                                <td>~1 MB</td>
                             </tr>
                             <tr>
                                 <td>Large export (1 million containers)</td>
                                 <td>1,000,000</td>
                                 <td>~32 MB</td>
+                                <td>~100 MB</td>
                             </tr>
                             <tr>
                                 <td>Massive log file (100 million nodes)</td>
                                 <td>100,000,000</td>
                                 <td>~3.2 GB</td>
+                                <td>~10 GB</td>
                             </tr>
                         </tbody>
                     </table>
 
                     <p>Additional auxiliary files (sparse line index, line length cache, keys index) add modest
-                        overhead, typically 1-5% of the structural index size.</p>
+                        overhead, typically 1-5% of the final index size.</p>
+
+                    <h3 id="memory-during-indexing">Memory usage during indexing</h3>
+
+                    <p>Indexing is designed to use a <strong>constant amount of memory</strong> regardless of file size.
+                        A 100 MB file and a 50 GB file use roughly the same peak memory &mdash; approximately
+                        <strong>150 MB</strong>. This means you won't run into out-of-memory issues even when indexing
+                        very large files on devices with limited RAM.
+                    </p>
 
                     <h3 id="storage-implications">Storage implications</h3>
 
@@ -374,16 +451,19 @@
 
                     <p>You can view your total storage usage and per-file breakdown from the Recent Files screen.</p>
 
-                    <h2 id="what-we-dont-do">What Giant JSON Viewer Doesn't Do</h2>
+                    <h2 id="what-we-dont-do">What GiantJSON Viewer+ Doesn't Do</h2>
 
                     <p>To set expectations clearly:</p>
 
                     <ul>
-                        <li><strong>No editing</strong>: This is a viewer only. You cannot modify files within the app.
+                        <li><strong>No editing</strong>: This is a viewer and analysis tool only. You cannot modify
+                            source files.</li>
+                        <li><strong>No XML, YAML, or TOML</strong>: Supported formats are JSON, NDJSON/JSONL, HAR,
+                            CBOR, MessagePack, and Markdown.</li>
+                        <li><strong>No pre-request/test scripts</strong>: The API client does not include a JavaScript
+                            engine. Postman scripts are skipped on import.</li>
+                        <li><strong>No cloud sync</strong>: Files, indexes, and API collections stay on your device.
                         </li>
-                        <li><strong>No XML, YAML, or TOML</strong>: Only JSON, NDJSON, and plain text are supported.
-                        </li>
-                        <li><strong>No cloud sync</strong>: Files and indexes stay on your device.</li>
                     </ul>
 
                     <h2 id="hitting-a-limitation">Hitting a Limitation?</h2>
@@ -426,20 +506,28 @@
                                 <td>4.3 billion</td>
                             </tr>
                             <tr>
-                                <td>Structure Mode sampling (arrays)</td>
-                                <td>100 items</td>
+                                <td>Schema sampling (arrays)</td>
+                                <td>Configurable (default: 1,000)</td>
                             </tr>
                             <tr>
                                 <td>Structure tree depth</td>
-                                <td>30 levels</td>
+                                <td>Configurable (default: 50)</td>
                             </tr>
                             <tr>
                                 <td>Structure tree children per level</td>
-                                <td>500</td>
+                                <td>Configurable (default: 50)</td>
+                            </tr>
+                            <tr>
+                                <td>Structure tree total nodes</td>
+                                <td>Configurable (default: 1,000)</td>
                             </tr>
                             <tr>
                                 <td>Long line threshold</td>
-                                <td>10 KB</td>
+                                <td>4 KB</td>
+                            </tr>
+                            <tr>
+                                <td>Unique JSONPath limit</td>
+                                <td>Configurable (default: 200,000)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -450,7 +538,7 @@
                     <!-- Google Play CTA -->
                     <div class="docs-play-cta">
                         <h3>Handle Large JSON Files With Ease</h3>
-                        <p>Try Giant JSON Viewer free and experience smooth navigation through files that crash other
+                        <p>Try GiantJSON Viewer+ free and experience smooth navigation through files that crash other
                             apps.</p>
                         <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=article_cta&utm_campaign=known_limitations"
                             class="btn-primary" target="_blank" rel="noopener">
@@ -458,7 +546,7 @@
                                 <path
                                     d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
                             </svg>
-                            Get Giant JSON Viewer
+                            Get GiantJSON Viewer+
                         </a>
                     </div>
                 </div>
@@ -484,7 +572,7 @@
 
     <!-- Footer -->
     <footer class="docs-footer">
-        <p>&copy; 2025 <a href="../">Giant JSON Viewer Docs</a> by Kotysoft</p>
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
         <p>All rights reserved</p>
     </footer>
 
