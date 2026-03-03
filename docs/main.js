@@ -4,7 +4,38 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initLightbox();
     initTracking();
+    initWebtools();
 });
+
+/* ------------------------------------------ */
+/* Web Tools — card click to preview           */
+/* ------------------------------------------ */
+
+function initWebtools() {
+    const toolsGrid = document.getElementById('wt-tools');
+    const preview = document.getElementById('wt-preview');
+    if (!toolsGrid || !preview) return;
+
+    const cards = toolsGrid.querySelectorAll('.wt-card');
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const imgSrc = card.dataset.wtImg;
+            const imgAlt = card.dataset.wtAlt;
+            if (!imgSrc) return;
+
+            cards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            preview.style.opacity = '0';
+            setTimeout(() => {
+                preview.src = imgSrc;
+                preview.alt = imgAlt;
+                preview.style.opacity = '1';
+            }, 150);
+        });
+    });
+}
 
 /* ------------------------------------------ */
 /* Scroll Animations                           */
@@ -20,6 +51,7 @@ function initScrollAnimations() {
         '.feature-row',
         '.analysis-card',
         '.format-badge',
+        '.wt-card',
     ];
 
     const elements = document.querySelectorAll(animatableSelectors.join(', '));
@@ -70,7 +102,7 @@ function initLightbox() {
 
     // Attach click to all clickable screenshots
     const screenshots = document.querySelectorAll(
-        '.screenshot-phone, .mode-screenshot img, .analysis-card-screenshot img'
+        '.screenshot-phone, .mode-screenshot img, .analysis-card-screenshot img, .screenshot-webtools'
     );
 
     screenshots.forEach(img => {
@@ -107,7 +139,6 @@ function initTracking() {
 
     const trackMap = [
         { id: 'hero-play-btn', category: 'engagement', label: 'hero_play_store', isPlayStore: true },
-        { id: 'hero-docs-btn', category: 'engagement', label: 'hero_docs', isPlayStore: false },
         { id: 'cta-play-btn', category: 'engagement', label: 'cta_play_store', isPlayStore: true },
         { id: 'cta-docs-btn', category: 'engagement', label: 'cta_docs', isPlayStore: false },
         { id: 'cta-github-btn', category: 'engagement', label: 'cta_github_issues', isPlayStore: false },
