@@ -1,11 +1,42 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+    forwardUTMParameters();
     initScrollAnimations();
     initLightbox();
     initTracking();
     initWebtools();
 });
+
+/* ------------------------------------------ */
+/* UTM Forwarding to Google Play links         */
+/* ------------------------------------------ */
+
+/**
+ * Read UTM parameters from the current page URL and override them
+ * on all Google Play links. This preserves campaign attribution
+ * end-to-end (e.g. Reddit ad -> website -> Play Store).
+ * Falls back to the hardcoded defaults when no UTMs are present.
+ */
+function forwardUTMParameters() {
+    const pageParams = new URLSearchParams(window.location.search);
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+
+    const hasIncoming = utmKeys.some(k => pageParams.has(k));
+    if (!hasIncoming) return;
+
+    const playLinks = document.querySelectorAll('a[href*="play.google.com"]');
+
+    playLinks.forEach(link => {
+        const url = new URL(link.href);
+        utmKeys.forEach(k => {
+            if (pageParams.has(k)) {
+                url.searchParams.set(k, pageParams.get(k));
+            }
+        });
+        link.href = url.toString();
+    });
+}
 
 /* ------------------------------------------ */
 /* Web Tools — card click to preview           */
@@ -86,7 +117,6 @@ function initScrollAnimations() {
 /* ------------------------------------------ */
 
 function initLightbox() {
-    // Build the lightbox DOM
     const lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
     lightbox.innerHTML = `
@@ -100,7 +130,6 @@ function initLightbox() {
     const lightboxImage = lightbox.querySelector('.lightbox-image');
     const closeBtn = lightbox.querySelector('.lightbox-close');
 
-    // Attach click to all clickable screenshots
     const screenshots = document.querySelectorAll(
         '.screenshot-phone, .mode-screenshot img, .analysis-card-screenshot img, .screenshot-webtools'
     );
@@ -138,20 +167,18 @@ function initTracking() {
     if (typeof gtag === 'undefined') return;
 
     const trackMap = [
-        { id: 'hero-play-btn', category: 'engagement', label: 'hero_play_store', isPlayStore: true },
-        { id: 'cta-play-btn', category: 'engagement', label: 'cta_play_store', isPlayStore: true },
-        { id: 'cta-docs-btn', category: 'engagement', label: 'cta_docs', isPlayStore: false },
-        { id: 'cta-github-btn', category: 'engagement', label: 'cta_github_issues', isPlayStore: false },
+        { id: 'hero-play-btn', event: 'play_store_click', label: 'hero', isPlayStore: true },
+        { id: 'cta-play-btn', event: 'play_store_click', label: 'cta', isPlayStore: true },
+        { id: 'cta-docs-btn', event: 'docs_click', label: 'cta', isPlayStore: false },
+        { id: 'cta-github-btn', event: 'github_click', label: 'cta', isPlayStore: false },
     ];
 
-    trackMap.forEach(({ id, category, label, isPlayStore }) => {
+    trackMap.forEach(({ id, event, label, isPlayStore }) => {
         const el = document.getElementById(id);
         if (!el) return;
         el.addEventListener('click', () => {
-            // Google Analytics
-            gtag('event', 'click', { event_category: category, event_label: label });
+            gtag('event', event, { button_location: label });
 
-            // Reddit Pixel - Track Play Store clicks as conversions
             if (isPlayStore && typeof rdt !== 'undefined') {
                 const conversionId = generateConversionId(label);
                 rdt('track', 'SignUp', {
