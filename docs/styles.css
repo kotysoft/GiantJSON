@@ -1514,7 +1514,17 @@ code {
     }
 
     .scroll-indicator {
-        display: none;
+        bottom: 16px;
+    }
+
+    .scroll-text {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+    }
+
+    .scroll-arrow {
+        width: 24px;
+        height: 24px;
     }
 
     .cta-buttons {
