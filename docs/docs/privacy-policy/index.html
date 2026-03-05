@@ -45,12 +45,12 @@
     <link rel="stylesheet" href="../docs.css">
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3RNGYQS1F4"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'G-NNVRGYSSNQ');
+        gtag('config', 'G-3RNGYQS1F4');
     </script>
 
     <!-- Structured Data -->
@@ -73,7 +73,7 @@
                 "url": "https://giantjson.com/icon.png"
             }
         },
-        "datePublished": "2026-01-11",
+        "datePublished": "2026-03-03",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://giantjson.com/docs/privacy-policy/"
@@ -162,8 +162,8 @@
                 <header class="docs-article-header">
                     <h1>Privacy Policy</h1>
                     <div class="docs-article-meta">
-                        <span>4 min read</span>
-                        <span>Updated Jan 11, 2026</span>
+                        <span>5 min read</span>
+                        <span>Updated Mar 3, 2026</span>
                     </div>
                 </header>
 
@@ -180,9 +180,10 @@
                             data</li>
                         <li><strong>No personal data collection</strong> — we don't collect names, emails, or
                             identifiers</li>
-                        <li><strong>No analytics or logging</strong> — the app itself doesn't track your usage</li>
-                        <li><strong>Minimal server interaction</strong> — only two optional features contact our
-                            servers, and neither exposes personal data</li>
+                        <li><strong>Anonymous analytics only</strong> — Crashlytics and Analytics help us fix bugs and
+                            improve the app, with no personal identifiers attached</li>
+                        <li><strong>You control data sharing</strong> — analytics is on by default but can be
+                            turned off anytime in the app's global options</li>
                     </ul>
 
                     <h2 id="what-the-app-does-locally">What the App Does Locally</h2>
@@ -198,21 +199,6 @@
 
                     <p>None of this data is transmitted anywhere. Files you open remain solely on your device.</p>
 
-                    <h2 id="free-trial-tracking">Free Trial Tracking</h2>
-
-                    <p>When you accept the optional 10-day PRO trial, we store an <strong>anonymous device
-                            token</strong>
-                        on our secure servers. This token is:</p>
-
-                    <ul>
-                        <li>A one-way cryptographic hash that <strong>cannot be reversed</strong> to identify you or
-                            your device</li>
-                        <li>Used solely to remember your trial progress across app reinstalls</li>
-                        <li>Processed and stored on Google Cloud infrastructure</li>
-                    </ul>
-
-                    <p>If you decline the trial, no data is stored.</p>
-
                     <h2 id="ai-regex-generator">AI-Assisted Regex Generator</h2>
 
                     <p>The optional AI regex generator sends <strong>only the text description you type</strong> (up to
@@ -225,27 +211,79 @@
                         <li>Requests are not stored or used for any other purpose</li>
                     </ul>
 
-                    <p>This is the only feature that sends any user-provided content to a server.</p>
+                    <h2 id="in-app-feedback">In-App Feedback</h2>
+
+                    <p>The app includes an optional feedback form where you can report bugs, request features, or share
+                        general feedback. When you submit feedback, the following is sent to our servers via
+                        Firebase Firestore:</p>
+
+                    <ul>
+                        <li><strong>Your message</strong> — the text you type (10-2000 characters)</li>
+                        <li><strong>Feedback category</strong> — Bug Report, Feature Request, or General Feedback</li>
+                        <li><strong>Non-identifying device info</strong> — App version, Android API level, device
+                            model/manufacturer, available/total RAM, and PRO subscription status</li>
+                    </ul>
+
+                    <p>Before submitting, the app displays exactly what data will be sent in a transparency section
+                        at the bottom of the feedback form. No personal identifiers (name, email, device ID) are
+                        included.</p>
 
                     <h2 id="in-app-purchases">In-App Purchases</h2>
 
-                    <p>PRO features are available via Google Play In-App Purchases. All payment processing is handled
-                        entirely by Google Play. We do not collect, see, or store any payment information.</p>
+                    <p>PRO features are available via Google Play In-App Purchases, including free trial periods
+                        managed entirely by Google Play. All payment and trial processing is handled by Google. We do
+                        not collect, see, or store any payment or trial information.</p>
+
+                    <h2 id="firebase-crashlytics">Firebase Crashlytics</h2>
+
+                    <p>We use Firebase Crashlytics for automatic crash and error reporting. When the app crashes or
+                        encounters an error, Crashlytics collects:</p>
+
+                    <ul>
+                        <li>Crash stack traces and error logs</li>
+                        <li>Device state at the time of crash (memory, battery, orientation)</li>
+                        <li>Device model and OS version</li>
+                    </ul>
+
+                    <p>No personal data is included. This data is used solely to identify and fix stability issues.
+                        You can disable this in the app's global options at any time.</p>
+
+                    <h2 id="google-analytics">Google Analytics (Firebase)</h2>
+
+                    <p>We use Google Analytics for Firebase to understand how the app is used, which features are
+                        popular, and where users encounter problems. This data is fully anonymous and includes:</p>
+
+                    <ul>
+                        <li>Feature usage events (which screens are visited, which tools are used)</li>
+                        <li>App performance metrics</li>
+                        <li>General device category (no unique identifiers)</li>
+                    </ul>
+
+                    <p>No personal identifiers are collected. Analytics data is processed by Google under
+                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy
+                            Policy</a>. You can disable this in the app's global options at any time.
+                    </p>
+
+                    <h2 id="analytics-consent">Analytics Consent</h2>
+
+                    <p>Crashlytics and Analytics are <strong>enabled by default</strong> to help us maintain app
+                        stability and improve the experience. You can <strong>opt out at any time</strong> from the
+                        app's global options — no data will be collected once you turn it off. Your preference is
+                        stored locally on your device.</p>
 
                     <h2 id="google-play-services">Google Play Services</h2>
 
-                    <p>While GiantJSON Viewer+ itself does not log or collect usage data, <strong>Google Play may
+                    <p>In addition to the Firebase services described above, <strong>Google Play itself may
                             collect</strong>:</p>
 
                     <ul>
-                        <li>Crash reports and ANR (Application Not Responding) logs</li>
-                        <li>Basic usage statistics</li>
-                        <li>Device information for compatibility purposes</li>
+                        <li>Basic installation and update statistics</li>
+                        <li>Device compatibility information</li>
                     </ul>
 
                     <p>This is standard for all Android apps distributed via Google Play and is governed by
                         <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy
-                            Policy</a>. We use this data solely to identify and fix crashes.
+                            Policy</a>.
                     </p>
 
                     <h2 id="in-app-reviews">In-App Reviews</h2>
@@ -265,10 +303,9 @@
                     <ul>
                         <li>Your name, email, or contact details</li>
                         <li>Contents of your JSON files</li>
-                        <li>Device identifiers (except the anonymous trial token)</li>
+                        <li>Unique device identifiers or advertising IDs</li>
                         <li>Location data</li>
                         <li>Browsing history</li>
-                        <li>Usage patterns or behavior analytics</li>
                     </ul>
 
                     <h2 id="contact">Contact</h2>
@@ -286,7 +323,7 @@
                             Policy Details
                         </div>
                         <p><strong>Effective Date:</strong> January 2026<br>
-                            <strong>Last Updated:</strong> January 11, 2026
+                            <strong>Last Updated:</strong> March 3, 2026
                         </p>
                     </div>
                 </div>
