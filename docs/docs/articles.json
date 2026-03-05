@@ -1,13 +1,6 @@
 {
   "articles": [
-    {
-      "slug": "overview",
-      "title": "GiantJSON Viewer+: Complete Overview",
-      "description": "A complete guide to the three viewing modes, indexing, storage, tools, and getting the most out of the app.",
-      "category": "getting-started",
-      "date": "2026-01-10",
-      "readTime": 10
-    },
+
     {
       "slug": "viewing-large-files",
       "title": "How to View Large JSON Files on Android",
@@ -29,7 +22,7 @@
       "title": "Privacy Policy",
       "description": "How GiantJSON Viewer+ protects your data and what information we collect (spoiler: almost nothing).",
       "category": "legal",
-      "date": "2026-01-11",
+      "date": "2026-03-03",
       "readTime": 4
     },
     {
@@ -45,7 +38,7 @@
       "title": "Known Limitations",
       "description": "Understanding the architectural boundaries of GiantJSON Viewer+ and when they might affect you.",
       "category": "getting-started",
-      "date": "2026-01-13",
+      "date": "2026-03-01",
       "readTime": 5
     }
   ],
