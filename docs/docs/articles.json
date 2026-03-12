@@ -40,6 +40,14 @@
       "category": "getting-started",
       "date": "2026-03-01",
       "readTime": 5
+    },
+    {
+      "slug": "har-file-analyzer",
+      "title": "How to Analyze Large HAR Files on Android — Offline, Private, No Upload",
+      "description": "Open, read, and analyze large HAR files directly on your Android phone without uploading. Full network traffic analysis with filtering, timing breakdowns, and privacy.",
+      "category": "topics",
+      "date": "2026-03-12",
+      "readTime": 7
     }
   ],
   "categories": [

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>How to Analyze Large HAR Files on Android — Offline, Private, No Upload</title>
+    <meta name="title" content="How to Analyze Large HAR Files on Android — Offline, Private, No Upload">
+    <meta name="description"
+        content="Open, read, and analyze large HAR files directly on your Android phone without uploading. This HAR viewer for Android handles multi-gigabyte HAR files offline with full network traffic analysis.">
+    <meta name="keywords"
+        content="HAR file analyzer, HAR file viewer, HAR file reader, HAR viewer for Android, large HAR file, open HAR file Android, analyze HAR file, network traffic analysis, web performance, mobile HAR analyzer, HAR analyzer app">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/har-file-analyzer/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/har-file-analyzer/">
+    <meta property="og:title" content="How to Analyze Large HAR Files on Android — Offline, Private, No Upload">
+    <meta property="og:description"
+        content="Open, read, and analyze large HAR files directly on your Android phone without uploading. This HAR viewer for Android handles multi-gigabyte HAR files offline with full network traffic analysis.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-03-12T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/har-file-analyzer/">
+    <meta property="twitter:title" content="How to Analyze Large HAR Files on Android — Offline, Private, No Upload">
+    <meta property="twitter:description"
+        content="Open, read, and analyze large HAR files directly on your Android phone without uploading. This HAR viewer for Android handles multi-gigabyte HAR files offline with full network traffic analysis.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3RNGYQS1F4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-3RNGYQS1F4');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Analyze Large HAR Files on Android — Offline, Private, No Upload",
+        "description": "Open, read, and analyze large HAR files directly on your Android phone without uploading. This HAR viewer for Android handles multi-gigabyte HAR files offline with full network traffic analysis.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "GiantJSON Viewer+",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-03-12",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/har-file-analyzer/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "How to Analyze Large HAR Files on Android",
+                "item": "https://giantjson.com/docs/har-file-analyzer/"
+            }
+        ]
+    }
+    </script>
+
+    <!-- FAQ Structured Data for LLM + Google visibility -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is the best HAR file analyzer for Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Giant JSON Viewer is a HAR analyzer app for Android that handles files of any size, works completely offline, and provides a full analysis dashboard with filtering, timing breakdowns, domain analysis, and detailed request inspection."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I open large HAR files on my phone?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. As a HAR viewer for Android, Giant JSON Viewer handles multi-gigabyte HAR files without crashes or excessive memory usage. Files are indexed progressively and requests are loaded on demand."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is it safe to upload HAR files to online analyzers?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "HAR files contain sensitive data including authentication tokens, cookies, and potentially passwords. Uploading to online tools means sending this to third-party servers. An offline HAR analyzer like Giant JSON Viewer processes files entirely on your device — no upload required."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I read a HAR file?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "HAR files are JSON-formatted, so any JSON viewer can open them. However, a specialized HAR file reader provides structured analysis — a dashboard overview, timing waterfall, domain breakdown, multi-dimension filtering, and request-level detail — rather than just showing raw JSON text."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is inside a HAR file?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A HAR file contains a complete log of HTTP requests and responses: URLs, methods, headers, cookies, query parameters, request/response bodies, timing data for each network phase, and connection security details. It's the standard format for capturing and sharing web network traffic."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I export a request from a HAR file as cURL?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Tap any request in the HAR file viewer and use Copy as cURL to get a formatted command ready to paste into your terminal."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I replay a HAR request for testing?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The Clone to API Client feature imports any HAR request into the built-in API Client, where you can modify and re-send it. This mobile HAR analyzer feature is useful for debugging specific API calls captured during network traffic analysis."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=har_analyzer"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">How to Analyze Large HAR Files on Android</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>How to Analyze Large HAR Files on Android</h1>
+                    <div class="docs-article-meta">
+                        <span>7 min read</span>
+                        <span>Updated Mar 12, 2026</span>
+                    </div>
+                </header>
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+
+                    <!-- What Is a HAR File? -->
+                    <h2 id="what-is-a-har-file">What Is a HAR File?</h2>
+
+                    <p>A HAR (HTTP Archive) file is a JSON-formatted log of every network request and response between a web browser and a website. When you record network activity in Chrome DevTools, Firefox, Safari, or Edge and export it, you get a <code>.har</code> file.</p>
+
+                    <p>Each entry in a HAR file captures:</p>
+
+                    <ul>
+                        <li><strong>URL and HTTP method</strong> (GET, POST, PUT, DELETE, etc.)</li>
+                        <li><strong>Request and response headers</strong> (including cookies, auth tokens, content types)</li>
+                        <li><strong>Status codes</strong> (2xx success, 3xx redirect, 4xx client error, 5xx server error)</li>
+                        <li><strong>Timing breakdown</strong> (DNS lookup, TCP connection, SSL handshake, server wait time, download)</li>
+                        <li><strong>Payload data</strong> (request bodies, response content, including base64-encoded images and media)</li>
+                        <li><strong>Cookie details</strong> (name, value, domain, path, expiry, security flags)</li>
+                    </ul>
+
+                    <p>HAR files are the standard format for capturing web network traffic. Developers, QA engineers, DevOps teams, and support engineers use them to debug slow pages, track down failing API calls, and diagnose network issues.</p>
+
+                    <!-- Why HAR Files Get Extremely Large -->
+                    <h2 id="why-har-files-get-extremely-large">Why HAR Files Get Extremely Large</h2>
+
+                    <p>A simple page load might generate a few dozen requests. Real-world web applications produce far more:</p>
+
+                    <ul>
+                        <li><strong>Single Page Applications</strong> make hundreds of API calls during a session</li>
+                        <li><strong>E-commerce sites</strong> load product images, tracking scripts, and third-party widgets</li>
+                        <li><strong>Admin dashboards</strong> fetch large JSON payloads from multiple endpoints</li>
+                        <li><strong>Long recording sessions</strong> accumulate thousands of requests</li>
+                        <li><strong>Response bodies</strong> included in the HAR (images, fonts, scripts) inflate file size dramatically</li>
+                    </ul>
+
+                    <p>HAR files of <strong>50 MB, 200 MB, or well over 1 GB</strong> are common when recording complex applications or extended debugging sessions. That's when most HAR analysis tools break down.</p>
+
+                    <!-- The Problem -->
+                    <h2 id="the-problem">The Problem: Most HAR Tools Can't Handle Large Files</h2>
+
+                    <h3 id="browser-devtools-struggle">Browser DevTools Struggle</h3>
+
+                    <p>Chrome DevTools can import HAR files, but loads everything into memory at once. With files over 100 MB:</p>
+
+                    <ul>
+                        <li>Loading takes minutes</li>
+                        <li>The browser tab becomes unresponsive</li>
+                        <li>Chrome sometimes saves a 0-byte file when the export itself is too large</li>
+                    </ul>
+
+                    <h3 id="online-analyzers-require-uploading">Online HAR Analyzers Require Uploading</h3>
+
+                    <p>Most HAR analysis tools are web-based &mdash; you upload your file to their server for processing. Two problems:</p>
+
+                    <ol>
+                        <li><strong>Privacy risk</strong>: HAR files contain auth tokens, session cookies, API keys, and sometimes passwords in POST bodies. Uploading means sending all of this to someone else's infrastructure.</li>
+                        <li><strong>Size limits</strong>: Web-based tools typically fail with files over 10-50 MB. JavaScript runtimes have strict memory limits.</li>
+                    </ol>
+
+                    <h3 id="desktop-tools-are-heavyweight">Desktop Tools Are Heavyweight</h3>
+
+                    <p>Tools like Fiddler and Charles Proxy can import HAR files, but they're full proxy applications designed for live traffic capture &mdash; not quick HAR file analysis. They require installation and configuration.</p>
+
+                    <h3 id="mobile-har-readers-are-basic">Mobile HAR Readers Are Basic</h3>
+
+                    <p>The few HAR file reader apps on Google Play offer minimal functionality &mdash; basic request lists without filtering, performance analysis, or timing breakdowns, and they can't handle large files.</p>
+
+                    <!-- Analyzing HAR Files on Android -->
+                    <h2 id="analyzing-har-files-on-android">Analyzing HAR Files on Android with Giant JSON Viewer</h2>
+
+                    <p>Giant JSON Viewer includes a dedicated HAR analyzer for opening and reading HAR files of any size &mdash; from small session logs to multi-gigabyte captures &mdash; directly on your Android device, completely offline. As a full-featured HAR viewer for Android, it goes far beyond basic file reading.</p>
+
+                    <h3 id="open-any-har-file">Open Any HAR File</h3>
+
+                    <p>Open any <code>.har</code> file and the app detects the format and launches the HAR Analyzer. The file is indexed progressively with a real-time progress indicator and cancel support. Once indexed, reopening the same file loads instantly from cache.</p>
+
+                    <h3 id="dashboard-overview">Dashboard Overview</h3>
+
+                    <p>The HAR analyzer dashboard provides an immediate summary of network traffic:</p>
+
+                    <ul>
+                        <li><strong>Requests</strong>: Total number of network requests in the capture</li>
+                        <li><strong>Transfer Size</strong>: Total data transferred across all requests</li>
+                        <li><strong>Avg Response Time</strong>: Color-coded &mdash; green for fast (&lt;200ms), amber for moderate, red for slow (&gt;1s)</li>
+                        <li><strong>Errors</strong>: Count of 4xx and 5xx responses, highlighted in red when problems exist. Tap to jump directly to the error list.</li>
+                    </ul>
+
+                    <p>The dashboard also shows the <strong>recording tool</strong> and version (e.g., Chrome DevTools), <strong>HAR format version</strong>, <strong>capture duration</strong>, and <strong>date range</strong> of the recording.</p>
+
+                    <h3 id="timing-waterfall">Timing Waterfall</h3>
+
+                    <p>A visual breakdown shows where time is spent across all requests, split into seven network phases:</p>
+
+                    <ul>
+                        <li><strong>Blocked</strong> &mdash; request queued by the browser</li>
+                        <li><strong>DNS</strong> &mdash; domain name resolution</li>
+                        <li><strong>Connect</strong> &mdash; TCP connection establishment</li>
+                        <li><strong>SSL</strong> &mdash; TLS/SSL handshake</li>
+                        <li><strong>Send</strong> &mdash; sending the request data</li>
+                        <li><strong>Wait</strong> &mdash; waiting for the server response (Time To First Byte)</li>
+                        <li><strong>Receive</strong> &mdash; downloading the response body</li>
+                    </ul>
+
+                    <details class="docs-details">
+                        <summary>What do these phases mean?</summary>
+                        <p>Every time your browser makes a request, it goes through these steps in order. If "Wait" is high, the server is slow. If "DNS" is high, name resolution is the bottleneck. If "Blocked" is high, too many requests are queued. Understanding which phase takes the most time tells you exactly where the problem is.</p>
+                    </details>
+
+                    <p>Toggle between <strong>Average</strong> (per-request) and <strong>Sum</strong> (total accumulated) views to understand both typical and overall impact.</p>
+
+                    <h3 id="status-code-chart">Status Code Chart</h3>
+
+                    <p>A visual bar chart shows the distribution of HTTP response codes (2xx, 3xx, 4xx, 5xx). Tap any category to jump to a filtered view of those requests.</p>
+
+                    <details class="docs-details">
+                        <summary>What are HTTP status codes?</summary>
+                        <p>Status codes are three-digit numbers that tell you what happened with a request. 2xx means success (200 OK). 3xx means the browser was redirected. 4xx means something was wrong with the request (404 Not Found). 5xx means the server had an error. A healthy capture should be mostly 2xx.</p>
+                    </details>
+
+                    <h3 id="domain-breakdown">Domain Breakdown</h3>
+
+                    <p>See all unique domains with their request count, transfer size, average response time, and error count. Sort by any metric. Toggle between average and total response times. Tap any domain to see all requests to that domain.</p>
+
+                    <p>This is especially useful for web performance analysis &mdash; identify which third-party domains (ad networks, analytics, CDN providers) are slow or returning errors.</p>
+
+                    <h3 id="slowest-requests">Slowest Requests</h3>
+
+                    <p>The top 10 slowest requests are highlighted on the dashboard with color-coded method badges, status codes, and response times. Tap any request to see full detail, or tap "Show All" to view the complete list sorted by response time.</p>
+
+                    <h3 id="full-request-list">Full Request List with Search and Filters</h3>
+
+                    <p>Browse all requests in a scrollable list. This HAR reader loads requests in pages to keep memory low, even with tens of thousands of entries.</p>
+
+                    <p><strong>Search</strong> across all URLs with instant results. <strong>Sort</strong> by chronological order, response time, transfer size, or status code. <strong>Filter</strong> across five dimensions:</p>
+
+                    <ul>
+                        <li><strong>HTTP method</strong> (GET, POST, PUT, DELETE, PATCH, etc.)</li>
+                        <li><strong>Status code category</strong> (2xx, 3xx, 4xx, 5xx)</li>
+                        <li><strong>Content type</strong> (XHR, JavaScript, CSS, Images, Fonts, Media, WebSocket, etc.)</li>
+                        <li><strong>Response time threshold</strong> (&gt;100ms, &gt;500ms, &gt;1s, &gt;2s, &gt;5s, &gt;10s)</li>
+                        <li><strong>Domain</strong></li>
+                    </ul>
+
+                    <p>Filters can be combined. A badge shows active filter count, and one-tap "Clear All" resets everything.</p>
+
+                    <h3 id="request-detail-view">Request Detail View</h3>
+
+                    <p>Tap any request to open a detailed six-tab view:</p>
+
+                    <ul>
+                        <li><strong>Headers</strong>: Request and response headers in organized key-value tables with long-press copy</li>
+                        <li><strong>Cookies</strong>: Full cookie details including HttpOnly, Secure flags, domain, path, and expiry</li>
+                        <li><strong>Request</strong>: HTTP method, URL, version, query parameters, and request body</li>
+                        <li><strong>Response</strong>: Status, response body preview with syntax highlighting. For large bodies, a "View Full Body" button opens the full content</li>
+                        <li><strong>Timings</strong>: Per-request timing waterfall showing exactly where time was spent</li>
+                        <li><strong>Security</strong>: Server connection info, SSL handshake timing, and security response headers (HSTS, CSP, X-Frame-Options, and more)</li>
+                    </ul>
+
+                    <h3 id="embedded-content-detection">Embedded Content Detection</h3>
+
+                    <p>HAR files often contain base64-encoded images, SVGs, audio, and video within response bodies. The HAR file analyzer automatically detects embedded content formats, shows inline previews for images and SVGs, and provides an <strong>Extract</strong> button to decode and save any embedded file to your device.</p>
+
+                    <details class="docs-details">
+                        <summary>What is base64 encoding?</summary>
+                        <p>Base64 is a way to represent binary data (like images) as text characters. When Chrome records a network capture, it often stores image and media responses as base64 text inside the HAR file. The HAR analyzer detects these automatically and can preview or extract the original file.</p>
+                    </details>
+
+                    <h3 id="copy-as-curl">Copy as cURL</h3>
+
+                    <p>Export any HAR request as a ready-to-use cURL command, copied to your clipboard with one tap. Headers are intelligently filtered so the command works immediately in any terminal.</p>
+
+                    <details class="docs-details">
+                        <summary>What is cURL?</summary>
+                        <p>cURL is a command-line tool for making HTTP requests. Developers use it to test APIs and replay requests. Exporting a HAR request as cURL lets you reproduce the exact same request outside the browser for debugging.</p>
+                    </details>
+
+                    <h3 id="clone-to-api-client">Clone to API Client</h3>
+
+                    <p>Take any request from your HAR capture and replay it in the built-in API Client. The HTTP method, URL, headers, and body are imported automatically. This lets you modify parameters and re-send the request for debugging &mdash; going from HAR file analysis directly to active API testing without leaving the app.</p>
+
+                    <!-- Why Offline HAR Analysis Matters -->
+                    <h2 id="why-offline-har-analysis-matters">Why Offline HAR Analysis Matters</h2>
+
+                    <p>HAR files routinely contain:</p>
+
+                    <ul>
+                        <li><strong>Authentication tokens</strong> (Bearer tokens, API keys, JWTs)</li>
+                        <li><strong>Session cookies</strong> (login state, CSRF tokens)</li>
+                        <li><strong>POST request bodies</strong> (form submissions with passwords, personal data, payment info)</li>
+                        <li><strong>Internal API endpoints</strong> (revealing backend architecture and service names)</li>
+                    </ul>
+
+                    <p>Uploading a HAR file to any online analyzer means sending this sensitive data to a third-party server. Even if the service promises to delete files after processing, the data has already left your control.</p>
+
+                    <p>A proper HAR analyzer app should process everything locally. Giant JSON Viewer does exactly that &mdash; no upload, no cloud, no third-party access. Your HAR data stays on your phone.</p>
+
+                    <!-- Common Use Cases -->
+                    <h2 id="common-use-cases">Common HAR Analysis Use Cases</h2>
+
+                    <h3 id="debugging-slow-pages">Debugging Slow Pages</h3>
+                    <p>Export a HAR from your browser, open it in the HAR reader, and see which requests are slowest. Use the timing waterfall to determine whether the bottleneck is DNS resolution, server processing, or download speed.</p>
+
+                    <h3 id="finding-failed-api-calls">Finding Failed API Calls</h3>
+                    <p>Filter by 4xx and 5xx status codes to isolate all failing requests. Inspect headers and response bodies to understand why they failed.</p>
+
+                    <h3 id="analyzing-third-party-performance">Analyzing Third-Party Performance</h3>
+                    <p>Sort the domain breakdown by response time or transfer size to find which third-party services hurt your site's web performance. Ad networks, analytics scripts, and social widgets are common offenders.</p>
+
+                    <h3 id="qa-and-support">QA and Support</h3>
+                    <p>When a user reports "the page is slow" or "something broke," a HAR file provides the full picture. Open it on your phone, analyze the network traffic on the spot, and identify the issue without needing a laptop.</p>
+
+                    <h3 id="api-testing-workflow">API Testing Workflow</h3>
+                    <p>Use <strong>Clone to API Client</strong> to take a real request from a HAR recording and replay it with modifications. Change parameters, remove headers, test different payloads &mdash; all from this mobile HAR reader.</p>
+
+                    <!-- How to Generate a HAR File -->
+                    <h2 id="how-to-generate-a-har-file">How to Generate a HAR File</h2>
+
+                    <h3 id="chrome">Chrome</h3>
+                    <ol>
+                        <li>Open DevTools (F12 or right-click &gt; Inspect)</li>
+                        <li>Go to the <strong>Network</strong> tab</li>
+                        <li>Enable <strong>Preserve log</strong> if you need cross-navigation recording</li>
+                        <li>Reproduce the scenario</li>
+                        <li>Right-click the request list &gt; <strong>Save all as HAR with content</strong></li>
+                    </ol>
+
+                    <h3 id="firefox">Firefox</h3>
+                    <ol>
+                        <li>Open Developer Tools (F12)</li>
+                        <li>Go to <strong>Network</strong> tab</li>
+                        <li>Reproduce the scenario</li>
+                        <li>Click the gear icon &gt; <strong>Save All As HAR</strong></li>
+                    </ol>
+
+                    <h3 id="safari">Safari</h3>
+                    <ol>
+                        <li>Enable Developer menu (Preferences &gt; Advanced)</li>
+                        <li>Open Web Inspector &gt; Network tab</li>
+                        <li>Reproduce the scenario</li>
+                        <li>Click <strong>Export</strong></li>
+                    </ol>
+
+                    <h3 id="edge">Edge</h3>
+                    <ol>
+                        <li>Open DevTools (F12)</li>
+                        <li>Go to <strong>Network</strong> tab</li>
+                        <li>Reproduce the scenario</li>
+                        <li>Click the <strong>Export HAR</strong> button</li>
+                    </ol>
+
+                    <!-- Tips -->
+                    <h2 id="tips-for-large-har-files">Tips for Working with Large HAR Files</h2>
+
+                    <ul>
+                        <li><strong>Clear browser cache</strong> before recording to avoid cached responses inflating the file</li>
+                        <li><strong>Disable "Preserve log"</strong> unless you specifically need cross-page recording</li>
+                        <li><strong>Filter in the browser first</strong> if you only need specific request types</li>
+                        <li><strong>Close unnecessary tabs</strong> to reduce background network noise</li>
+                        <li><strong>Compress HAR files</strong> (zip) before transferring &mdash; they compress well since they're JSON text</li>
+                        <li><strong>Use a dedicated HAR viewer for Android</strong> like Giant JSON Viewer when your HAR file is too large for browser DevTools or online HAR analyzers</li>
+                    </ul>
+
+                    <!-- FAQ -->
+                    <h2 id="faq">Frequently Asked Questions</h2>
+
+                    <h3 id="faq-best-analyzer">What is the best HAR file analyzer for Android?</h3>
+                    <p>Giant JSON Viewer is a HAR analyzer app for Android that handles files of any size, works completely offline, and provides a full analysis dashboard with filtering, timing breakdowns, domain analysis, and detailed request inspection.</p>
+
+                    <h3 id="faq-large-files">Can I open large HAR files on my phone?</h3>
+                    <p>Yes. As a HAR viewer for Android, Giant JSON Viewer handles multi-gigabyte HAR files without crashes or excessive memory usage. Files are indexed progressively and requests are loaded on demand.</p>
+
+                    <h3 id="faq-upload-safety">Is it safe to upload HAR files to online analyzers?</h3>
+                    <p>HAR files contain sensitive data including authentication tokens, cookies, and potentially passwords. Uploading to online tools means sending this to third-party servers. An offline HAR analyzer like Giant JSON Viewer processes files entirely on your device &mdash; no upload required.</p>
+
+                    <h3 id="faq-how-to-read">How do I read a HAR file?</h3>
+                    <p>HAR files are JSON-formatted, so any JSON viewer can open them. However, a specialized HAR file reader provides structured analysis &mdash; a dashboard overview, timing waterfall, domain breakdown, multi-dimension filtering, and request-level detail &mdash; rather than just showing raw JSON text.</p>
+
+                    <h3 id="faq-whats-inside">What is inside a HAR file?</h3>
+                    <p>A HAR file contains a complete log of HTTP requests and responses: URLs, methods, headers, cookies, query parameters, request/response bodies, timing data for each network phase, and connection security details. It's the standard format for capturing and sharing web network traffic.</p>
+
+                    <h3 id="faq-curl-export">Can I export a request from a HAR file as cURL?</h3>
+                    <p>Yes. Tap any request in the HAR file viewer and use "Copy as cURL" to get a formatted command ready to paste into your terminal.</p>
+
+                    <h3 id="faq-replay-request">Can I replay a HAR request for testing?</h3>
+                    <p>Yes. The "Clone to API Client" feature imports any HAR request into the built-in API Client, where you can modify and re-send it. This mobile HAR analyzer feature is useful for debugging specific API calls captured during network traffic analysis.</p>
+
+                    <!-- Google Play CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Analyze HAR Files on Android</h3>
+                        <p>Open, filter, and debug HAR files of any size &mdash; completely offline, with full privacy.</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=article_cta&utm_campaign=har_analyzer"
+                            class="btn-primary" target="_blank" rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                            </svg>
+                            Get Giant JSON Viewer
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

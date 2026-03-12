@@ -809,3 +809,56 @@
         font-size: 1.125rem;
     }
 }
+
+/* ============================================== */
+/* EXPANDABLE DETAILS                             */
+/* ============================================== */
+
+.docs-details {
+    background: var(--bg-secondary);
+    border: 1px solid var(--stroke-default);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden;
+}
+
+.docs-details summary {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--accent-cyan);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: background var(--transition-fast);
+    user-select: none;
+}
+
+.docs-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.docs-details summary::before {
+    content: '\25B6';
+    font-size: 0.625rem;
+    transition: transform var(--transition-fast);
+    color: var(--text-tertiary);
+}
+
+.docs-details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.docs-details summary:hover {
+    background: var(--bg-elevated);
+}
+
+.docs-details p {
+    padding: 0 var(--spacing-lg) var(--spacing-lg);
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+}
