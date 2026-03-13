@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Test REST & GraphQL APIs on Android — Postman Alternative</title>
+    <meta name="title" content="Test REST & GraphQL APIs on Android — Postman Alternative">
+    <meta name="description"
+        content="Send REST and GraphQL requests from your Android phone. Import Postman collections, use OAuth2 PKCE, Bearer, AWS Signature V4 auth. View large API responses — no account needed.">
+    <meta name="keywords"
+        content="REST API client android, postman alternative android, API testing app android, GraphQL client android, test API on phone, import postman collection android, curl import android, send HTTP request from phone">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/api-client-android/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/api-client-android/">
+    <meta property="og:title" content="Test REST & GraphQL APIs on Android — Postman Alternative">
+    <meta property="og:description"
+        content="Send REST and GraphQL requests from your Android phone. Import Postman collections, use OAuth2 PKCE, Bearer, AWS Signature V4 auth. View large API responses — no account needed.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-03-13T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/api-client-android/">
+    <meta property="twitter:title" content="Test REST & GraphQL APIs on Android — Postman Alternative">
+    <meta property="twitter:description"
+        content="Send REST and GraphQL requests from your Android phone. Import Postman collections, use OAuth2 PKCE, Bearer, AWS Signature V4 auth. View large API responses — no account needed.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data: Article -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Test REST & GraphQL APIs on Android — Postman Alternative",
+        "description": "Send REST and GraphQL requests from your Android phone. Import Postman collections, use OAuth2 PKCE, Bearer, AWS Signature V4 auth. View large API responses — no account needed.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "GiantJSON Viewer+",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-03-13",
+        "dateModified": "2026-03-13",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/api-client-android/"
+        }
+    }
+    </script>
+
+    <!-- Structured Data: Breadcrumbs -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "REST & GraphQL API Client on Android",
+                "item": "https://giantjson.com/docs/api-client-android/"
+            }
+        ]
+    }
+    </script>
+
+    <!-- Structured Data: FAQ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is there a Postman app for Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Postman does not have a native Android app. Giant JSON Viewer includes a REST and GraphQL API client for Android that can import Postman collections, making it a practical alternative for mobile API testing."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I test a REST API from my phone?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Install an API testing app like Giant JSON Viewer on your Android device. You can create requests manually, import them from cURL commands, or import entire Postman collections. Set up auth, configure headers and body, and tap send."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I import Postman collections on Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Giant JSON Viewer imports Postman collections in v2.0 and v2.1 format, preserving folder structure, request details, auth inheritance, and collection variables."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does it support OAuth2 authentication?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes — the full OAuth 2.0 Authorization Code flow with PKCE, including token refresh. You can also use Basic Auth, Bearer tokens, API keys, and AWS Signature V4."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I test AWS APIs from my Android phone?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The API client supports AWS Signature V4 authentication with configurable region, service name, and optional session token for temporary credentials (STS)."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What happens if the API returns a huge response?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Responses are streamed to disk, not loaded into memory. Even multi-hundred-megabyte JSON responses can be opened and navigated in Giant JSON Viewer's tree browser without crashing."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=api_client"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">REST & GraphQL API Client on Android</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>How to Test REST & GraphQL APIs on Android</h1>
+                    <div class="docs-article-meta">
+                        <span>5 min read</span>
+                        <span>Updated Mar 13, 2026</span>
+                    </div>
+                </header>
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+
+                    <!-- Why test from phone -->
+                    <h2 id="why-test-apis-from-your-phone">Why Would You Test APIs From Your Phone?</h2>
+
+                    <p>Fair question. If you have a laptop nearby, you probably wouldn't. But laptops aren't always nearby.</p>
+
+                    <p>Maybe you're on call and something breaks at 11pm. Maybe you're commuting and want to quickly verify an endpoint. Maybe you're in a meeting and someone asks "is that API still returning 500?" and you'd rather check than guess.</p>
+
+                    <p>Or maybe you just prefer not to open your laptop for a 5-second health check.</p>
+
+                    <p>Whatever the reason &mdash; there aren't many good options on Android. Postman doesn't have a native Android app, and most popular alternatives are desktop or web-only. The few Android apps that do exist tend to cover the basics but fall short on auth, import, or handling anything beyond a simple GET request.</p>
+
+                    <!-- What it can do -->
+                    <h2 id="what-the-api-client-can-do">What Giant JSON Viewer's API Client Can Do</h2>
+
+                    <p>Giant JSON Viewer is primarily a JSON viewer &mdash; it's built to open multi-gigabyte JSON files on a phone without crashing. But along the way, it grew an API client that turned out to be surprisingly capable.</p>
+
+                    <p>Here's what it supports:</p>
+
+                    <h3 id="http-methods">HTTP Methods</h3>
+                    <p>GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS, and a dedicated GraphQL mode with a query + variables editor.</p>
+
+                    <h3 id="request-body-types">Request Body Types</h3>
+                    <p>JSON, plain text, GraphQL, form URL-encoded, multipart form data (with file attachments from your device), and raw binary upload.</p>
+
+                    <h3 id="authentication">Authentication</h3>
+                    <p>This is where most mobile API clients give up. Giant JSON Viewer supports:</p>
+
+                    <ul>
+                        <li><strong>Basic Auth</strong> &mdash; username and password</li>
+                        <li><strong>Bearer Token</strong> &mdash; paste your token</li>
+                        <li><strong>API Key</strong> &mdash; in header or query parameter</li>
+                        <li><strong>OAuth 2.0 with PKCE</strong> &mdash; full authorization code flow with token refresh. Yes, on a phone.</li>
+                        <li><strong>AWS Signature V4</strong> &mdash; for those of you talking to API Gateway, S3, Lambda, or any AWS service directly. Region, service, session token &mdash; it's all there.</li>
+                    </ul>
+
+                    <h3 id="postman-collection-import">Postman Collection Import</h3>
+                    <p>Import your existing Postman collections (v2.0 and v2.1) with full folder structure, nested requests, inherited auth, and collection variables.</p>
+
+                    <h3 id="curl-import-and-export">cURL Import & Export</h3>
+                    <p>Paste a cURL command from Chrome DevTools, Firefox, or Stack Overflow. The parser handles single-quoted, double-quoted, and <code>$'...'</code> strings, line continuations from bash, CMD, and PowerShell, and auto-detects auth from <code>Authorization</code> headers. Export any request back as a formatted cURL command.</p>
+
+                    <h3 id="environments-and-variables">Environments & Variables</h3>
+                    <p>Create environments (Dev, Staging, Production) and use <code>{{variables}}</code> in URLs, headers, body, form fields, and even auth configuration. Variables resolve with Postman-compatible precedence: collection &rarr; environment &rarr; inline.</p>
+
+                    <h3 id="network-metrics">Network Metrics</h3>
+                    <p>Every request shows a detailed timing breakdown: DNS lookup, TCP connect, TLS handshake, time to first byte, and download duration. Useful for figuring out if it's the server being slow or the network being flaky.</p>
+
+                    <h3 id="response-handling">Response Handling</h3>
+                    <p>Responses stream to disk instead of loading into memory. This means you won't get an out-of-memory crash even if an endpoint dumps a 200MB JSON response at you. And since this is Giant JSON Viewer &mdash; the response opens directly in the full <a href="../viewing-large-files/">JSON tree browser</a> with search, filtering, and export.</p>
+
+                    <!-- A few more things -->
+                    <h2 id="additional-features">A Few More Things</h2>
+
+                    <ul>
+                        <li><strong>Request History</strong> &mdash; every request is logged with timestamps</li>
+                        <li><strong>Session Cookies</strong> &mdash; maintained across requests</li>
+                        <li><strong>Configurable Timeouts</strong> &mdash; connect, read, and write</li>
+                        <li><strong>Follow Redirects</strong> &mdash; toggle per request</li>
+                        <li><strong>Request Cancellation</strong> &mdash; because sometimes you realize mid-flight that you hit the wrong endpoint</li>
+                    </ul>
+
+                    <!-- What it does NOT do -->
+                    <h2 id="what-it-does-not-do">What It Does NOT Do</h2>
+
+                    <p>Being straight with you here &mdash; this is a feature inside a JSON viewer, not a full Postman replacement:</p>
+
+                    <ul>
+                        <li><strong>No pre-request or test scripts</strong> &mdash; there's no JavaScript engine. If your workflow depends on scripting, this won't cover it.</li>
+                        <li><strong>No WebSocket support</strong> &mdash; REST and GraphQL only.</li>
+                        <li><strong>No Swagger/OpenAPI import</strong> &mdash; you can import Postman collections and cURL, but not raw API specs.</li>
+                        <li><strong>No team collaboration</strong> &mdash; everything lives on your device. No cloud sync, no shared workspaces.</li>
+                    </ul>
+
+                    <p>If you need those things, Postman on desktop is still the right tool. But if you need to fire off authenticated requests from your phone with real auth, real collections, and the ability to actually read the response &mdash; this does the job. And if you're working with <a href="../har-file-analyzer/">HAR files</a>, you can clone any captured request straight into the API Client for replay.</p>
+
+                    <!-- FAQ -->
+                    <h2 id="faq">Frequently Asked Questions</h2>
+
+                    <h3 id="faq-postman-android">Is there a Postman app for Android?</h3>
+                    <p>Postman does not have a native Android app. Giant JSON Viewer includes a REST and GraphQL API client for Android that can import Postman collections, making it a practical alternative for mobile API testing.</p>
+
+                    <h3 id="faq-test-api-from-phone">How do I test a REST API from my phone?</h3>
+                    <p>Install an API testing app like Giant JSON Viewer on your Android device. You can create requests manually, import them from cURL commands, or import entire Postman collections. Set up auth, configure headers and body, and tap send.</p>
+
+                    <h3 id="faq-import-postman">Can I import Postman collections on Android?</h3>
+                    <p>Yes. Giant JSON Viewer imports Postman collections in v2.0 and v2.1 format, preserving folder structure, request details, auth inheritance, and collection variables.</p>
+
+                    <h3 id="faq-oauth2">Does it support OAuth2 authentication?</h3>
+                    <p>Yes &mdash; the full OAuth 2.0 Authorization Code flow with PKCE, including token refresh. You can also use Basic Auth, Bearer tokens, API keys, and AWS Signature V4.</p>
+
+                    <h3 id="faq-aws">Can I test AWS APIs from my Android phone?</h3>
+                    <p>Yes. The API client supports AWS Signature V4 authentication with configurable region, service name, and optional session token for temporary credentials (STS).</p>
+
+                    <h3 id="faq-large-response">What happens if the API returns a huge response?</h3>
+                    <p>Responses are streamed to disk, not loaded into memory. Even multi-hundred-megabyte JSON responses can be opened and navigated in Giant JSON Viewer's tree browser without crashing.</p>
+
+                    <!-- CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Send API Requests From Your Phone</h3>
+                        <p>Test REST and GraphQL APIs on Android &mdash; import Postman collections, use real authentication, and inspect responses of any size.</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=article_cta&utm_campaign=api_client"
+                            class="btn-primary" target="_blank" rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                            </svg>
+                            Get Giant JSON Viewer
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

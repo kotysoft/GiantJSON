@@ -48,6 +48,14 @@
       "category": "topics",
       "date": "2026-03-12",
       "readTime": 7
+    },
+    {
+      "slug": "api-client-android",
+      "title": "How to Test REST & GraphQL APIs on Android — A Postman Alternative With Real Auth",
+      "description": "Send REST and GraphQL requests from your Android phone. Import Postman collections, use OAuth2 PKCE, Bearer, AWS Signature V4 auth.",
+      "category": "topics",
+      "date": "2026-03-13",
+      "readTime": 5
     }
   ],
   "categories": [
