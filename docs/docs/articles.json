@@ -56,6 +56,14 @@
       "category": "topics",
       "date": "2026-03-13",
       "readTime": 5
+    },
+    {
+      "slug": "sample-json-generator",
+      "title": "How to Generate Sample JSON Test Data on Android — From 1 MB to 100 GB",
+      "description": "Generate JSON test data from built-in templates or your own JSON Schema. Streaming engine, up to 100 GB, offline.",
+      "category": "topics",
+      "date": "2026-03-26",
+      "readTime": 6
     }
   ],
   "categories": [
