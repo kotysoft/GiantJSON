@@ -106,6 +106,54 @@
         ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Why do JSON viewer apps crash with large files on Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most Android JSON viewers load the entire file into the Java heap, which the OS limits to a few hundred megabytes regardless of device RAM. A 500 MB JSON file can require 1-2 GB of heap to parse, causing an Out-Of-Memory crash. The solution is a streaming architecture that reads only what is visible and bypasses heap constraints using native code."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the best JSON viewer for large files on Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ is an Android app designed specifically for large JSON files. It uses a native Rust engine with streaming architecture to open files of any size — including multi-gigabyte and 100+ GB files — without crashes, on any Android device."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does a streaming JSON viewer work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A streaming JSON viewer builds a structural index on first open, then reads only the data currently on screen from disk on demand. It never loads the full file into memory. This means a 50 GB file uses the same memory as a 50 KB file during viewing."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can GiantJSON Viewer+ open JSON files larger than my device RAM?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. GiantJSON Viewer+ uses a native streaming engine that operates outside Java heap constraints. Files are accessed directly from storage with constant memory usage regardless of file size. Users have successfully opened files over 100 GB on standard Android phones."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does GiantJSON Viewer+ support NDJSON and JSONL files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. GiantJSON Viewer+ supports NDJSON (newline-delimited JSON) and JSONL (JSON Lines) formats. These line-based formats are common for log files, analytics pipelines, and streaming data exports."
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body class="docs-page">

@@ -106,6 +106,54 @@
         ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I format and beautify minified JSON on Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ automatically displays any JSON file in pretty-printed format when you open it — no manual step required. For saving a formatted output file, use the Just Make Pretty tool from the Tools menu. It handles both minified JSON and NDJSON files of any size."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the difference between JSON and NDJSON?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "JSON is a single structured document (one root object or array). NDJSON (Newline-Delimited JSON), also called JSONL or JSON Lines, stores one independent JSON object per line. NDJSON is common in log files, analytics exports, and streaming data pipelines."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I beautify a large minified JSON file on my phone?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. GiantJSON Viewer+ uses a streaming engine for prettification, so it can format files of any size — including multi-gigabyte minified JSON — without loading the full file into memory. The output file is written progressively to disk."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is minified JSON?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Minified JSON has all whitespace (spaces, newlines, tabs) removed to reduce file size. This format is common in API responses and production systems where bandwidth matters. It is valid JSON but difficult for humans to read without formatting."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can GiantJSON Viewer+ convert NDJSON to a regular JSON array?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The Just Make Pretty tool in GiantJSON Viewer+ can convert NDJSON files (where each line is a separate JSON object) into a proper JSON array with pretty-printed formatting, creating a new output file without modifying the original."
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body class="docs-page">

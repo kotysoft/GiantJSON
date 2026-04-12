@@ -106,6 +106,54 @@
         ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I convert JSON to CSV on Android without uploading my data?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ can export JSON arrays to CSV entirely offline. Navigate to the array in the browser view, select Export Subset, and choose CSV. The entire conversion runs on your device — no data is sent to any server."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I convert large JSON files to CSV on my phone?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. GiantJSON Viewer+ uses a streaming Rust engine for CSV export, which processes the file in chunks with constant memory usage. This allows exporting large arrays from multi-gigabyte JSON files without running out of memory."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What JSON structures can be exported to CSV?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CSV export works best with JSON arrays of objects that have consistent keys — like database records or API response arrays. Deeply nested or irregularly structured JSON does not map directly to CSV rows and columns."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does GiantJSON Viewer+ support SQL export?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. GiantJSON Viewer+ can export JSON arrays to SQL INSERT statements for MySQL, PostgreSQL, SQLite, SQL Server, Oracle, and MariaDB. The export auto-detects column types and can include a CREATE TABLE statement."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is JSON to CSV conversion free in GiantJSON Viewer+?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CSV and SQL export are Pro features in GiantJSON Viewer+. The app is free to download and the viewer is fully functional without a subscription."
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body class="docs-page">

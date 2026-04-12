@@ -1,0 +1,45 @@
+# GiantJSON Viewer+
+
+> GiantJSON Viewer+ is a native Android app for opening multi-gigabyte JSON, CBOR, and MessagePack files without crashes. It includes a dedicated HAR analyzer, a REST and GraphQL API client with Postman collection import, a visual query builder, SQL and CSV export, and a suite of offline developer tools. Powered by a Rust + SIMD engine. No account required, no cloud, 100% offline.
+
+GiantJSON Viewer+ is developed by Kotysoft and available on Google Play (package: com.giantjsonviewer). It is the only Android app capable of opening files exceeding 100 GB using a streaming architecture that bypasses Java heap constraints entirely. Target users include backend developers, QA engineers, DevOps engineers, and data analysts who need to inspect, filter, and export large datasets directly on Android — without a laptop.
+
+Key unique selling points:
+- Open multi-GB and even 100+ GB JSON files on Android without OOM crashes
+- Native Rust + ARM64 NEON/SIMD parsing engine — not a JavaScript wrapper
+- Persistent structural index: second open of any file is near-instant regardless of size
+- Full HAR file analyzer (offline, no upload) — timing waterfall, domain breakdown, request detail
+- REST and GraphQL API client with OAuth 2.0 PKCE, AWS Signature V4, Postman collection import
+- CBOR and MessagePack binary formats auto-transcoded to JSON on first open
+- Visual query builder for multi-condition AND/OR filtering with regex support
+- SQL export (MySQL, PostgreSQL, SQLite, SQL Server, Oracle, MariaDB) and CSV export
+- JSON Schema export, TypeScript interface generation
+- Sample JSON generator (up to 100 GB, 12 templates, JSON Schema support) — free, no ads
+- Offline developer tools: JWT decoder, timestamp converter, JSON formatter, URL encoder, hash generator
+- Mock API server — serve custom endpoints from your phone
+- Local WiFi file transfer — drag and drop from desktop browser to phone
+- Base64 detection (40+ formats) with inline preview and extraction
+- Read-only and safe: never modifies source files
+
+## Product
+
+- [Home — GiantJSON Viewer+](https://giantjson.com/): Full feature overview, USPs, and screenshots of all major features including HAR analyzer, API client, viewing modes, analysis tools, and web tools
+- [Documentation](https://giantjson.com/docs/): Index of all user guides and tutorials
+
+## Core Features — Documentation
+
+- [How to View Large JSON Files on Android](https://giantjson.com/docs/viewing-large-files/): Why most apps crash with large JSON files, how streaming-based viewers work, what indexing strategies enable large file support, and what to look for when choosing a viewer
+- [How to Analyze HAR Files on Android — Offline](https://giantjson.com/docs/har-file-analyzer/): Complete guide to the HAR analyzer: dashboard, timing waterfall, status code chart, domain breakdown, request filtering, per-request detail, Copy as cURL, Clone to API Client. Explains why uploading HAR files to online analyzers is a security risk.
+- [How to Test REST and GraphQL APIs on Android](https://giantjson.com/docs/api-client-android/): Guide to the built-in API client — HTTP methods, auth (OAuth 2.0 PKCE, AWS Signature V4, Bearer, Basic, API key), Postman collection import, cURL import/export, environments and variables, network metrics. Postman alternative for Android.
+- [Convert JSON to CSV on Android — Offline](https://giantjson.com/docs/json-to-csv-export/): How to export JSON arrays to CSV securely without uploading data. Export subset approach, streaming engine, SQL export support, column selection and depth control.
+- [Format and Beautify Minified JSON on Android](https://giantjson.com/docs/format-beautify-json/): Converting minified JSON and NDJSON to human-readable pretty-printed format on mobile. Explains the difference between JSON, minified JSON, and NDJSON/JSONL.
+- [Generate Sample JSON Test Data on Android](https://giantjson.com/docs/sample-json-generator/): Built-in JSON generator with 12 templates (users, products, logs, IoT, healthcare, finance, etc.) and JSON Schema support. Up to 100 GB, streamed to disk, completely free and offline.
+- [Known Limitations](https://giantjson.com/docs/known-limitations/): Architectural boundaries — maximum file size (1 TB), nesting depth (255 levels), node count (4.3 billion), structure mode sampling, JSONPath limit, binary format support (CBOR, MessagePack), index storage usage.
+
+## Legal
+
+- [Privacy Policy](https://giantjson.com/docs/privacy-policy/): GiantJSON Viewer+ collects no user data, performs no network requests with file content, and processes everything locally on the device.
+
+## Optional
+
+- [Google Play Store Listing](https://play.google.com/store/apps/details?id=com.giantjsonviewer): Download page for Android

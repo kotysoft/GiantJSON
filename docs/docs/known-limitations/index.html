@@ -108,6 +108,54 @@
         ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is the maximum file size GiantJSON Viewer+ can open?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ supports files up to 1 TB. The internal index format uses 40-bit offsets which cap at 1 terabyte. For practical purposes, file size is limited by available device storage. Users have successfully indexed files over 100 GB."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does GiantJSON Viewer+ support CBOR and MessagePack binary formats?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. GiantJSON Viewer+ automatically detects CBOR and MessagePack files and transcodes them to JSON on first open using a streaming Rust converter with constant memory usage. The converted JSON is cached locally so subsequent opens skip the conversion."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What file formats does GiantJSON Viewer+ NOT support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ does not support XML, YAML, or TOML. Supported formats are JSON, NDJSON/JSONL, HAR, CBOR, MessagePack, and Markdown. The API client does not support WebSocket connections or Swagger/OpenAPI spec import."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can GiantJSON Viewer+ open JSON files larger than available RAM?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The streaming architecture uses constant memory regardless of file size — approximately 150 MB peak during indexing for both a 100 MB file and a 50 GB file. Files are accessed directly from storage, so available RAM does not limit which files can be opened."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the maximum JSON nesting depth GiantJSON Viewer+ can handle?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ supports JSON structures up to 255 levels deep. This limit prevents stack overflow during parsing. Real-world JSON files rarely exceed 10-15 levels of nesting, so this limit is effectively never reached in practice."
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body class="docs-page">
