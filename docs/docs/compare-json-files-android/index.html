@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>How to Compare Two JSON Files on Android - GiantJSON Viewer+ Docs</title>
+    <meta name="title" content="How to Compare Two JSON Files on Android - GiantJSON Viewer+ Docs">
+    <meta name="description"
+        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records. Plus honest desktop and CLI alternatives.">
+    <meta name="keywords"
+        content="compare JSON files Android, JSON diff app, diff JSON files, compare two large JSON files, NDJSON diff, structural JSON diff">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/compare-json-files-android/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/compare-json-files-android/">
+    <meta property="og:title" content="How to Compare Two JSON Files on Android - GiantJSON Viewer+">
+    <meta property="og:description"
+        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-07-17T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/compare-json-files-android/">
+    <meta property="twitter:title" content="How to Compare Two JSON Files on Android - GiantJSON Viewer+">
+    <meta property="twitter:description"
+        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Compare Two JSON Files on Android",
+        "description": "Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records. Plus honest desktop and CLI alternatives.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "GiantJSON Viewer+",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-07-17",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/compare-json-files-android/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "How to Compare Two JSON Files on Android",
+                "item": "https://giantjson.com/docs/compare-json-files-android/"
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I compare two JSON files on Android?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GiantJSON Viewer+ includes a Compare Files tool that performs a structural diff of two JSON or NDJSON files directly on the device. It ignores formatting and key order, detects moved records, and works on files far larger than device RAM. Comparing files up to 1 MB is free; larger files require PRO."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why does a normal diff tool show so many changes between two JSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Line-based diff tools compare text, not structure. If two JSON files differ in indentation, key order, or line wrapping, a text diff reports thousands of changed lines even when the data is identical. A structural JSON diff parses both files and compares actual keys and values, so only real data differences are reported."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I diff very large JSON files on a phone?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, with a streaming architecture. GiantJSON Viewer+ was tested with 2 GB files on each side on a Galaxy S23 Ultra: an identical pair is confirmed in roughly 4-8 seconds, a pair with 50,000 added records is compared in about 10 seconds, and memory use stays below 400 MB throughout."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does GiantJSON Viewer+ compare NDJSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Compare Files supports both standard JSON and NDJSON (newline-delimited JSON), which is common for logs and data pipeline exports. Comparison results can also be exported as Markdown or NDJSON."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the best way to diff JSON files on a desktop computer?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It depends on the workflow. Command-line tools like jd or jq combined with diff work well for scripting and CI. GUI tools such as Meld, WinMerge, or Beyond Compare suit visual side-by-side review. VS Code has a built-in file compare. Online diff sites are convenient for small snippets but should not be used with sensitive data."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=article"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">How to Compare Two JSON Files on Android</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>How to Compare Two JSON Files on Android</h1>
+                    <div class="docs-article-meta">
+                        <span>10 min read</span>
+                        <span>Updated Jul 17, 2026</span>
+                    </div>
+                </header>
+
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+                    <p>Two exports from the same API, taken a day apart. A configuration file before and after a
+                        deployment. Yesterday's NDJSON log and today's. Sooner or later, everyone who works with JSON
+                        needs to answer the same question: <em>what actually changed between these two files?</em></p>
+
+                    <p>This guide covers why comparing JSON is harder than comparing ordinary text, how structural
+                        diffing solves it, what the new Compare Files tool in GiantJSON Viewer+ can and cannot do
+                        (with real measured numbers), and which desktop and command-line tools are worth knowing when
+                        a phone is not the right place for the job.</p>
+
+                    <h2 id="why-text-diff-fails-for-json">Why Ordinary Diff Tools Struggle With JSON</h2>
+
+                    <p>Classic diff tools compare files line by line. That works well for source code, where lines are
+                        a meaningful unit. JSON breaks that assumption in three ways:</p>
+
+                    <h3 id="key-order-is-not-meaningful">Key Order Is Not Meaningful</h3>
+
+                    <p>Per the JSON specification, <code>{"a": 1, "b": 2}</code> and <code>{"b": 2, "a": 1}</code>
+                        represent the same object. But many serializers do not guarantee key order, so two exports of
+                        identical data can list keys in different order. A line-based diff flags every reordered key
+                        as a change, even though nothing changed.</p>
+
+                    <h3 id="formatting-is-noise">Formatting Is Noise</h3>
+
+                    <p>Pretty-printed with 2 spaces, pretty-printed with 4 spaces, minified onto a single line: all
+                        three are the same data. A text diff between a minified file and its formatted twin reports
+                        that every single line changed. Worse, a large minified file is often <em>one</em> line, so
+                        a line diff has exactly one unit to work with and its output is useless.</p>
+
+                    <h3 id="moved-data-looks-like-deleted-plus-added">Moved Data Looks Like Delete + Add</h3>
+
+                    <p>If a record moves from position 12 to position 47,000 in an array, a text diff reports it as
+                        one deletion and one unrelated addition. In a big dataset where records get reordered (a
+                        common side effect of database exports), this turns a handful of real edits into thousands of
+                        phantom changes.</p>
+
+                    <h2 id="what-structural-diff-means">What a Structural JSON Diff Does Instead</h2>
+
+                    <p>A structural (or semantic) diff parses both files and compares the actual data: keys, values,
+                        arrays, nesting. The practical consequences:</p>
+
+                    <ul>
+                        <li>Key order differences are ignored. <code>{"a":1,"b":2}</code> equals
+                            <code>{"b":2,"a":1}</code>.</li>
+                        <li>Formatting differences are ignored. Minified and pretty-printed versions of the same data
+                            compare as identical.</li>
+                        <li>Changes are reported by path (for example <code>$.users[3].email</code>), not by line
+                            number.</li>
+                        <li>Good implementations recognize moved records as moves rather than delete/add pairs.</li>
+                    </ul>
+
+                    <p>Most structural diff tools are desktop or command-line software, and most of them load both
+                        files fully into memory, which limits the file sizes they can handle. On mobile, structural
+                        diffing has been essentially unavailable for anything beyond small files.</p>
+
+                    <h2 id="compare-files-in-giantjson">Compare Files in GiantJSON Viewer+</h2>
+
+                    <p>GiantJSON Viewer+ now includes a Compare Files tool: a structural diff for JSON and NDJSON
+                        built on the same streaming philosophy as the <a href="../viewing-large-files/">large-file
+                        viewer</a>. Both files are scanned in a streaming pass that writes a compact cache to disk;
+                        the comparison then runs against those caches instead of holding the files in memory. This
+                        means the tool is not limited by device RAM.</p>
+
+                    <h3 id="what-it-does">What It Does</h3>
+
+                    <ul>
+                        <li><strong>Structural comparison</strong>: key order and formatting are ignored; only real
+                            data differences are reported, each with its path and old/new values.</li>
+                        <li><strong>Move detection</strong>: records that changed position are detected as moves, and
+                            each detected move is verified byte-for-byte against the source files rather than assumed
+                            from a hash match.</li>
+                        <li><strong>NDJSON support</strong>: newline-delimited JSON (logs, pipeline exports) is a
+                            first-class input format alongside standard JSON.</li>
+                        <li><strong>Grouped results</strong>: mass changes are grouped by where they occur in the
+                            file, so 50,000 additions to one array show up as one understandable group, not 50,000
+                            rows to scroll through. A summary verdict comes first; the full breakdown, source excerpts,
+                            and a tappable minimap are there when you want detail.</li>
+                        <li><strong>Sanity gate for unrelated files</strong>: if the two files share almost no
+                            content, the tool says so instead of producing a giant, meaningless diff. (Very small
+                            file pairs can still be force-compared.)</li>
+                        <li><strong>Export</strong>: results can be saved or shared as a Markdown report or as NDJSON
+                            (one change per line, machine-readable), including old and new value excerpts.</li>
+                        <li><strong>Offline</strong>: like the rest of the app, comparison runs entirely on the
+                            device. Nothing is uploaded.</li>
+                    </ul>
+
+                    <h3 id="measured-performance">Measured Performance</h3>
+
+                    <p>These are real numbers from the test rounds on a Samsung Galaxy S23 Ultra, using two 2 GB
+                        files (one per side):</p>
+
+                    <ul>
+                        <li><strong>Identical pair</strong>: confirmed identical in roughly 4-8 seconds.</li>
+                        <li><strong>2 GB pair with 50,000 added records</strong>: compared in about 10 seconds,
+                            reporting exactly 50,000 additions in a single group.</li>
+                        <li><strong>Repeat comparison</strong>: re-running a comparison whose caches already exist
+                            took 0.25 seconds, versus 52 seconds for the same pair cold (the first run includes
+                            building the index caches).</li>
+                        <li><strong>Memory</strong>: stays below 400 MB even on the 2 GB runs (267 MB measured at
+                            report time on the 50,000-change case), because the engine streams from disk instead of
+                            loading the files.</li>
+                    </ul>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Key Concept
+                        </div>
+                        <p>Because both files are indexed to disk caches first, the expensive work happens once per
+                            file. Comparing the same files again, or comparing one file against several others, reuses
+                            the caches and is close to instant.</p>
+                    </div>
+
+                    <h3 id="pricing">Pricing</h3>
+
+                    <p>Comparing files up to 1 MB is free. Comparing larger files is part of PRO. The free tier is
+                        enough to try the full workflow on typical config files and API responses; the large-file
+                        engine is what PRO pays for.</p>
+
+                    <h3 id="honest-limitations">Honest Limitations</h3>
+
+                    <p>Being upfront about boundaries (see also <a href="../known-limitations/">Known
+                        Limitations</a>):</p>
+
+                    <ul>
+                        <li><strong>Heavily scattered edits in giant minified files</strong>: when thousands of tiny
+                            edits are spread randomly across a multi-gigabyte single-line file, the diff may fall back
+                            to reporting coarser changed regions instead of resolving every individual value. Typical
+                            real-world change patterns (appends, block edits, record changes) resolve exactly.</li>
+                        <li><strong>No side-by-side split view</strong> in this first version. Results are a single
+                            unified breakdown with source excerpts, not two synchronized panes.</li>
+                        <li><strong>No JSON Patch (RFC 6902) export</strong>. Exports are Markdown and NDJSON. If you
+                            need a machine-applyable patch, use a desktop tool from the list below.</li>
+                        <li><strong>It compares, it does not merge</strong>. There is no three-way merge or conflict
+                            resolution; that remains desktop territory.</li>
+                        <li><strong>Unrelated files are refused by design</strong>: if two large files share less
+                            than a small fraction of their content, the tool reports them as unrelated instead of
+                            rendering a diff that would be noise.</li>
+                    </ul>
+
+                    <h2 id="desktop-and-cli-tools">Desktop and Command-Line Alternatives</h2>
+
+                    <p>A phone is not always the right place for a diff, and the desktop ecosystem for this job is
+                        mature. Below is an honest overview of the common options, with their trade-offs. All of them
+                        are good tools; which one fits depends on whether you want a script, a GUI, or a quick paste
+                        box.</p>
+
+                    <h3 id="cli-tools">Command-Line Tools</h3>
+
+                    <p><strong>jq + diff</strong> (Windows / macOS / Linux, free, open source). The classic recipe:
+                        normalize both files with <code>jq -S .</code> (sort keys, consistent formatting), then run an
+                        ordinary <code>diff</code> on the results. jq is actively maintained and available
+                        practically everywhere, including CI images.
+                        <em>Pro</em>: no new tool to learn if you already use jq; fully scriptable.
+                        <em>Con</em>: the final comparison is still a line diff. Reordered array items, renamed keys,
+                        or <code>1.0</code> vs <code>1</code> still show up as noisy line changes rather than
+                        structural ones, and sorting keys can scatter a single rename across the diff output.</p>
+
+                    <p><strong>jd</strong> (Windows / macOS / Linux, free, MIT license). A dedicated structural
+                        diff-and-patch CLI for JSON and YAML, distributed as a single Go binary.
+                        <em>Pro</em>: a true structural diff, with output in its own format, JSON Merge Patch
+                        (RFC 7386), or a subset of JSON Patch (RFC 6902), which makes it a good fit for automation
+                        and CI.
+                        <em>Con</em>: CLI only, and a smaller community than jq; tagged releases are infrequent even
+                        though development continues.</p>
+
+                    <p><strong>json-diff</strong> (npm, free, MIT license). A simple structural diff for Node users:
+                        <code>json-diff a.json b.json</code> prints a colorized structural comparison.
+                        <em>Pro</em>: trivially easy in npm-based projects.
+                        <em>Con</em>: release cadence has slowed in recent years, and it needs a Node runtime rather
+                        than being a single static binary.</p>
+
+                    <p><strong>Graphtage</strong> (command-line Python tool from Trail of Bits). A semantic diff for
+                        tree-like formats: JSON, YAML, XML, and others, and it can even diff a JSON file against a
+                        YAML file.
+                        <em>Pro</em>: genuinely semantic matching of unordered keys.
+                        <em>Con</em>: more niche and research-flavored than jq or jd, with a steeper learning
+                        curve.</p>
+
+                    <h3 id="gui-compare-tools">GUI Compare Tools</h3>
+
+                    <p><strong>Meld</strong> (Linux / Windows, macOS via community builds; free, GPL). A well-known
+                        open-source visual diff and merge tool, actively maintained by the GNOME project.
+                        <em>Pro</em>: clean two- and three-way visual comparison and merging, which the phone tool
+                        deliberately does not attempt.
+                        <em>Con</em>: it has no JSON-aware mode, so you should pretty-print (and ideally key-sort)
+                        both files first or the diff fills with formatting noise; Windows updates are manual.</p>
+
+                    <p><strong>WinMerge</strong> (Windows only, free, GPL). Actively maintained, and notably it ships
+                        JSON-related plugins: PrettifyJSON formats both sides via jq before comparing, and QueryJSON
+                        can extract sub-parts of a file for comparison.
+                        <em>Pro</em>: free and Windows-native, with the formatting-noise problem largely handled by
+                        the plugin.
+                        <em>Con</em>: underneath it is still a line diff; the plugin normalizes formatting but does
+                        not produce a structural change report.</p>
+
+                    <p><strong>Beyond Compare</strong> (Windows / macOS / Linux; commercial, Standard $35 / Pro $70
+                        per user, perpetual license). A long-established commercial compare suite, currently in its
+                        5.x line.
+                        <em>Pro</em>: polished side-by-side text compare plus strong folder-compare and merge
+                        workflows; one license covers all platforms.
+                        <em>Con</em>: paid; and in practice JSON comparison there is a text compare over
+                        pre-formatted, sorted JSON rather than a structural diff, so the same normalization caveats
+                        apply.</p>
+
+                    <h3 id="vs-code-diff">VS Code Built-In Diff</h3>
+
+                    <p>If VS Code is already your editor, right-click a file, choose "Select for Compare", then
+                        "Compare with Selected" on the second file (or use "File: Compare Active File With..." from
+                        the command palette).
+                        <em>Pro</em>: free, zero setup, and fine for quick line-level checks.
+                        <em>Con</em>: the diff editor is line-based with character-level highlighting; for JSON you
+                        will want to format and key-sort both files first, or install a marketplace extension that
+                        offers a more structural JSON view.</p>
+
+                    <h3 id="online-diff-tools">Online Diff Sites</h3>
+
+                    <p>Sites like jsondiff.com (a semantic JSON compare tool) and several similar services let you
+                        paste two documents into a browser and see the differences immediately. For small,
+                        non-sensitive snippets they are the fastest option of all.</p>
+
+                    <div class="docs-callout docs-callout-warning">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+                            </svg>
+                            Privacy Caveat
+                        </div>
+                        <p>Most online diff tools do not document whether your data stays in the browser or is sent
+                            to a server. For proprietary, personal, or otherwise sensitive JSON, assume the data may
+                            leave your machine unless the tool explicitly states it works offline, or use a local
+                            tool instead.</p>
+                    </div>
+
+                    <h2 id="when-not-to-use-a-phone">When Not to Use a Phone for This</h2>
+
+                    <p>A phone diff tool exists for the situations where the data is already on the phone, or where
+                        the phone is simply what you have in hand: checking an export on the go, verifying a backup,
+                        inspecting logs pulled from a device. It is not trying to replace a workstation. Reach for a
+                        desktop tool when:</p>
+
+                    <ul>
+                        <li>You need to <strong>merge</strong> changes, not just see them. Three-way merges and
+                            conflict editing need a desktop GUI.</li>
+                        <li>You need <strong>machine-readable patches</strong> (JSON Patch, jd format) to feed into
+                            automation or CI pipelines.</li>
+                        <li>You are reviewing a <strong>large refactor side by side</strong> with your editor open,
+                            making fixes as you go. A workstation with a split view is simply the better environment.
+                        </li>
+                        <li>The comparison is part of a <strong>scripted, repeated workflow</strong>. CLI tools
+                            compose; a touchscreen does not.</li>
+                    </ul>
+
+                    <h2 id="faq">Frequently Asked Questions</h2>
+
+                    <h3 id="faq-how-compare-android">How do I compare two JSON files on Android?</h3>
+                    <p>Open GiantJSON Viewer+, choose Compare Files from the Tools screen, pick the two files, and
+                        run the comparison. The result starts with a plain verdict and a summary of additions,
+                        removals, changes, and moves, with the full grouped breakdown below it. Files up to 1 MB
+                        compare free; larger files require PRO.</p>
+
+                    <h3 id="faq-why-many-changes">Why does a normal diff show thousands of changes between two JSON
+                        files with the same data?</h3>
+                    <p>Because line-based diffs compare text. Different key order, indentation, or line wrapping all
+                        count as changes to a text diff even when the data is identical. A structural diff parses
+                        both files and compares actual keys and values instead.</p>
+
+                    <h3 id="faq-large-files">Can I diff really large JSON files on a phone?</h3>
+                    <p>With a streaming engine, yes. Compare Files was tested at 2 GB per side on a Galaxy S23
+                        Ultra: identical-pair confirmation in roughly 4-8 seconds, a 50,000-change comparison in
+                        about 10 seconds, repeat runs in 0.25 seconds, with memory staying under 400 MB.</p>
+
+                    <h3 id="faq-ndjson">Does it work with NDJSON?</h3>
+                    <p>Yes. NDJSON (newline-delimited JSON) is supported as an input format, and comparison results
+                        can be exported as NDJSON as well, one change per line.</p>
+
+                    <h2 id="conclusion">Conclusion</h2>
+
+                    <p>Comparing JSON files is a structural problem, and text diffs answer a different question than
+                        the one being asked. On a desktop there is a healthy ecosystem of structural diff tools, from
+                        one-line CLI recipes to full GUI compare suites, and for merges, patches, and scripted
+                        pipelines they remain the right choice.</p>
+
+                    <p>What was missing was a way to do this on a phone at all, let alone on files bigger than the
+                        phone's RAM. That is the gap Compare Files fills: a structural JSON and NDJSON diff that
+                        streams from disk, verified on 2 GB inputs, with results built to be read by a person first
+                        and exported for the record second.</p>
+
+                    <!-- Google Play CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Compare JSON Files on Your Phone</h3>
+                        <p>Try Compare Files in GiantJSON Viewer+ — free for files up to 1 MB, structural diff at any
+                            size with PRO.</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=article_cta&utm_campaign=compare_json_files"
+                            class="btn-primary" target="_blank" rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                            </svg>
+                            Get GiantJSON Viewer+
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

@@ -42,6 +42,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://giantjson.com/docs/compare-json-files-android/</loc>
+    <lastmod>2026-07-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://giantjson.com/docs/known-limitations/</loc>
     <lastmod>2026-03-01</lastmod>
     <priority>0.6</priority>
