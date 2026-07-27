@@ -9,9 +9,9 @@
     <title>How to Compare Two JSON Files on Android - GiantJSON Viewer+ Docs</title>
     <meta name="title" content="How to Compare Two JSON Files on Android - GiantJSON Viewer+ Docs">
     <meta name="description"
-        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records. Plus honest desktop and CLI alternatives.">
+        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records. Match list items by key, scope the compare to one path, ignore noisy fields. Plus honest desktop and CLI alternatives.">
     <meta name="keywords"
-        content="compare JSON files Android, JSON diff app, diff JSON files, compare two large JSON files, NDJSON diff, structural JSON diff">
+        content="compare JSON files Android, JSON diff app, diff JSON files, compare two large JSON files, NDJSON diff, structural JSON diff, ignore fields JSON diff, match array items by key">
     <meta name="author" content="Kotysoft">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://giantjson.com/docs/compare-json-files-android/">
@@ -21,16 +21,17 @@
     <meta property="og:url" content="https://giantjson.com/docs/compare-json-files-android/">
     <meta property="og:title" content="How to Compare Two JSON Files on Android - GiantJSON Viewer+">
     <meta property="og:description"
-        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records.">
+        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records — with per-list key matching, path scoping, and ignored fields.">
     <meta property="og:image" content="https://giantjson.com/icon.png">
     <meta property="article:published_time" content="2026-07-17T00:00:00Z">
+    <meta property="article:modified_time" content="2026-07-26T00:00:00Z">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://giantjson.com/docs/compare-json-files-android/">
     <meta property="twitter:title" content="How to Compare Two JSON Files on Android - GiantJSON Viewer+">
     <meta property="twitter:description"
-        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records.">
+        content="Diff two JSON or NDJSON files on Android with a structural compare that ignores formatting and key order, handles multi-gigabyte files, and detects moved records — with per-list key matching, path scoping, and ignored fields.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../icon.png">
@@ -74,6 +75,7 @@
             }
         },
         "datePublished": "2026-07-17",
+        "dateModified": "2026-07-26",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://giantjson.com/docs/compare-json-files-android/"
@@ -116,7 +118,23 @@
                 "name": "How do I compare two JSON files on Android?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "GiantJSON Viewer+ includes a Compare Files tool that performs a structural diff of two JSON or NDJSON files directly on the device. It ignores formatting and key order, detects moved records, and works on files far larger than device RAM. Comparing files up to 1 MB is free; larger files require PRO."
+                    "text": "GiantJSON Viewer+ includes a Compare Files tool that performs a structural diff of two JSON or NDJSON files directly on the device. It ignores formatting and key order, detects moved records, and works on files far larger than device RAM. Four optional settings let you control the comparison: how list items are paired, which part of the file to compare, which fields to ignore, and how aggressively values are matched. Comparing files up to 1 MB is free; larger files require PRO."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I ignore fields like updated_at when comparing JSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The Ignore fields setting takes either a bare field name, which is ignored everywhere in both files, or a path such as $.data.items[*].meta.ts, which ignores that field at one exact spot in the structure. Ignored differences are hidden but still counted, and the report states how many were suppressed, so a filtered comparison never silently looks cleaner than it is."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I compare two JSON arrays whose items are in a different order?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Pair the items by an identity field instead of by position. In GiantJSON Viewer+ the Match list items setting defaults to Automatic, which finds each list's identity field (such as an id) on its own and falls back to position matching when it is not confident. Custom keys lets you name the field yourself, for example $.users[*].id, for the cases where the automatic choice is wrong."
                 }
             },
             {
@@ -210,8 +228,8 @@
                 <header class="docs-article-header">
                     <h1>How to Compare Two JSON Files on Android</h1>
                     <div class="docs-article-meta">
-                        <span>10 min read</span>
-                        <span>Updated Jul 17, 2026</span>
+                        <span>13 min read</span>
+                        <span>Updated Jul 26, 2026</span>
                     </div>
                 </header>
 
@@ -223,9 +241,10 @@
                         needs to answer the same question: <em>what actually changed between these two files?</em></p>
 
                     <p>This guide covers why comparing JSON is harder than comparing ordinary text, how structural
-                        diffing solves it, what the new Compare Files tool in GiantJSON Viewer+ can and cannot do
-                        (with real measured numbers), and which desktop and command-line tools are worth knowing when
-                        a phone is not the right place for the job.</p>
+                        diffing solves it, what the Compare Files tool in GiantJSON Viewer+ can and cannot do
+                        (with real measured numbers), how to steer a comparison when the default answer is too noisy,
+                        and which desktop and command-line tools are worth knowing when a phone is not the right place
+                        for the job.</p>
 
                     <h2 id="why-text-diff-fails-for-json">Why Ordinary Diff Tools Struggle With JSON</h2>
 
@@ -294,6 +313,14 @@
                             file, so 50,000 additions to one array show up as one understandable group, not 50,000
                             rows to scroll through. A summary verdict comes first; the full breakdown, source excerpts,
                             and a tappable minimap are there when you want detail.</li>
+                        <li><strong>Steerable</strong>: four optional settings decide what counts as a change at all —
+                            how list items are paired, which part of the files to look at, which fields to ignore, and
+                            whether values are matched by meaning or byte for byte. See
+                            <a href="#controlling-the-comparison">Controlling What Counts as a Change</a> below.</li>
+                        <li><strong>Source context on tap</strong>: every reported change opens the surrounding source
+                            lines from the actual file, syntax-coloured, with an A/B toggle to see the same spot on
+                            the other side. A long press copies the change's path, its source position, or the value
+                            itself.</li>
                         <li><strong>Sanity gate for unrelated files</strong>: if the two files share almost no
                             content, the tool says so instead of producing a giant, meaningless diff. (Very small
                             file pairs can still be force-compared.)</li>
@@ -359,6 +386,151 @@
                             than a small fraction of their content, the tool reports them as unrelated instead of
                             rendering a diff that would be noise.</li>
                     </ul>
+
+                    <h2 id="controlling-the-comparison">Controlling What Counts as a Change</h2>
+
+                    <p>A structural diff answers "what changed". On real data that answer is often technically correct
+                        and practically useless: an export re-stamps <code>updated_at</code> on all 40,000 records, a
+                        database dump lists the same rows in a different order, or you only care about one branch of a
+                        file that happens to be two gigabytes. Compare Files has four settings for exactly these
+                        situations. Each one is a separate screen with its own examples, and each is optional — leave
+                        them alone and you get the plain structural comparison described above.</p>
+
+                    <p>All four are configured after both files have been scanned, which matters: every value can be
+                        filled in by browsing the structure that was actually found in <em>your</em> files, and checked
+                        before anything is compared.</p>
+
+                    <h3 id="match-list-items">Match List Items: Pairing Records by Key</h3>
+
+                    <p>When a list is reordered, the tool has to decide which item in file B corresponds to which item
+                        in file A. That single decision separates "three records were edited" from "eleven thousand
+                        lines changed". There are three modes:</p>
+
+                    <ul>
+                        <li><strong>Automatic</strong> (the default, and the recommended one): the engine works out
+                            each list's identity field — an <code>id</code> or something like it — on its own, and
+                            pairs items by it, so reordering is handled. Where it is not confident, it falls back to
+                            comparing by position instead of guessing.</li>
+                        <li><strong>By position only</strong>: item #1 is compared with item #1, #2 with #2. This is
+                            the right answer when position is itself meaningful — a time series, an ordered pipeline —
+                            and the noisy one when it is not.</li>
+                        <li><strong>Custom keys</strong>: you name the identity field yourself, for the rare case
+                            where the automatic choice is wrong.</li>
+                    </ul>
+
+                    <p>A custom key is a path that ends with the field identifying an item:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Meaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$.users[*].id</code></td>
+                                <td>items of the <code>users</code> list are paired by their <code>id</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$.data.orders[*].sku</code></td>
+                                <td>works at any depth — plain names joined by dots</td>
+                            </tr>
+                            <tr>
+                                <td><code>$.accounts.{*}.orders[*].sku</code></td>
+                                <td><code>{*}</code> stands for any one key, for levels that are a map of IDs</td>
+                            </tr>
+                            <tr>
+                                <td><code>$.grid[*][*].code</code></td>
+                                <td><code>[*]</code> is the items of a list, and may repeat for nested lists</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>You can also set a single key field that applies to every list — often just <code>id</code> —
+                        and add per-list rules on top of it for the lists that use something else.</p>
+
+                    <h3 id="compare-only-a-part">Compare Only a Part</h3>
+
+                    <p>This points the comparison at one exact place and ignores everything outside it. Useful when a
+                        file is large but the interesting part is not: compare <code>$.data.items</code> and skip the
+                        metadata, envelope, and everything else that surrounds it.</p>
+
+                    <p>What goes in the box is an <em>address</em>, not a pattern — it names a single spot, such as
+                        <code>$.data.items</code> or <code>$.orders[128].shipping</code>. Wildcards like
+                        <code>[*]</code> deliberately do not work here; a scope that could match many places would make
+                        the report ambiguous about what was actually compared. File A is the baseline for resolving
+                        the address.</p>
+
+                    <h3 id="ignore-fields">Ignore Fields</h3>
+
+                    <p>The answer to the re-stamped <code>updated_at</code> problem. An ignore entry takes one of two
+                        forms:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Entry</th>
+                                <th>Meaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>updated_at</code></td>
+                                <td>a bare field name — ignored everywhere in both files, at any depth</td>
+                            </tr>
+                            <tr>
+                                <td><code>$.data.items[*].meta.ts</code></td>
+                                <td>a path — ignores that field at this one spot in the structure, in every list item
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>$.accounts.{*}.updated_at</code></td>
+                                <td><code>{*}</code> again stands for any one key, when a level is a map of IDs</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>Ignored differences are hidden but <strong>still counted</strong>. The report states how many
+                        were suppressed, and if filtering removed every difference there was, it says so in those
+                        words rather than showing a clean "no differences" screen. A comparison should never look
+                        quieter than the data actually is.</p>
+
+                    <h3 id="smart-vs-exact">Smart vs Exact Text</h3>
+
+                    <p><strong>Smart</strong> (the default) counts only content differences: <code>1.0</code> and
+                        <code>1.00</code> are the same number, and spacing, indentation, and key order are ignored.
+                        This answers "what actually changed?".</p>
+
+                    <p><strong>Exact text</strong> compares the raw text as written, so <code>1.0</code> versus
+                        <code>1.00</code> and different spacing both count. It answers a narrower question — "are
+                        these two files byte-for-byte the same?" — and is the right mode for verifying a copy or a
+                        re-export that should be identical.</p>
+
+                    <h3 id="browse-and-verify">Browse and Verify Before You Run</h3>
+
+                    <p>Every one of these screens has the same two buttons, and they exist because typing a path from
+                        memory into a phone keyboard is a poor way to spend an afternoon.</p>
+
+                    <p><strong>BROWSE</strong> shows what the scan actually found in your two files — the lists that
+                        can be keyed, the addresses that exist, the field names that are present — and a tap fills the
+                        value in. <strong>VERIFY</strong> then checks what you have against both scanned files and
+                        answers in plain language: seen in both files, seen only in A, or not seen in the scanned
+                        structure at all. Nothing is compared until you press COMPARE, so a wrong path costs you a
+                        second, not a full run over two gigabytes.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Key Concept
+                        </div>
+                        <p>Every setting narrows the question, and the report always says which narrowing was applied:
+                            the scope that was compared, the rules that paired list items, and the number of
+                            differences that were ignored. A filtered comparison stays auditable.</p>
+                    </div>
 
                     <h2 id="desktop-and-cli-tools">Desktop and Command-Line Alternatives</h2>
 
@@ -479,8 +651,22 @@
                     <h3 id="faq-how-compare-android">How do I compare two JSON files on Android?</h3>
                     <p>Open GiantJSON Viewer+, choose Compare Files from the Tools screen, pick the two files, and
                         run the comparison. The result starts with a plain verdict and a summary of additions,
-                        removals, changes, and moves, with the full grouped breakdown below it. Files up to 1 MB
-                        compare free; larger files require PRO.</p>
+                        removals, changes, and moves, with the full grouped breakdown below it. If the answer is
+                        noisier than you need, the four settings on the setup screen narrow it: how list items are
+                        paired, which part of the files to compare, which fields to ignore, and smart versus exact
+                        text matching. Files up to 1 MB compare free; larger files require PRO.</p>
+
+                    <h3 id="faq-ignore-fields">Can I ignore fields like <code>updated_at</code>?</h3>
+                    <p>Yes. An ignore entry is either a bare field name, which is ignored everywhere in both files, or
+                        a path such as <code>$.data.items[*].meta.ts</code>, which ignores that field at one exact
+                        spot in the structure. Ignored differences are hidden but still counted, and the report says
+                        how many were suppressed.</p>
+
+                    <h3 id="faq-reordered-arrays">How do I compare two arrays in a different order?</h3>
+                    <p>Pair the items by an identity field instead of by position. The Match list items setting
+                        defaults to Automatic, which finds each list's identity field on its own and falls back to
+                        position matching when it is not confident. Custom keys lets you name the field yourself, for
+                        example <code>$.users[*].id</code>.</p>
 
                     <h3 id="faq-why-many-changes">Why does a normal diff show thousands of changes between two JSON
                         files with the same data?</h3>
@@ -507,7 +693,8 @@
                     <p>What was missing was a way to do this on a phone at all, let alone on files bigger than the
                         phone's RAM. That is the gap Compare Files fills: a structural JSON and NDJSON diff that
                         streams from disk, verified on 2 GB inputs, with results built to be read by a person first
-                        and exported for the record second.</p>
+                        and exported for the record second — and with enough control over the question that the
+                        answer stays short enough to read on a phone.</p>
 
                     <!-- Google Play CTA -->
                     <div class="docs-play-cta">

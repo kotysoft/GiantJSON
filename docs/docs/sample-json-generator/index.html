@@ -363,7 +363,7 @@
 
                     <p>The generator writes directly to disk through a buffered writer &mdash; records never accumulate in memory. That's how it can produce files much larger than the device's available RAM.</p>
 
-                    <p>The app checks free storage before starting and warns if it looks tight. You can cancel at any point &mdash; the partial file remains valid up to the last complete record.</p>
+                    <p>The app writes to the location you choose and reports failures surfaced by that provider during the write. You can cancel at any point &mdash; the app then asks the provider to remove the newly created incomplete document, but it may remain if that provider does not support deletion.</p>
 
                     <!-- Known limitations -->
                     <h2 id="known-limitations">Known Limitations</h2>
@@ -373,7 +373,7 @@
                         <li><strong>Max nesting depth:</strong> 250 levels</li>
                         <li><strong><code>$ref</code> chain depth:</strong> max 5 levels, circular references detected and warned</li>
                         <li><strong>Per-record cap:</strong> records over 10 MB are skipped (safety against pathological schemas)</li>
-                        <li><strong>Storage checks:</strong> blocked if free space &lt; 1.1x target, warning if &lt; 1.5x</li>
+                        <li><strong>Storage availability:</strong> SAF providers do not offer a universal free-space preflight; the selected provider may instead report a write, quota, or connection failure during generation</li>
                         <li><strong>No <code>pattern</code> support:</strong> regex patterns in schema are not used for value generation</li>
                         <li><strong>No <code>if</code>/<code>then</code>/<code>else</code>:</strong> conditional schema keywords not supported</li>
                     </ul>

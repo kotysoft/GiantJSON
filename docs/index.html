@@ -10,9 +10,9 @@
     <meta name="title"
         content="GiantJSON Viewer+ — Multi-GB JSON, CBOR & MsgPack Viewer, HAR Analyzer & API Client for Android">
     <meta name="description"
-        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats are transcoded to JSON on first open. Powered by a native Rust + SIMD engine. Includes a full HAR analyzer, REST & GraphQL API client with Postman import, advanced filters, SQL/CSV export, and offline privacy.">
+        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats are transcoded to JSON on first open. Powered by a native Rust + SIMD engine. Includes a structural file compare, a full HAR analyzer, REST & GraphQL API client with Postman import, advanced filters, SQL/CSV export, and offline privacy.">
     <meta name="keywords"
-        content="JSON viewer Android, large JSON file viewer, CBOR viewer Android, MessagePack viewer Android, MsgPack viewer, binary JSON viewer, HAR analyzer Android, API client Android, REST client mobile, Postman alternative Android, NDJSON viewer, JSON log viewer, multi-GB JSON, JSON parser mobile, GraphQL client Android, HAR file analyzer, JSON to SQL export, JSON to CSV export, JSON schema viewer">
+        content="JSON viewer Android, large JSON file viewer, CBOR viewer Android, MessagePack viewer Android, MsgPack viewer, binary JSON viewer, compare JSON files Android, JSON diff Android, HAR analyzer Android, API client Android, REST client mobile, Postman alternative Android, NDJSON viewer, JSON log viewer, multi-GB JSON, JSON parser mobile, GraphQL client Android, HAR file analyzer, JSON to SQL export, JSON to CSV export, JSON schema viewer">
     <meta name="author" content="Kotysoft">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://giantjson.com/">
@@ -32,7 +32,7 @@
     <meta property="og:title"
         content="GiantJSON Viewer+ — Multi-GB JSON, CBOR & MsgPack Viewer, HAR Analyzer & API Client for Android">
     <meta property="og:description"
-        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats auto-transcoded to JSON. Native Rust + SIMD engine. HAR analyzer, REST/GraphQL API client with Postman import, advanced filters, SQL/CSV export. 100% offline.">
+        content="Open multi-gigabyte JSON, CBOR, and MessagePack files on Android without crashes. Binary formats auto-transcoded to JSON. Native Rust + SIMD engine. Structural file compare, HAR analyzer, REST/GraphQL API client with Postman import, advanced filters, SQL/CSV export. 100% offline.">
     <meta property="og:image" content="https://giantjson.com/icon.png">
     <meta property="og:site_name" content="GiantJSON Viewer+">
 
@@ -108,6 +108,8 @@
             "Postman collection import",
             "OAuth 2.0 with PKCE authentication",
             "AWS Signature V4 authentication",
+            "Structural compare of two JSON or NDJSON files with move detection",
+            "Configurable diff: key-based list matching, path scoping, ignored fields",
             "Advanced visual query filter builder",
             "SQL export (MySQL, PostgreSQL, SQLite, SQL Server, Oracle, MariaDB)",
             "CSV export",
@@ -130,7 +132,7 @@
         },
         "installUrl": "https://play.google.com/store/apps/details?id=com.giantjsonviewer",
         "downloadUrl": "https://play.google.com/store/apps/details?id=com.giantjsonviewer",
-        "dateModified": "2026-04-12"
+        "dateModified": "2026-07-26"
     }
     </script>
 </head>
@@ -144,8 +146,8 @@
             <p class="hero-tagline hero-animate">A JSON viewer and analysis toolkit built for files that crash
                 everything else</p>
             <p class="hero-description hero-animate">
-                Native Rust + SIMD engine. Multi-GB JSON, HAR analysis, API client, SQL export — all offline, all on
-                your Android device.
+                Native Rust + SIMD engine. Multi-GB JSON, structural file compare, HAR analysis, API client, SQL
+                export — all offline, all on your Android device.
             </p>
             <div class="hero-badges hero-animate">
                 <span class="hero-badge">Rust + SIMD Core</span>
@@ -598,6 +600,19 @@
             <h2 class="section-title">More Features</h2>
             <p class="section-subtitle">A complete toolkit beyond just file viewing.</p>
             <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-card-icon icon-cyan">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M15,3H19A2,2 0 0,1 21,5V9H19V5H15V3M9,3V5H5V9H3V5A2,2 0 0,1 5,3H9M15,21V19H19V15H21V19A2,2 0 0,1 19,21H15M9,21H5A2,2 0 0,1 3,19V15H5V19H9V21M7,11H11V13H7V11M13,11H17V13H13V11Z" />
+                        </svg>
+                    </div>
+                    <h4>Compare Files</h4>
+                    <p>Structural diff of two JSON or NDJSON files — formatting and key order never count as changes,
+                        moved records are detected, and results are grouped instead of dumped. Pair list items by key,
+                        scope the compare to one path, or ignore noisy fields. <a
+                            href="docs/compare-json-files-android/">Read the guide</a>.</p>
+                </div>
                 <div class="tool-card">
                     <div class="tool-card-icon icon-blue">
                         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
