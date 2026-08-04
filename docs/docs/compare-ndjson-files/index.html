@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>How to Compare NDJSON Files When Record Order Changed - GiantJSON Viewer+ Docs</title>
+    <meta name="title" content="How to Compare NDJSON Files When Record Order Changed - GiantJSON Viewer+ Docs">
+    <meta name="description"
+        content="Compare NDJSON and JSONL files whose record order changed between dumps: the jq normalize-and-sort recipe with copy-paste commands, its two honest limits, and key-based record pairing with gjxdiff --key — measured on files up to 3.1 million records per side.">
+    <meta name="keywords"
+        content="compare NDJSON files, NDJSON diff, diff JSONL files, compare newline-delimited JSON, json lines diff, compare database exports JSON, NDJSON compare tool, jq sort diff">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/compare-ndjson-files/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/compare-ndjson-files/">
+    <meta property="og:title" content="How to Compare NDJSON Files When Record Order Changed - GiantJSON Viewer+">
+    <meta property="og:description"
+        content="Database exports and event logs reorder between dumps. The jq sort recipe, where it stops being enough, and key-based record pairing that absorbs reorders — measured up to 3.1 million records per side.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-08-04T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/compare-ndjson-files/">
+    <meta property="twitter:title" content="How to Compare NDJSON Files When Record Order Changed - GiantJSON Viewer+">
+    <meta property="twitter:description"
+        content="Database exports and event logs reorder between dumps. The jq sort recipe, where it stops being enough, and key-based record pairing that absorbs reorders — measured up to 3.1 million records per side.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Compare NDJSON Files When the Record Order Changed",
+        "description": "Compare NDJSON and JSONL files whose record order changed between dumps: the jq normalize-and-sort recipe with copy-paste commands, its two honest limits, and key-based record pairing with gjxdiff --key, measured on files up to 3.1 million records per side.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "GiantJSON Viewer+",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-08-04",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/compare-ndjson-files/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "How to Compare NDJSON Files When the Record Order Changed",
+                "item": "https://giantjson.com/docs/compare-ndjson-files/"
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Are NDJSON and JSONL the same thing?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In practice, yes. NDJSON (newline-delimited JSON) and JSONL (JSON Lines) both mean a text file with one complete JSON value per line, almost always one object per line. The two names come from two independent specification efforts; the files themselves are interchangeable, and every technique in this guide applies to both."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I compare two NDJSON files if the record order changed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Either make the order irrelevant or pair records by identity. The jq recipe — jq -S -c . on both files, then sort, then diff — makes order irrelevant and works with tiny memory, but reports whole records as text lines. gjxdiff pairs records by an identity field (autodetected, or forced with --key id), so reordered records are matched and compared field by field, and only real data differences are reported."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is sort plus diff enough to compare NDJSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Only after normalization. Sorting raw lines works only if both files serialize every record byte-identically; different key order or number formatting breaks it. Normalizing with jq -S -c first fixes key order and formatting, and the result is genuinely useful. Two limits remain: the output is text lines rather than a field-level report, and jq preserves number literals, so 1.0 versus 1.00 is flagged as a difference even though the values are equal."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I diff NDJSON records by more than one field?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use a compound key. gjxdiff --key region,id pairs records by the combination of both fields; up to 16 fields are supported, a field one level down is written as meta.id, and a literal comma in a field name is escaped as \\,."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What does gjxdiff report when only the record order changed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "With keyed pairing, an order-only difference produces zero change records and exit code 1: the files are not byte-identical, but no data changed. Reordered records are never reported as removals plus additions."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I compare a JSON array against an NDJSON file?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. gjxdiff detects JSON and NDJSON per file, and one side can be a JSON document while the other is NDJSON — useful when an API snapshot is a JSON array and the database dump of the same data is newline-delimited."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How large can the compared NDJSON files be?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "gjxdiff memory-maps its inputs and keeps working state in temporary files under a fixed memory budget, so input size is bounded by disk, not RAM. Measured on an 8 GiB Linux container: 83 MB per side (310,000 records) in 2.8 seconds, 837 MB per side (3.1 million records) in 26 seconds, and 1.36 GB per side in 61 seconds."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=article"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">How to Compare NDJSON Files</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>How to Compare NDJSON Files When the Record Order Changed</h1>
+                    <div class="docs-article-meta">
+                        <span>9 min read</span>
+                        <span>Updated Aug 4, 2026</span>
+                    </div>
+                </header>
+
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+                    <p>You export the same table twice, a day apart. Same rows, same data — and <code>diff</code>
+                        reports that nearly every line changed. Anyone who compares NDJSON or JSONL files from
+                        databases, event pipelines, or log shippers hits this eventually: the records are fine,
+                        the <em>order</em> moved.</p>
+
+                    <p>This guide covers why record order changes between dumps, why plain <code>diff</code> and
+                        naive <code>sort</code> tricks mislead, an honest jq recipe that solves most of the problem
+                        with copy-paste commands, and key-based record pairing with
+                        <a href="https://github.com/kotysoft/gjxdiff" target="_blank" rel="noopener">gjxdiff</a>
+                        for the cases the recipe cannot cover. Every number here is a real measurement.</p>
+
+                    <h2 id="why-order-changes">Why Record Order Changes Between Dumps</h2>
+
+                    <p>NDJSON writers rarely promise an order. A <code>SELECT</code> without an
+                        <code>ORDER BY</code> returns rows in whatever order the storage engine finds convenient,
+                        and that order shifts after inserts, deletes, or a vacuum. Export jobs that run in parallel
+                        interleave their workers' output differently on every run. Log shippers and event queues
+                        deliver by arrival, not by timestamp. None of this changes the data — two dumps can be
+                        record-for-record identical and still list those records in a completely different
+                        sequence.</p>
+
+                    <p>For a line-based tool, that distinction does not exist. A record that moved from line 12 to
+                        line 47,000 is one deletion plus one unrelated addition, and a reordered dump of a million
+                        records produces a diff with millions of phantom changes wrapped around the three edits
+                        you actually care about.</p>
+
+                    <h2 id="why-plain-diff-fails">Why Plain diff and Naive sort Mislead</h2>
+
+                    <p>The first instinct is to sort both files and diff the results:</p>
+
+                    <pre><code>sort a.ndjson > a.sorted
+sort b.ndjson > b.sorted
+diff a.sorted b.sorted        # misleading</code></pre>
+
+                    <p>This only works when both files serialize every record <em>byte-identically</em>. In
+                        practice they often do not: one exporter writes <code>{"id":7,"name":"x"}</code> and the
+                        other <code>{"name": "x", "id": 7}</code>, or one writes <code>1.0</code> where the other
+                        writes <code>1</code>. Same data, different bytes — so identical records sort to different
+                        positions and <code>diff</code> reports them as changed. The output mixes real edits with
+                        serialization noise, and there is no way to tell them apart by looking.</p>
+
+                    <p>The fix is to normalize before sorting, and jq does that well.</p>
+
+                    <h2 id="jq-recipe">The jq Recipe: Normalize, Sort, Diff</h2>
+
+                    <p>This is the honest first answer, and for many jobs it is also the last one needed:</p>
+
+                    <pre><code>jq -S -c . a.ndjson | sort > a.norm
+jq -S -c . b.ndjson | sort > b.norm
+diff a.norm b.norm</code></pre>
+
+                    <p><code>-S</code> sorts every object's keys, <code>-c</code> prints each record minified on
+                        one line. After that, byte equality means data equality for most records, sorting makes
+                        the order irrelevant, and plain <code>diff</code> shows which records exist only in one
+                        file.</p>
+
+                    <p>It is also genuinely cheap. Measured on August 4, 2026 — all numbers in this article come
+                        from the same machine: a Linux container with 8 GiB of RAM and 4 cores, a SATA SSD, cold
+                        page cache, single first runs — the jq 1.7 recipe processed an 83 MB-per-side keyed NDJSON
+                        pair in 5.0 seconds using 3.4 MB of RAM, and an 837 MB-per-side pair in 56 seconds at
+                        3.5 MB. Because jq streams one record at a time, memory stays flat no matter how large the
+                        file grows.</p>
+
+                    <h3 id="jq-when-enough">When This Is All You Need</h3>
+
+                    <ul>
+                        <li>You want a yes/no answer: did anything change besides the order?</li>
+                        <li>Records are small enough that reading a whole changed record is fine.</li>
+                        <li>You are in CI or on a server where jq is already installed and adding a tool is
+                            friction.</li>
+                    </ul>
+
+                    <h3 id="jq-limits">Where It Stops Being Enough</h3>
+
+                    <p>The recipe has two structural limits, and both follow from what it is:</p>
+
+                    <ul>
+                        <li><strong>The output is text lines, not a report.</strong> A record with one changed
+                            field appears as one full record removed and one full record added. On wide records,
+                            finding <em>which</em> field changed is manual work, and there are no paths, no
+                            operations, and nothing machine-readable to feed a pipeline.</li>
+                        <li><strong>Number literals count as differences.</strong> jq preserves the literal it
+                            read, so <code>1.0</code> versus <code>1.00</code> — the same number — survives
+                            normalization and shows up in the diff as a change. On files re-serialized by
+                            different writers, this produces false positives that no amount of sorting
+                            removes.</li>
+                    </ul>
+
+                    <p>When either limit bites — or when the files outgrow what you want to eyeball — the next
+                        step is a tool that pairs records by identity and compares them structurally.</p>
+
+                    <h2 id="keyed-pairing">Pairing Records by Key with gjxdiff</h2>
+
+                    <p><a href="https://github.com/kotysoft/gjxdiff" target="_blank" rel="noopener">gjxdiff</a> is
+                        a structural JSON and NDJSON diff CLI for Linux x86-64, built for files bigger than RAM.
+                        Its answer to the reordering problem is record identity: instead of comparing line 12 with
+                        line 12, it works out which record in B <em>is</em> the record from A, and compares those
+                        two — wherever they moved.</p>
+
+                    <pre><code>gjxdiff a.ndjson b.ndjson                    # key autodetected
+gjxdiff --key id a.ndjson b.ndjson           # force the identity field
+gjxdiff --key region,id a.ndjson b.ndjson    # compound key
+gjxdiff --key meta.id a.ndjson b.ndjson      # field one level down
+gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code></pre>
+
+                    <p>By default gjxdiff autodetects a key field on its own and falls back to order-based
+                        alignment where it is not confident. <code>--key</code> forces the choice: compound keys
+                        combine up to 16 comma-separated fields, <code>meta.id</code> reaches one level of
+                        nesting, and <code>\,</code> escapes a literal comma in a field name. <code>--key
+                        none</code> disables keyed matching entirely — the right call when position itself is the
+                        meaning, as in a time series.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Order-Only Differences
+                        </div>
+                        <p>With keyed pairing, a pair that differs only in record order produces <em>zero</em>
+                            change records and exit code <code>1</code>: not identical, but nothing changed. The
+                            millions of phantom changes a line diff would report simply do not exist here.</p>
+                    </div>
+
+                    <p>What you get instead of text lines is a field-level report: each difference carries its
+                        path (for example <code>$.users[*].email</code>), its operation, and byte offsets into
+                        both files. On a terminal it renders as a color-coded human view; piped, it becomes an
+                        NDJSON machine report. And unlike jq, gjxdiff compares values, not literals —
+                        <code>1.0</code> versus <code>1.00</code> is not a difference.</p>
+
+                    <h3 id="volatile-fields">Ignore the Fields That Always Change</h3>
+
+                    <p>Exports love to re-stamp timestamps. Exclude them from the comparison instead of reading
+                        past them:</p>
+
+                    <pre><code>gjxdiff --key id --ignore updated_at,ts a.ndjson b.ndjson</code></pre>
+
+                    <p>A bare name is ignored at any depth; anchored paths such as <code>$.arr[*].ts</code> ignore
+                        one exact spot. A pair identical apart from ignored fields exits <code>0</code>.</p>
+
+                    <h3 id="mixed-formats">JSON on One Side, NDJSON on the Other</h3>
+
+                    <p>Formats are detected per file, and a JSON document can be compared against an NDJSON file.
+                        When the API snapshot is a JSON array and the database dump of the same data is
+                        newline-delimited, that is one command, not a conversion step.</p>
+
+                    <h2 id="measured">Measured on Real Files</h2>
+
+                    <p>Same machine and conditions as the jq numbers above. The test pairs carried 20 planted
+                        differences each; gjxdiff 0.8.0 found all 20 on every pair, with zero false
+                        positives.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Input</th>
+                                <th>Time</th>
+                                <th>Peak RAM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2 MB pair</td>
+                                <td>0.11 s</td>
+                                <td>14 MB</td>
+                            </tr>
+                            <tr>
+                                <td>83 MB per side, NDJSON, 310,000 records</td>
+                                <td>2.8 s</td>
+                                <td>478 MB</td>
+                            </tr>
+                            <tr>
+                                <td>156 MB per side, 30% of records changed</td>
+                                <td>7.5 s (52 MB report)</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td>837 MB per side, NDJSON, 3.1 million records</td>
+                                <td>26 s</td>
+                                <td>3.9 GB</td>
+                            </tr>
+                            <tr>
+                                <td>1.36 GB per side</td>
+                                <td>61 s</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>The 30%-changed row matters for real-world use: a change-dense pair does not blow up, it
+                        just writes a bigger report. For the full tool-by-tool comparison at these sizes — jd,
+                        json-diff, jsondiffpatch, and jq on the same box — see
+                        <a href="../diff-large-json-files-linux/">How to Diff Large JSON Files on Linux</a>. If
+                        the tools you tried are crashing rather than merely misreporting, that failure mode has
+                        its own guide: <a href="../json-diff-out-of-memory/">JSON Diff Out of Memory? Why It
+                        Happens and What Works</a>.</p>
+
+                    <p>One more thing keyed pairing gives you: because reordered records are matched rather than
+                        re-listed, gjxdiff can also export the comparison as an
+                        <a href="../json-patch-large-files/">RFC 6902 JSON Patch</a> when you need a
+                        machine-applyable delta rather than a report.</p>
+
+                    <h2 id="on-your-phone">The Same Problem on Your Phone</h2>
+
+                    <p>NDJSON dumps do not always arrive at a Linux box first. The Compare Files tool in
+                        <a href="../../">GiantJSON Viewer+</a>, our Android viewer for multi-gigabyte JSON, solves
+                        the same reordering problem the same way: list items are paired by an identity field —
+                        detected automatically, set by position, or named explicitly with a custom key — and the
+                        comparison streams from disk caches, so file size is not bound by the phone's RAM.</p>
+
+                    <p>How the on-device keyed matching works, with measured numbers on 2 GB pairs, is covered in
+                        <a href="../compare-json-files-android/">How to Compare Two JSON Files on
+                        Android</a>.</p>
+
+                    <h2 id="faq">Frequently Asked Questions</h2>
+
+                    <h3 id="faq-ndjson-jsonl">Are NDJSON and JSONL the same thing?</h3>
+                    <p>In practice, yes. NDJSON (newline-delimited JSON) and JSONL (JSON Lines) both mean a text
+                        file with one complete JSON value per line, almost always one object per line. The two
+                        names come from two independent specification efforts; the files themselves are
+                        interchangeable, and every technique in this guide applies to both.</p>
+
+                    <h3 id="faq-order-changed">How do I compare two NDJSON files if the record order changed?</h3>
+                    <p>Either make the order irrelevant or pair records by identity. The jq recipe —
+                        <code>jq -S -c .</code> on both files, then <code>sort</code>, then <code>diff</code> —
+                        makes order irrelevant and works with tiny memory, but reports whole records as text
+                        lines. gjxdiff pairs records by an identity field (autodetected, or forced with
+                        <code>--key id</code>), so reordered records are matched and compared field by field, and
+                        only real data differences are reported.</p>
+
+                    <h3 id="faq-sort-diff">Is sort plus diff enough to compare NDJSON files?</h3>
+                    <p>Only after normalization. Sorting raw lines works only if both files serialize every record
+                        byte-identically; different key order or number formatting breaks it. Normalizing with
+                        <code>jq -S -c</code> first fixes key order and formatting, and the result is genuinely
+                        useful. Two limits remain: the output is text lines rather than a field-level report, and
+                        jq preserves number literals, so <code>1.0</code> versus <code>1.00</code> is flagged as a
+                        difference even though the values are equal.</p>
+
+                    <h3 id="faq-compound-key">How do I diff NDJSON records by more than one field?</h3>
+                    <p>Use a compound key. <code>gjxdiff --key region,id</code> pairs records by the combination
+                        of both fields; up to 16 fields are supported, a field one level down is written as
+                        <code>meta.id</code>, and a literal comma in a field name is escaped as
+                        <code>\,</code>.</p>
+
+                    <h3 id="faq-order-only">What does gjxdiff report when only the record order changed?</h3>
+                    <p>With keyed pairing, an order-only difference produces zero change records and exit code
+                        <code>1</code>: the files are not byte-identical, but no data changed. Reordered records
+                        are never reported as removals plus additions.</p>
+
+                    <h3 id="faq-json-vs-ndjson">Can I compare a JSON array against an NDJSON file?</h3>
+                    <p>Yes. gjxdiff detects JSON and NDJSON per file, and one side can be a JSON document while
+                        the other is NDJSON — useful when an API snapshot is a JSON array and the database dump of
+                        the same data is newline-delimited.</p>
+
+                    <h3 id="faq-how-large">How large can the compared NDJSON files be?</h3>
+                    <p>gjxdiff memory-maps its inputs and keeps working state in temporary files under a fixed
+                        memory budget, so input size is bounded by disk, not RAM. Measured on an 8 GiB Linux
+                        container: 83 MB per side (310,000 records) in 2.8 seconds, 837 MB per side (3.1 million
+                        records) in 26 seconds, and 1.36 GB per side in 61 seconds.</p>
+
+                    <h2 id="conclusion">Conclusion</h2>
+
+                    <p>Reordered NDJSON is not a diff problem, it is an identity problem. The jq recipe solves it
+                        by erasing order — cheap, scriptable, and enough whenever a record-level text answer is
+                        enough. When you need to know which field changed, need <code>1.0</code> and
+                        <code>1.00</code> treated as equal, or need a machine-readable report at
+                        millions-of-records scale, keyed pairing is the tool for the job:
+                        <code>gjxdiff --key id a.ndjson b.ndjson</code>, and reorders stop being noise.</p>
+
+                    <!-- GitHub CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Diff NDJSON Files by Record Identity</h3>
+                        <p>gjxdiff is a single static binary for Linux x86-64 — free for individuals and
+                            organizations under 100 people.</p>
+                        <a href="https://github.com/kotysoft/gjxdiff" class="btn-primary" target="_blank"
+                            rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                            </svg>
+                            Get gjxdiff on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

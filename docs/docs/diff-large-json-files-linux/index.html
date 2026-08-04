@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>How to Diff Large JSON Files on Linux (Even Bigger Than RAM) - GiantJSON Viewer+ Docs</title>
+    <meta name="title" content="How to Diff Large JSON Files on Linux (Even Bigger Than RAM) - GiantJSON Viewer+ Docs">
+    <meta name="description"
+        content="Diff large JSON and NDJSON files on Linux without running out of memory. Measured results for jd, json-diff, jsondiffpatch, and jq against gjxdiff on files up to 1.36 GB per side, with copy-paste commands, CI exit codes, key-based NDJSON record pairing, and RFC 6902 patch export.">
+    <meta name="keywords"
+        content="diff large JSON files, compare two large JSON files Linux, JSON diff out of memory, NDJSON diff tool, compare NDJSON files, JSON diff CLI Linux, structural JSON diff command line, RFC 6902 patch large files, ERR_STRING_TOO_LONG, gjxdiff">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/diff-large-json-files-linux/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/diff-large-json-files-linux/">
+    <meta property="og:title" content="How to Diff Large JSON Files on Linux (Even Bigger Than RAM) - GiantJSON Viewer+">
+    <meta property="og:description"
+        content="Structural diff of JSON and NDJSON files bigger than RAM: measured behavior of jd, json-diff, jsondiffpatch, and jq at scale, and how gjxdiff compares 1.36 GB files in 61 seconds inside a fixed memory budget.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-08-04T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/diff-large-json-files-linux/">
+    <meta property="twitter:title" content="How to Diff Large JSON Files on Linux (Even Bigger Than RAM) - GiantJSON Viewer+">
+    <meta property="twitter:description"
+        content="Structural diff of JSON and NDJSON files bigger than RAM: measured behavior of jd, json-diff, jsondiffpatch, and jq at scale, and how gjxdiff compares 1.36 GB files in 61 seconds inside a fixed memory budget.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Diff Large JSON Files on Linux — Even Bigger Than RAM",
+        "description": "Diff large JSON and NDJSON files on Linux without running out of memory. Measured results for jd, json-diff, jsondiffpatch, and jq against gjxdiff on files up to 1.36 GB per side, with copy-paste commands, CI exit codes, and RFC 6902 patch export.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "GiantJSON Viewer+",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-08-04",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/diff-large-json-files-linux/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "How to Diff Large JSON Files on Linux — Even Bigger Than RAM",
+                "item": "https://giantjson.com/docs/diff-large-json-files-linux/"
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I diff two JSON files that are too big to fit in memory?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use a diff tool that does not parse the inputs into RAM. gjxdiff memory-maps both files and keeps its working state in temporary files under a fixed memory budget, so input size is bounded by disk, not RAM. On an 8 GiB Linux container it compared a 1.36 GB-per-side pair in 61 seconds, and with --memory-limit 512M the same multi-gigabyte pair still completed in 28 seconds using 42 MB of heap, with the coarser result clearly disclosed."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why does json-diff run out of memory or time out on large files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "json-diff parses both documents fully into the Node.js heap and then compares the object trees. A parsed tree is many times larger than the file on disk, so memory and time grow with input size. On our test machine, json-diff 1.0.6 was correct on small files but took 2 min 45 s on a 2 MB pair and exceeded a 15-minute timeout from 83 MB inputs upward. Scale, not correctness, is the problem."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What causes ERR_STRING_TOO_LONG when reading a big JSON file in Node.js?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "V8, the JavaScript engine in Node.js, caps a single string at roughly 512 MB. readFileSync(path, \"utf8\") must return the whole file as one string, so it fails with ERR_STRING_TOO_LONG for files above that size no matter how much RAM the machine has. Any Node-based JSON diff tool that reads whole files this way inherits the limit; adding RAM does not help."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How can I compare NDJSON files where the record order changed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Pair records by an identity field instead of by position. gjxdiff autodetects a key field on its own, or you can force one with --key id; compound keys such as --key region,id are supported. With keyed pairing, reordered records are not reported as churn: an order-only difference produces zero change records and exit code 1."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I generate an RFC 6902 patch from very large JSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. gjxdiff --patch changes.json a.json b.json writes an RFC 6902 JSON Patch that transforms A into B, built under the same memory budget as the diff itself, so it works on files bigger than RAM. If a correct patch cannot be proven — for example when an operation has no concrete RFC 6901 address — gjxdiff refuses with exit code 2 and writes no file rather than emitting a silently partial patch."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does gjxdiff work on Windows or macOS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. gjxdiff is Linux x86-64 only. It ships as a single static musl binary, so it runs on any x86-64 Linux distribution without dependencies, but there is no Windows or macOS build."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is gjxdiff open source?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. gjxdiff is distributed as a prebuilt binary. It is free for individuals and for organizations with fewer than 100 people, including their own CI and automation; automated use in larger organizations and embedding in commercial products require a commercial license. Free use requires the attribution line 'gjxdiff by Tibor Kovacs (Kotysoft)'. The full terms are in the LICENSE file in the GitHub repository."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is the jq normalize-and-diff recipe good enough for comparing JSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Often, yes. Normalizing both files with jq -S, sorting, and running diff is genuinely useful and low on memory, especially for keyed NDJSON. Its two limits: the output is raw text lines rather than a structural report with paths, and jq preserves number literals, so representation-only differences such as 1.0 versus 1.00 are reported as changes even though the values are equal."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=article"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">How to Diff Large JSON Files on Linux</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>How to Diff Large JSON Files on Linux — Even Bigger Than RAM</h1>
+                    <div class="docs-article-meta">
+                        <span>12 min read</span>
+                        <span>Updated Aug 4, 2026</span>
+                    </div>
+                </header>
+
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+                    <p>Two NDJSON exports from the same pipeline, a day apart. A database dump before and after a
+                        migration. An API snapshot that should be identical to yesterday's — but is it? At small
+                        sizes, any JSON diff tool answers this question. Somewhere between 100 MB and 1 GB, most of
+                        them stop answering.</p>
+
+                    <p>This guide covers why comparing two large JSON files on Linux is harder than it looks, what
+                        actually happened when we ran the common command-line tools against the same large file pairs
+                        on the same machine, and how <a href="https://github.com/kotysoft/gjxdiff" target="_blank"
+                        rel="noopener">gjxdiff</a> — a JSON diff CLI for Linux built for exactly this case — compares
+                        files bigger than RAM. Every number here is a real measurement, and every command is
+                        copy-paste ready.</p>
+
+                    <h2 id="why-large-json-diff-is-hard">Why Diffing Large JSON Files Breaks the Usual Tools</h2>
+
+                    <p>Plain <code>diff</code> is the wrong instrument for JSON. It compares text lines, and JSON
+                        does not keep its meaning in lines: two files can differ in indentation, key order, or record
+                        order while containing identical data, and a line diff reports thousands of changes anyway.
+                        A minified multi-gigabyte file is often a <em>single</em> line, at which point a line diff
+                        has exactly one unit to work with.</p>
+
+                    <p>Structural JSON diff tools solve that by parsing both documents and comparing keys and values.
+                        Almost all of them parse both documents <em>fully into memory</em> first — and that is where
+                        large files kill them. Depending on the runtime, the failure looks like one of three
+                        things:</p>
+
+                    <ul>
+                        <li><strong>"JavaScript heap out of memory"</strong> — a Node.js process exhausts its heap
+                            building the parsed tree, which is many times larger than the file on disk.</li>
+                        <li><strong>An OOM kill</strong> — the kernel terminates the process when the machine or the
+                            container runs out of memory.</li>
+                        <li><strong><code>ERR_STRING_TOO_LONG</code></strong> — V8 caps a single string at roughly
+                            512 MB, so <code>readFileSync(path, "utf8")</code> cannot even read a larger file into
+                            memory. This one is independent of RAM: a 128 GB workstation fails exactly like a
+                            laptop.</li>
+                    </ul>
+
+                    <p>None of this is bad engineering by the tools in question. They were built for configuration
+                        files and API responses, and at those sizes they work well. The problem is purely one of
+                        scale.</p>
+
+                    <h2 id="measured-at-scale">What Actually Happens at Scale, Measured</h2>
+
+                    <p>All measurements below were taken on August 4, 2026 on one machine: a Linux container with
+                        8 GiB of RAM and 4 cores, a SATA SSD, cold page cache, single first runs, a 900-second
+                        timeout, and a 6 GB memory cap per tool. Same files, same box, for every tool. The test
+                        pairs carried 20 planted differences each.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>2 MB pair</th>
+                                <th>83 MB per side</th>
+                                <th>837 MB - 1.36 GB per side</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>jd 2.5.0</td>
+                                <td>works</td>
+                                <td>exceeded the 6 GB memory cap</td>
+                                <td>exceeded the 6 GB memory cap</td>
+                            </tr>
+                            <tr>
+                                <td>json-diff 1.0.6</td>
+                                <td>correct, 2 min 45 s</td>
+                                <td>exceeded the 15-minute timeout</td>
+                                <td>exceeded the 15-minute timeout</td>
+                            </tr>
+                            <tr>
+                                <td>jsondiffpatch 0.7.6</td>
+                                <td>fast, correct</td>
+                                <td>works, RAM in the gigabytes</td>
+                                <td>cannot open the files (V8 string cap)</td>
+                            </tr>
+                            <tr>
+                                <td>jq 1.7 + sort + diff</td>
+                                <td>works</td>
+                                <td>works, low memory</td>
+                                <td>works, but text output only</td>
+                            </tr>
+                            <tr>
+                                <td>gjxdiff 0.8.0</td>
+                                <td>0.11 s</td>
+                                <td>2.8 s</td>
+                                <td>26 s at 837 MB, 61 s at 1.36 GB</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>jd 2.5.0</strong> is a true structural diff in a single Go binary, and on small files
+                        on this machine it did its job. Its memory use grows quadratically with array length, though,
+                        and on these files it exceeded the 6 GB cap from the 83 MB inputs upward.</p>
+
+                    <p><strong>json-diff 1.0.6</strong> (npm) produced correct output on small files but slowly:
+                        2 min 45 s on the 2 MB pair. From 83 MB upward it exceeded the 15-minute timeout. It parses
+                        both documents fully into the Node heap and compares the trees; on these inputs that
+                        approach simply runs out of time before it runs out of memory.</p>
+
+                    <p><strong>jsondiffpatch 0.7.6</strong> (npm, with <code>objectHash</code> configured) was the
+                        strongest of the Node tools on this machine: fast and correct up to a few hundred megabytes
+                        per side, at a cost of 1.3-3.9 GB of RAM. But like every tool that reads whole files with
+                        <code>readFileSync</code> in utf8, it cannot open files above roughly 512 MB at all — that is
+                        V8's string cap, and more RAM does not change it.</p>
+
+                    <p><strong>The jq recipe</strong> — normalize both files with <code>jq -S</code>, sort, and run
+                        ordinary <code>diff</code> — deserves respect. For keyed NDJSON it is genuinely useful and
+                        stays low on memory at every size we tried. It has two structural limits: the output is raw
+                        text lines, not a structural report with paths and operations; and jq preserves number
+                        literals, so representation-only differences such as <code>1.0</code> versus
+                        <code>1.00</code> are reported as changes even though the values are equal.</p>
+
+                    <h3 id="gjxdiff-numbers">gjxdiff on the Same Files</h3>
+
+                    <p><a href="https://github.com/kotysoft/gjxdiff" target="_blank" rel="noopener">gjxdiff
+                        0.8.0</a>, cold runs on the same box:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Input</th>
+                                <th>Time</th>
+                                <th>Peak RAM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2 MB pair</td>
+                                <td>0.11 s</td>
+                                <td>14 MB</td>
+                            </tr>
+                            <tr>
+                                <td>83 MB per side, NDJSON, 310,000 records</td>
+                                <td>2.8 s</td>
+                                <td>478 MB</td>
+                            </tr>
+                            <tr>
+                                <td>165 MB per side, real-world GeoJSON</td>
+                                <td>5.0 s</td>
+                                <td>920 MB</td>
+                            </tr>
+                            <tr>
+                                <td>156 MB per side, 30% of records changed</td>
+                                <td>7.5 s</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td>837 MB per side, NDJSON, 3.1 million records</td>
+                                <td>26 s</td>
+                                <td>3.9 GB</td>
+                            </tr>
+                            <tr>
+                                <td>1.36 GB per side</td>
+                                <td>61 s</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>Correctness on the same runs: all 20 planted differences found on every pair, with zero false
+                        positives.</p>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Constrained Memory
+                        </div>
+                        <p>With <code>--memory-limit 512M</code>, the multi-gigabyte pair still completed — in 28
+                            seconds using 42 MB of heap. The result is coarser, and the run says so explicitly in
+                            every output mode. gjxdiff never degrades silently: anything the comparison skips,
+                            absorbs, or coarsens is disclosed.</p>
+                    </div>
+
+                    <h2 id="how-gjxdiff-works">How gjxdiff Works</h2>
+
+                    <p>gjxdiff is built around one rule: input size must not be bounded by RAM.</p>
+
+                    <ul>
+                        <li><strong>Memory-mapped inputs.</strong> The files are never loaded into memory; the
+                            kernel pages bytes in as they are compared.</li>
+                        <li><strong>Working state on disk.</strong> Intermediate structures live in temporary files
+                            under a memory budget — a fixed 4 GiB by default, adjustable with
+                            <code>--memory-limit</code>.</li>
+                        <li><strong>Key-based record pairing.</strong> NDJSON records are matched by an identity
+                            field (autodetected, or forced with <code>--key</code>), so reordered records are not
+                            reported as churn.</li>
+                        <li><strong>Three outputs.</strong> An NDJSON machine report when stdout is piped, a
+                            color-coded human view on a terminal, and an RFC 6902 JSON Patch export with
+                            <code>--patch</code>.</li>
+                        <li><strong>Deterministic.</strong> The same inputs and flags produce a byte-identical
+                            report on any machine — the default budget is a fixed number, not a share of free RAM,
+                            so nothing in the report depends on the machine's momentary state.</li>
+                        <li><strong>Single static musl binary.</strong> No runtime, no dependencies; drop it on your
+                            <code>PATH</code> and it runs on any x86-64 Linux distribution.</li>
+                        <li><strong>Single-threaded by design.</strong> The times in the tables above are what one
+                            core does.</li>
+                    </ul>
+
+                    <h3 id="honest-limitations">Honest Limitations</h3>
+
+                    <p>Same policy as the rest of this site: boundaries stated up front.</p>
+
+                    <ul>
+                        <li><strong>Linux x86-64 only.</strong> No Windows or macOS build.</li>
+                        <li><strong>Single-threaded.</strong> It will not use your other cores.</li>
+                        <li><strong>Very long arrays coarsen.</strong> Arrays whose direct children exceed an
+                            alignment cap are reported as coarse changed regions rather than item by item. The cap
+                            scales with the memory budget; raising <code>--memory-limit</code> raises it.</li>
+                        <li><strong>Move detection has a floor.</strong> Moves are detected only for whole objects
+                            or arrays of at least 64 bytes; smaller displaced values report as an addition plus a
+                            removal.</li>
+                        <li><strong>Temp disk use.</strong> Temporary files can reach about 2x the combined input
+                            size on change-dense pairs. <code>--temp</code> picks the directory and
+                            <code>--max-temp</code> caps the total.</li>
+                        <li><strong>Pre-1.0 report format.</strong> The report's meta line carries
+                            <code>"stability":"draft"</code>; the format may still change between minor
+                            releases.</li>
+                    </ul>
+
+                    <h2 id="how-to">Practical How-To</h2>
+
+                    <h3 id="install">Install</h3>
+
+                    <p>Download the tarball from the repository's
+                        <a href="https://github.com/kotysoft/gjxdiff/tree/main/dist/0.8.0" target="_blank"
+                        rel="noopener">dist/0.8.0/</a> directory, verify its SHA-256 against the
+                        <code>SHA256SUMS</code> file published next to it, and put the binary on your
+                        <code>PATH</code> — full steps are in
+                        <a href="https://github.com/kotysoft/gjxdiff/blob/main/INSTALL.md" target="_blank"
+                        rel="noopener">INSTALL.md</a>:</p>
+
+                    <pre><code>sha256sum gjxdiff-0.8.0-x86_64-linux-musl.tar.gz   # compare against SHA256SUMS in dist/0.8.0/
+tar xzf gjxdiff-0.8.0-x86_64-linux-musl.tar.gz
+sudo install -m 0755 gjxdiff /usr/local/bin/gjxdiff
+gjxdiff --version</code></pre>
+
+                    <h3 id="basic-diff">Basic Diff</h3>
+
+                    <pre><code>gjxdiff a.json b.json                    # human view on a terminal
+gjxdiff a.json b.json > report.ndjson    # machine NDJSON report when piped
+gjxdiff --stat a.json b.json             # totals only</code></pre>
+
+                    <p>JSON and NDJSON are detected per file, and a JSON file can be compared against an NDJSON
+                        file. Formatting, key order, and number representation (<code>1.0</code> versus
+                        <code>1.00</code>) do not count as differences.</p>
+
+                    <h3 id="ci-gate">CI Gate With Exit Codes</h3>
+
+                    <p>The exit code always reflects the full comparison: <code>0</code> identical, <code>1</code>
+                        differences found, <code>2</code> error, <code>130</code> interrupted.</p>
+
+                    <pre><code>gjxdiff --profile ci expected.ndjson actual.ndjson > report.ndjson
+case $? in
+  0) echo "identical" ;;
+  1) echo "differences found, see report.ndjson" ;;
+  *) echo "gjxdiff error" >&2; exit 2 ;;
+esac</code></pre>
+
+                    <p><code>--profile ci</code> bundles <code>--ndjson --color=never --progress=never</code>. For a
+                        pure yes/no gate, <code>gjxdiff --quiet a.json b.json</code> prints nothing and answers with
+                        the exit code alone.</p>
+
+                    <h3 id="key-pairing">Pair NDJSON Records by Key</h3>
+
+                    <p>When record order changed between the two files, pair records by identity instead of
+                        position:</p>
+
+                    <pre><code>gjxdiff --key id orders-a.ndjson orders-b.ndjson
+gjxdiff --key region,id events-a.ndjson events-b.ndjson   # compound key</code></pre>
+
+                    <p>By default gjxdiff autodetects a key and falls back to order-based alignment where it is not
+                        confident; <code>--key none</code> disables keyed matching entirely.</p>
+
+                    <h3 id="ignore-fields">Ignore Volatile Fields</h3>
+
+                    <pre><code>gjxdiff --ignore ts,updated_at a.ndjson b.ndjson
+gjxdiff --ignore '$.meta.generated_at' a.json b.json</code></pre>
+
+                    <p>A bare name is ignored at any depth; an anchored path such as
+                        <code>$.arr[*].ts</code> ignores one exact spot. Ignored content is excluded from the
+                        comparison, and a pair identical apart from ignored fields exits <code>0</code>.</p>
+
+                    <h3 id="patch-export">Export an RFC 6902 Patch</h3>
+
+                    <pre><code>gjxdiff --patch changes.json config-a.json config-b.json</code></pre>
+
+                    <p>The patch transforms A into B and is built under the same memory budget as the diff, so
+                        generating an RFC 6902 patch from large files works where in-memory tools cannot open the
+                        inputs. When a correct patch cannot be proven — for example, an operation with no concrete
+                        RFC 6901 address — gjxdiff refuses with exit <code>2</code> and writes no file, never a
+                        silently partial patch.</p>
+
+                    <h3 id="stdin">Diff an API Response From stdin</h3>
+
+                    <pre><code>curl -s https://api.example.com/items | gjxdiff - snapshot.json</code></pre>
+
+                    <p><code>-</code> reads one side from standard input, which makes drift checks against a saved
+                        snapshot a one-liner.</p>
+
+                    <h2 id="relationship">Where gjxdiff Comes From</h2>
+
+                    <p>gjxdiff grew out of the diff feature of <a href="../../">GiantJSON Viewer+</a>, our Android
+                        viewer for multi-gigabyte JSON — the same problem, solved with the same conviction that file
+                        size must not be bounded by RAM. If you need this comparison on a phone rather than a Linux
+                        box, see <a href="../compare-json-files-android/">How to Compare Two JSON Files on
+                        Android</a>.</p>
+
+                    <p>gjxdiff is free for individuals and for organizations under 100 people, including their own
+                        CI; the full terms are in the
+                        <a href="https://github.com/kotysoft/gjxdiff/blob/main/LICENSE" target="_blank"
+                        rel="noopener">LICENSE</a> in the repository. Commercial licensing and questions:
+                        <a href="mailto:support@giantjson.com">support@giantjson.com</a>.</p>
+
+                    <h2 id="faq">Frequently Asked Questions</h2>
+
+                    <h3 id="faq-too-big-for-memory">How do I diff two JSON files that are too big to fit in
+                        memory?</h3>
+                    <p>Use a diff tool that does not parse the inputs into RAM. gjxdiff memory-maps both files and
+                        keeps its working state in temporary files under a fixed memory budget, so input size is
+                        bounded by disk, not RAM. On an 8 GiB Linux container it compared a 1.36 GB-per-side pair in
+                        61 seconds, and with <code>--memory-limit 512M</code> the same multi-gigabyte pair still
+                        completed in 28 seconds using 42 MB of heap, with the coarser result clearly disclosed.</p>
+
+                    <h3 id="faq-json-diff-oom">Why does json-diff run out of memory or time out on large
+                        files?</h3>
+                    <p>json-diff parses both documents fully into the Node.js heap and then compares the object
+                        trees. A parsed tree is many times larger than the file on disk, so memory and time grow
+                        with input size. On our test machine, json-diff 1.0.6 was correct on small files but took
+                        2 min 45 s on a 2 MB pair and exceeded a 15-minute timeout from 83 MB inputs upward. Scale,
+                        not correctness, is the problem.</p>
+
+                    <h3 id="faq-err-string-too-long">What causes <code>ERR_STRING_TOO_LONG</code> when reading a big
+                        JSON file in Node.js?</h3>
+                    <p>V8, the JavaScript engine in Node.js, caps a single string at roughly 512 MB.
+                        <code>readFileSync(path, "utf8")</code> must return the whole file as one string, so it
+                        fails with <code>ERR_STRING_TOO_LONG</code> for files above that size no matter how much RAM
+                        the machine has. Any Node-based JSON diff tool that reads whole files this way inherits the
+                        limit; adding RAM does not help.</p>
+
+                    <h3 id="faq-ndjson-reorder">How can I compare NDJSON files where the record order changed?</h3>
+                    <p>Pair records by an identity field instead of by position. gjxdiff autodetects a key field on
+                        its own, or you can force one with <code>--key id</code>; compound keys such as
+                        <code>--key region,id</code> are supported. With keyed pairing, reordered records are not
+                        reported as churn: an order-only difference produces zero change records and exit code
+                        <code>1</code>.</p>
+
+                    <h3 id="faq-rfc6902-large">Can I generate an RFC 6902 patch from very large JSON files?</h3>
+                    <p>Yes. <code>gjxdiff --patch changes.json a.json b.json</code> writes an RFC 6902 JSON Patch
+                        that transforms A into B, built under the same memory budget as the diff itself, so it works
+                        on files bigger than RAM. If a correct patch cannot be proven, gjxdiff refuses with exit
+                        code <code>2</code> and writes no file rather than emitting a silently partial patch.</p>
+
+                    <h3 id="faq-windows-macos">Does gjxdiff work on Windows or macOS?</h3>
+                    <p>No. gjxdiff is Linux x86-64 only. It ships as a single static musl binary, so it runs on any
+                        x86-64 Linux distribution without dependencies, but there is no Windows or macOS build.</p>
+
+                    <h3 id="faq-open-source">Is gjxdiff open source?</h3>
+                    <p>No. gjxdiff is distributed as a prebuilt binary. It is free for individuals and for
+                        organizations with fewer than 100 people, including their own CI and automation; automated
+                        use in larger organizations and embedding in commercial products require a commercial
+                        license. Free use requires the attribution line <em>gjxdiff by Tibor Kovacs (Kotysoft)</em>.
+                        The full terms are in the
+                        <a href="https://github.com/kotysoft/gjxdiff/blob/main/LICENSE" target="_blank"
+                        rel="noopener">LICENSE</a> file in the GitHub repository.</p>
+
+                    <h3 id="faq-jq-recipe">Is the jq normalize-and-diff recipe good enough?</h3>
+                    <p>Often, yes. Normalizing both files with <code>jq -S</code>, sorting, and running
+                        <code>diff</code> is genuinely useful and low on memory, especially for keyed NDJSON. Its
+                        two limits: the output is raw text lines rather than a structural report with paths, and jq
+                        preserves number literals, so representation-only differences such as <code>1.0</code>
+                        versus <code>1.00</code> are reported as changes even though the values are equal.</p>
+
+                    <h2 id="conclusion">Conclusion</h2>
+
+                    <p>Below a few hundred megabytes, you have choices, and several of them are good. Above that, on
+                        the machine we measured, the field thins out fast: in-memory structural tools hit heap
+                        limits, timeouts, or V8's string cap, and the jq recipe — solid as it is — answers with text
+                        lines rather than structure.</p>
+
+                    <p>gjxdiff exists for that upper range: a structural JSON and NDJSON diff for the command line
+                        that memory-maps its inputs, works inside a fixed memory budget, pairs reordered records by
+                        key, exports RFC 6902 patches, and tells you plainly whenever a limit shaped the answer. The
+                        binary and the full manual are at
+                        <a href="https://github.com/kotysoft/gjxdiff" target="_blank"
+                        rel="noopener">github.com/kotysoft/gjxdiff</a>.</p>
+
+                    <!-- GitHub CTA -->
+                    <div class="docs-play-cta">
+                        <h3>Diff JSON Files Bigger Than RAM</h3>
+                        <p>gjxdiff is a single static binary for Linux x86-64 — free for individuals and
+                            organizations under 100 people.</p>
+                        <a href="https://github.com/kotysoft/gjxdiff" class="btn-primary" target="_blank"
+                            rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                            </svg>
+                            Get gjxdiff on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>

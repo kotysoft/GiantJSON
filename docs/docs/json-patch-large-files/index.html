@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Generate an RFC 6902 JSON Patch from Large Files - GiantJSON Viewer+ Docs</title>
+    <meta name="title" content="Generate an RFC 6902 JSON Patch from Large Files - GiantJSON Viewer+ Docs">
+    <meta name="description"
+        content="Generate an RFC 6902 JSON Patch from two JSON or NDJSON files: python-jsonpatch and jsondiffpatch at small scale, and gjxdiff --patch for files bigger than RAM — a patch that transforms A into B or a loud exit-2 refusal, never a silent partial patch.">
+    <meta name="keywords"
+        content="RFC 6902 patch generator, JSON Patch large files, generate json patch diff, json patch CLI, apply json patch, json patch from two files, JSON Patch vs Merge Patch">
+    <meta name="author" content="Kotysoft">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://giantjson.com/docs/json-patch-large-files/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://giantjson.com/docs/json-patch-large-files/">
+    <meta property="og:title" content="Generate an RFC 6902 JSON Patch from Large Files - GiantJSON Viewer+">
+    <meta property="og:description"
+        content="JSON Patch for API bodies, config sync, and audit trails: small-scale generators, their in-memory limits, and gjxdiff --patch, which writes a correct patch or refuses loudly — never a silent partial one.">
+    <meta property="og:image" content="https://giantjson.com/icon.png">
+    <meta property="article:published_time" content="2026-08-04T00:00:00Z">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://giantjson.com/docs/json-patch-large-files/">
+    <meta property="twitter:title" content="Generate an RFC 6902 JSON Patch from Large Files - GiantJSON Viewer+">
+    <meta property="twitter:description"
+        content="JSON Patch for API bodies, config sync, and audit trails: small-scale generators, their in-memory limits, and gjxdiff --patch, which writes a correct patch or refuses loudly — never a silent partial one.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNVRGYSSNQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NNVRGYSSNQ');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Generate an RFC 6902 JSON Patch from Large Files",
+        "description": "How to generate an RFC 6902 JSON Patch from two JSON or NDJSON files: python-jsonpatch and jsondiffpatch at small scale, their in-memory limits, and gjxdiff --patch for files bigger than RAM — a patch that transforms A into B or a loud exit-2 refusal, never a silent partial patch.",
+        "image": "https://giantjson.com/icon.png",
+        "author": {
+            "@type": "Organization",
+            "name": "Kotysoft"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "GiantJSON Viewer+",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://giantjson.com/icon.png"
+            }
+        },
+        "datePublished": "2026-08-04",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://giantjson.com/docs/json-patch-large-files/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://giantjson.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Documentation",
+                "item": "https://giantjson.com/docs/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Generate an RFC 6902 JSON Patch from Large Files",
+                "item": "https://giantjson.com/docs/json-patch-large-files/"
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is an RFC 6902 JSON Patch?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A standard format for describing changes between two JSON documents: a JSON array of operations — add, remove, replace, move, copy, test — each addressing its target with an RFC 6901 JSON Pointer such as /users/3/email. Applying the operations in order to document A produces document B. It is the payload format behind HTTP PATCH with the application/json-patch+json media type."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the difference between JSON Patch (RFC 6902) and JSON Merge Patch (RFC 7386)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "JSON Patch is an ordered list of explicit operations with pointer addresses; it can express array edits, moves, and tests precisely. JSON Merge Patch is a partial document that gets merged over the target; it is simpler but cannot address individual array elements — replacing any part of an array means shipping the whole array. For array-heavy data, RFC 6902 is the expressive one."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I generate a JSON Patch from two very large JSON files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In-memory generators (python-jsonpatch, jsondiffpatch) parse both documents into RAM, which sets a size ceiling; Node-based ones cannot read files above V8's roughly 512 MB string cap at all. gjxdiff --patch changes.json a.json b.json builds the patch under the same fixed memory budget as its diff, so it works on files bigger than RAM — measured up to 1.36 GB per side on an 8 GiB container."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why does gjxdiff sometimes refuse to write a patch?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Because a patch it cannot prove correct is worse than no patch. gjxdiff refuses with exit code 2 and leaves no file when a needed record has no concrete RFC 6901 address, or when keyed record pairing absorbed a reorder — an order difference a patch would have to express but keyed matching deliberately erased. In the reorder case, rerun with --key none to align records by position; the patch then expresses the reorder explicitly."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What does an empty patch [] mean?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "That no operations are needed: the documents are semantically identical. This includes representation-only differences — 1.0 versus 1.00, formatting, key order — which produce exit code 0 and a [] patch, because applying zero operations to A already yields a document equal to B."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I apply an RFC 6902 patch to a JSON file?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Any RFC 6902 implementation works; the patch format is the standard, not the tool. On the command line, python-jsonpatch installs a jsonpatch command: jsonpatch a.json changes.json prints the patched document. Libraries exist for every major language, and servers accept these patches directly as HTTP PATCH bodies with the application/json-patch+json media type."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I generate a patch for only some of the changes?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Not with gjxdiff, by design. A patch must transform A into B completely, so --patch conflicts with the flags that truncate or filter output (--max-diffs, --only, --profile quick) — each combination exits with code 2 and a message. A partial patch would apply cleanly and silently produce a document that is neither A nor B."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body class="docs-page">
+    <!-- Reading Progress Bar -->
+    <div class="docs-progress"></div>
+
+    <!-- Header -->
+    <header class="docs-header">
+        <div class="docs-header-inner">
+            <a href="../" class="docs-logo">
+                <img src="../../icon.png" alt="GiantJSON Viewer+" class="docs-logo-icon">
+                <span>GiantJSON</span>
+                <span class="docs-logo-divider">/</span>
+                <span class="docs-logo-text">Docs</span>
+            </a>
+
+            <div class="docs-search">
+                <input type="text" class="docs-search-input" placeholder="Search documentation..." aria-label="Search">
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.giantjsonviewer&utm_source=docs&utm_medium=header&utm_campaign=article"
+                class="docs-header-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+                <span>Get the App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="docs-main">
+        <div class="docs-article-layout">
+            <!-- Sidebar -->
+            <aside class="docs-sidebar">
+                <div class="docs-sidebar-title">On This Page</div>
+                <ul class="docs-toc">
+                    <!-- Auto-generated by docs.js -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="docs-content">
+                <!-- Breadcrumbs -->
+                <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="../../">Home</a>
+                    <span>/</span>
+                    <a href="../">Docs</a>
+                    <span>/</span>
+                    <span class="docs-breadcrumbs-current">RFC 6902 JSON Patch from Large Files</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="docs-article-header">
+                    <h1>Generate an RFC 6902 JSON Patch from Large Files</h1>
+                    <div class="docs-article-meta">
+                        <span>9 min read</span>
+                        <span>Updated Aug 4, 2026</span>
+                    </div>
+                </header>
+
+
+                <!-- Article Body -->
+                <div class="docs-article-body">
+                    <p>A diff report tells a human what changed. A JSON Patch tells a <em>machine</em> how to
+                        make the change — and that difference decides which one you need. This guide covers what
+                        RFC 6902 actually is, the honest small-scale generators, and how to produce a patch from
+                        files that in-memory tools cannot even open.</p>
+
+                    <h2 id="what-is-rfc-6902">What RFC 6902 Is, and When You Want One</h2>
+
+                    <p>An RFC 6902 JSON Patch is a JSON array of operations — <code>add</code>,
+                        <code>remove</code>, <code>replace</code>, <code>move</code>, <code>copy</code>,
+                        <code>test</code> — each addressing its target with an RFC 6901 JSON Pointer:</p>
+
+                    <pre><code>[
+  { "op": "replace", "path": "/users/3/email", "value": "new@example.com" },
+  { "op": "add",     "path": "/users/17",      "value": { "id": 9432, "name": "Ada" } },
+  { "op": "remove",  "path": "/legacy" }
+]</code></pre>
+
+                    <p>Applying the operations in order to document A produces document B. That machine
+                        contract is the point, and it is what makes JSON Patch the right format in three
+                        recurring situations:</p>
+
+                    <ul>
+                        <li><strong>API PATCH bodies.</strong> HTTP <code>PATCH</code> with the
+                            <code>application/json-patch+json</code> media type sends exactly the operations
+                            above — the standard way to update a resource without resending it.</li>
+                        <li><strong>Config sync.</strong> Ship the delta between two versions of a large
+                            configuration instead of the whole file, and apply it mechanically on the other
+                            side.</li>
+                        <li><strong>Audit trails.</strong> A patch is a precise, replayable record of what
+                            changed between two snapshots — better evidence than a prose summary.</li>
+                    </ul>
+
+                    <p>Its simpler sibling, JSON Merge Patch (RFC 7386), is a partial document merged over the
+                        target. Merge Patch is easier to write by hand but cannot address individual array
+                        elements — touching any part of an array means shipping the whole array — so for
+                        array-heavy data, RFC 6902 is the expressive format.</p>
+
+                    <h2 id="small-scale">The Small-Scale Generators, Honestly</h2>
+
+                    <p>At config-file and API-response sizes, two established libraries generate RFC 6902
+                        patches well, and if your files are small they are the pragmatic choice.</p>
+
+                    <h3 id="python-jsonpatch">python-jsonpatch</h3>
+
+                    <p>The <code>jsonpatch</code> package generates and applies patches, both as a library and
+                        as bundled command-line tools:</p>
+
+                    <pre><code>pip install jsonpatch
+jsondiff a.json b.json > changes.json      # generate a patch
+jsonpatch a.json changes.json              # apply: prints the patched document</code></pre>
+
+                    <p>Or in code:</p>
+
+                    <pre><code>import json, jsonpatch
+a = json.load(open("a.json"))
+b = json.load(open("b.json"))
+patch = jsonpatch.make_patch(a, b)
+print(patch)</code></pre>
+
+                    <p>Correct, standard, everywhere Python is. Its scale limit is the universal one: both
+                        documents are parsed fully into Python objects in memory, so the size ceiling is set by
+                        your RAM and the parsed trees' overhead, exactly as described in
+                        <a href="../json-diff-out-of-memory/">JSON Diff Out of Memory</a>.</p>
+
+                    <h3 id="jsondiffpatch">jsondiffpatch</h3>
+
+                    <p>jsondiffpatch computes deltas in its own compact format, and ships a formatter that
+                        converts a delta into RFC 6902 operations:</p>
+
+                    <pre><code>import * as jsondiffpatch from 'jsondiffpatch';
+import * as jsonpatchFormatter from 'jsondiffpatch/formatters/jsonpatch';
+
+const differ = jsondiffpatch.create({ objectHash: (o) => o.id });
+const delta = differ.diff(a, b);
+const ops = jsonpatchFormatter.format(delta);   // RFC 6902 operations</code></pre>
+
+                    <p>It is a genuinely strong tool in its range. On our benchmark machine — all numbers in
+                        this article: an 8 GiB, 4-core Linux container, SATA SSD, cold page cache, single first
+                        runs, August 2026 — jsondiffpatch 0.7.6 diffed 83 MB per side in 2.5 seconds (at 1.3 GB
+                        of RAM) and 165 MB per side in 8 seconds (at 3.9 GB). The hard stop comes at roughly
+                        512 MB per file: V8 caps a single string there, <code>readFileSync</code> in utf8 cannot
+                        return a larger file, and the run fails with <code>ERR_STRING_TOO_LONG</code> — on the
+                        837 MB test file, in under 2 seconds. More RAM does not move that wall.</p>
+
+                    <h2 id="gjxdiff-patch">gjxdiff --patch: Patches from Files Bigger Than RAM</h2>
+
+                    <p><a href="https://github.com/kotysoft/gjxdiff" target="_blank" rel="noopener">gjxdiff</a>
+                        is a structural JSON and NDJSON diff CLI for Linux x86-64 whose engine memory-maps its
+                        inputs and keeps working state on disk under a fixed memory budget. <code>--patch</code>
+                        makes that engine emit an RFC 6902 patch:</p>
+
+                    <pre><code>gjxdiff --patch changes.json a.json b.json      # diff report plus patch file
+gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the report</code></pre>
+
+                    <p>The contract is strict, and every part of it is deliberate:</p>
+
+                    <ul>
+                        <li><strong>The patch transforms A into B, or there is no patch.</strong> When a correct
+                            patch cannot be proven, gjxdiff refuses with exit code <code>2</code> and leaves no
+                            file — never a silently partial patch that would apply cleanly and produce a
+                            document that is neither A nor B.</li>
+                        <li><strong>Two concrete refusal cases.</strong> A needed record has no concrete
+                            RFC 6901 address; or keyed record pairing absorbed a reorder — an order difference
+                            the patch would have to express, but which keyed matching deliberately erased. For
+                            the reorder case, rerun with <code>--key none</code> so records align by position
+                            and the patch expresses the reorder explicitly.</li>
+                        <li><strong>An empty diff yields <code>[]</code>.</strong> And representation-only
+                            differences — <code>1.0</code> versus <code>1.00</code>, formatting, key order —
+                            give exit <code>0</code> with a <code>[]</code> patch: zero operations already turn
+                            A into a document equal to B.</li>
+                        <li><strong>The write is atomic.</strong> The patch file appears complete or not at all;
+                            an interrupted run cannot leave a half-written patch behind.</li>
+                        <li><strong>No partial patches by construction.</strong> <code>--patch</code> conflicts
+                            with the flags that truncate or filter output — <code>--max-diffs</code>,
+                            <code>--only</code>, <code>--profile quick</code> — each combination exits
+                            <code>2</code> with a message.</li>
+                    </ul>
+
+                    <div class="docs-callout">
+                        <div class="docs-callout-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path
+                                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" />
+                            </svg>
+                            Why Refusal Is a Feature
+                        </div>
+                        <p>A diff report that misses something wastes your time. A patch that misses something
+                            corrupts data downstream, because patches get <em>applied</em>, often unattended.
+                            That asymmetry is why gjxdiff fails loudly with exit <code>2</code> rather than
+                            writing its best guess: the exit code is the difference between a pipeline that
+                            stops and a pipeline that quietly ships a wrong document.</p>
+                    </div>
+
+                    <h3 id="measured">Measured Performance</h3>
+
+                    <p>The patch generator runs on the same engine, under the same fixed memory budget, as the
+                        diff itself — that is what lets it handle inputs in-memory generators cannot open. These
+                        are the engine's measured diff runs on the benchmark machine, gjxdiff 0.8.0, cold:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Input</th>
+                                <th>Time</th>
+                                <th>Peak RAM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2 MB pair</td>
+                                <td>0.11 s</td>
+                                <td>14 MB</td>
+                            </tr>
+                            <tr>
+                                <td>83 MB per side, NDJSON, 310,000 records</td>
+                                <td>2.8 s</td>
+                                <td>478 MB</td>
+                            </tr>
+                            <tr>
+                                <td>165 MB per side, real-world GeoJSON</td>
+                                <td>5.0 s</td>
+                                <td>920 MB</td>
+                            </tr>
+                            <tr>
+                                <td>837 MB per side, NDJSON, 3.1 million records</td>
+                                <td>26 s</td>
+                                <td>3.9 GB</td>
+                            </tr>
+                            <tr>
+                                <td>1.36 GB per side</td>
+                                <td>61 s</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>Correctness on the same runs: 20 of 20 planted differences found on every pair, zero
+                        false positives. The full tool-by-tool story behind these numbers is in
+                        <a href="../diff-large-json-files-linux/">How to Diff Large JSON Files on Linux</a>;
+                        the keyed pairing that decides how NDJSON records line up before a patch is generated is
+                        covered in <a href="../compare-ndjson-files/">How to Compare NDJSON Files When the
+                        Record Order Changed</a>.</p>
+
+                    <h2 id="applying">Applying the Patch</h2>
+
+                    <p>The output is standard RFC 6902, so applying it needs no gjxdiff at all. On the command
+                        line, python-jsonpatch's bundled tool does it:</p>
+
+                    <pre><code>jsonpatch a.json changes.json > b-rebuilt.json</code></pre>
+
+                    <p>Every major language has an RFC 6902 implementation, and servers accept the same array
+                        directly as an HTTP <code>PATCH</code> body with the
+                        <code>application/json-patch+json</code> media type. Generate with whichever tool fits
+                        your file size; the patch itself is portable.</p>
+
+                    <h2 id="faq">Frequently Asked Questions</h2>
+
+                    <h3 id="faq-what-is">What is an RFC 6902 JSON Patch?</h3>
+                    <p>A standard format for describing changes between two JSON documents: a JSON array of
+                        operations — <code>add</code>, <code>remove</code>, <code>replace</code>,
+                        <code>move</code>, <code>copy</code>, <code>test</code> — each addressing its target
+                        with an RFC 6901 JSON Pointer such as <code>/users/3/email</code>. Applying the
+                        operations in order to document A produces document B. It is the payload format behind
+                        HTTP <code>PATCH</code> with the <code>application/json-patch+json</code> media
+                        type.</p>
+
+                    <h3 id="faq-vs-merge-patch">What is the difference between JSON Patch (RFC 6902) and JSON
+                        Merge Patch (RFC 7386)?</h3>
+                    <p>JSON Patch is an ordered list of explicit operations with pointer addresses; it can
+                        express array edits, moves, and tests precisely. JSON Merge Patch is a partial document
+                        that gets merged over the target; it is simpler but cannot address individual array
+                        elements — replacing any part of an array means shipping the whole array. For
+                        array-heavy data, RFC 6902 is the expressive one.</p>
+
+                    <h3 id="faq-large-files">How do I generate a JSON Patch from two very large JSON files?</h3>
+                    <p>In-memory generators (python-jsonpatch, jsondiffpatch) parse both documents into RAM,
+                        which sets a size ceiling; Node-based ones cannot read files above V8's roughly 512 MB
+                        string cap at all. <code>gjxdiff --patch changes.json a.json b.json</code> builds the
+                        patch under the same fixed memory budget as its diff, so it works on files bigger than
+                        RAM — measured up to 1.36 GB per side on an 8 GiB container.</p>
+
+                    <h3 id="faq-refusal">Why does gjxdiff sometimes refuse to write a patch?</h3>
+                    <p>Because a patch it cannot prove correct is worse than no patch. gjxdiff refuses with exit
+                        code <code>2</code> and leaves no file when a needed record has no concrete RFC 6901
+                        address, or when keyed record pairing absorbed a reorder — an order difference a patch
+                        would have to express but keyed matching deliberately erased. In the reorder case, rerun
+                        with <code>--key none</code> to align records by position; the patch then expresses the
+                        reorder explicitly.</p>
+
+                    <h3 id="faq-empty-patch">What does an empty patch <code>[]</code> mean?</h3>
+                    <p>That no operations are needed: the documents are semantically identical. This includes
+                        representation-only differences — <code>1.0</code> versus <code>1.00</code>, formatting,
+                        key order — which produce exit code <code>0</code> and a <code>[]</code> patch, because
+                        applying zero operations to A already yields a document equal to B.</p>
+
+                    <h3 id="faq-apply">How do I apply an RFC 6902 patch to a JSON file?</h3>
+                    <p>Any RFC 6902 implementation works; the patch format is the standard, not the tool. On the
+                        command line, python-jsonpatch installs a <code>jsonpatch</code> command:
+                        <code>jsonpatch a.json changes.json</code> prints the patched document. Libraries exist
+                        for every major language, and servers accept these patches directly as HTTP
+                        <code>PATCH</code> bodies.</p>
+
+                    <h3 id="faq-partial">Can I generate a patch for only some of the changes?</h3>
+                    <p>Not with gjxdiff, by design. A patch must transform A into B completely, so
+                        <code>--patch</code> conflicts with the flags that truncate or filter output
+                        (<code>--max-diffs</code>, <code>--only</code>, <code>--profile quick</code>) — each
+                        combination exits with code <code>2</code> and a message. A partial patch would apply
+                        cleanly and silently produce a document that is neither A nor B.</p>
+
+                    <h2 id="conclusion">Conclusion</h2>
+
+                    <p>For small files, python-jsonpatch and jsondiffpatch generate correct RFC 6902 patches
+                        with minimal ceremony, and they are the right tools at that scale. Past their in-memory
+                        ceilings — the heap for Python, the roughly 512 MB string cap for Node — the job needs
+                        an engine that never loads the documents at all. <code>gjxdiff --patch</code> is that
+                        engine's export: a patch built from files bigger than RAM, that transforms A into B or
+                        refuses loudly, and never anything in between. The binary and the full manual are at
+                        <a href="https://github.com/kotysoft/gjxdiff" target="_blank"
+                        rel="noopener">github.com/kotysoft/gjxdiff</a>.</p>
+
+                    <!-- GitHub CTA -->
+                    <div class="docs-play-cta">
+                        <h3>RFC 6902 Patches at Any File Size</h3>
+                        <p>gjxdiff is a single static binary for Linux x86-64 — free for individuals and
+                            organizations under 100 people.</p>
+                        <a href="https://github.com/kotysoft/gjxdiff" class="btn-primary" target="_blank"
+                            rel="noopener">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                            </svg>
+                            Get gjxdiff on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Article Navigation -->
+                <nav class="docs-article-nav">
+                    <a href="../" class="docs-article-nav-link">
+                        <span class="docs-article-nav-label">Back to</span>
+                        <span class="docs-article-nav-title">All Documentation</span>
+                    </a>
+                    <div></div>
+                </nav>
+            </article>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="docs-sidebar-toggle" aria-label="Toggle table of contents">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="docs-footer">
+        <p>&copy; 2025 <a href="../">GiantJSON Viewer+ Docs</a> by Kotysoft</p>
+        <p>All rights reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../docs.js"></script>
+</body>
+
+</html>
