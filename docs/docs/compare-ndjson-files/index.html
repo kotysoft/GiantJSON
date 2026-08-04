@@ -294,8 +294,10 @@ diff a.norm b.norm</code></pre>
                         from the same machine: a Linux container with 8 GiB of RAM and 4 cores, a SATA SSD, cold
                         page cache, single first runs — the jq 1.7 recipe processed an 83 MB-per-side keyed NDJSON
                         pair in 5.0 seconds using 3.4 MB of RAM, and an 837 MB-per-side pair in 56 seconds at
-                        3.5 MB. Because jq streams one record at a time, memory stays flat no matter how large the
-                        file grows.</p>
+                        3.5 MB. Because jq streams NDJSON one record at a time, memory stays flat no matter how
+                        large the NDJSON file grows — a property of newline-delimited input specifically. On a
+                        single-document JSON file, jq must hold the whole parsed document: 2.3 GB on a 165 MB
+                        document in the same benchmark.</p>
 
                     <h3 id="jq-when-enough">When This Is All You Need</h3>
 
@@ -372,8 +374,9 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
 
                     <pre><code>gjxdiff --key id --ignore updated_at,ts a.ndjson b.ndjson</code></pre>
 
-                    <p>A bare name is ignored at any depth; anchored paths such as <code>$.arr[*].ts</code> ignore
-                        one exact spot. A pair identical apart from ignored fields exits <code>0</code>.</p>
+                    <p>A bare name is ignored at any depth; the wildcard form <code>$.arr[*].ts</code> ignores the
+                        field at any array position, while <code>items[0].v</code> pins one exact position. A pair
+                        identical apart from ignored fields exits <code>0</code>.</p>
 
                     <h3 id="mixed-formats">JSON on One Side, NDJSON on the Other</h3>
 
@@ -383,9 +386,11 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
 
                     <h2 id="measured">Measured on Real Files</h2>
 
-                    <p>Same machine and conditions as the jq numbers above. The test pairs carried 20 planted
-                        differences each; gjxdiff 0.8.0 found all 20 on every pair, with zero false
-                        positives.</p>
+                    <p>Same machine and conditions as the jq numbers above. On the benchmark's three pairs with
+                        planted differences (83 MB, 165 MB, and 837 MB per side), gjxdiff 0.8.0 found all 20
+                        planted differences with zero false positives; the change-dense 156 MB pair was verified by
+                        exact record accounting (348,685 report records for 174,342 changed records), and the
+                        1.36 GB pair is a scale run with no planted ground truth.</p>
 
                     <table>
                         <thead>
@@ -409,7 +414,7 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
                             <tr>
                                 <td>156 MB per side, 30% of records changed</td>
                                 <td>7.5 s (52 MB report)</td>
-                                <td>—</td>
+                                <td>924 MB</td>
                             </tr>
                             <tr>
                                 <td>837 MB per side, NDJSON, 3.1 million records</td>
@@ -419,7 +424,7 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
                             <tr>
                                 <td>1.36 GB per side</td>
                                 <td>61 s</td>
-                                <td>—</td>
+                                <td>4.7 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
                             </tr>
                         </tbody>
                     </table>

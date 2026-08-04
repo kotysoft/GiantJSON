@@ -9,7 +9,7 @@
     <title>JSON Diff Out of Memory? Why It Happens and What Works - GiantJSON Viewer+ Docs</title>
     <meta name="title" content="JSON Diff Out of Memory? Why It Happens and What Works - GiantJSON Viewer+ Docs">
     <meta name="description"
-        content="Fixing 'JavaScript heap out of memory' and ERR_STRING_TOO_LONG during JSON diff: why tree-diff tools exhaust the heap, when raising --max-old-space-size helps, the V8 ~512 MB string cap RAM cannot fix, and a measured escalation ladder up to a disk-backed structural diff.">
+        content="Fixing 'JavaScript heap out of memory' and ERR_STRING_TOO_LONG during JSON diff: why tree-diff tools exhaust the heap, when raising --max-old-space-size helps, the V8 ~512 MiB string cap RAM cannot fix, and a measured escalation ladder up to a disk-backed structural diff.">
     <meta name="keywords"
         content="json diff out of memory, JavaScript heap out of memory json, node ERR_STRING_TOO_LONG, diff json files too large, json compare crashes, max-old-space-size json diff, compare huge json files">
     <meta name="author" content="Kotysoft">
@@ -113,7 +113,7 @@
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": "What does 'JavaScript heap out of memory' mean during a JSON diff?",
+                "name": "What does \"JavaScript heap out of memory\" mean during a JSON diff?",
                 "acceptedAnswer": {
                     "@type": "Answer",
                     "text": "The full message is 'FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory'. It means the Node.js process hit its heap ceiling while building the parsed object trees and diff structures. A parsed JSON tree is many times larger than the file on disk, and a diff needs both trees at once. The ceiling can be raised with node --max-old-space-size, which helps until the workload outgrows physical RAM or hits V8's string cap."
@@ -124,15 +124,15 @@
                 "name": "Does raising --max-old-space-size fix JSON diff out-of-memory errors?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Sometimes, and only within a window. On our test machine it is what kept jsondiffpatch working at 83-165 MB per side (at 1.3-3.9 GB of RAM). It does nothing for tools that run out of time first — json-diff exceeded a 15-minute timeout from 83 MB inputs — and nothing against V8's roughly 512 MB string cap, which stops Node tools from even reading larger files regardless of heap size."
+                    "text": "Sometimes, and only within a window. On our test machine it is what kept jsondiffpatch working at 83-165 MB per side (at 1.3-3.9 GB of RAM). It does nothing for tools that run out of time first — json-diff exceeded a 15-minute timeout on the 83-165 MB pairs — and nothing against V8's roughly 512 MiB string cap, which stops Node tools from even reading larger files regardless of heap size; at 837 MB json-diff refused the input in 1.89 seconds for exactly that reason."
                 }
             },
             {
                 "@type": "Question",
-                "name": "What causes ERR_STRING_TOO_LONG (Cannot create a string longer than 0x1fffffe8 characters)?",
+                "name": "What causes ERR_STRING_TOO_LONG (\"Cannot create a string longer than 0x1fffffe8 characters\")?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "V8 caps a single JavaScript string at 0x1fffffe8 characters, roughly 512 MB. readFileSync(path, 'utf8') must return the whole file as one string, so any Node tool that reads whole files this way fails with 'Error: Cannot create a string longer than 0x1fffffe8 characters' (code ERR_STRING_TOO_LONG) on larger files. It is an engine limit, not a memory limit: adding RAM or raising the heap does not change it."
+                    "text": "V8 caps a single JavaScript string at 0x1fffffe8 characters, roughly 512 MiB. readFileSync(path, \"utf8\") must return the whole file as one string, so any Node tool that reads whole files this way fails with Error: Cannot create a string longer than 0x1fffffe8 characters (code ERR_STRING_TOO_LONG) on larger files. It is an engine limit, not a memory limit: adding RAM or raising the heap does not change it."
                 }
             },
             {
@@ -282,14 +282,20 @@ NODE_OPTIONS="--max-old-space-size=6144" json-diff a.json b.json</code></pre>
                             165 MB per side at 3.9 GB. Fast and correct — as long as the heap keeps up and the
                             files stay under the string cap described below.</li>
                         <li><strong>json-diff 1.0.6</strong> has a different bottleneck: time. It took 2 min 45 s
-                            on a 2 MB pair (at just 193 MB of RAM) and exceeded a 15-minute timeout from 83 MB
-                            inputs upward. A bigger heap does not make it finish sooner.</li>
+                            on a 2 MB pair (at just 193 MB of RAM) and exceeded a 15-minute timeout on the
+                            83-165 MB pairs. At 837 MB it never got that far: it refused the input in
+                            1.89 seconds with <code>ERR_STRING_TOO_LONG</code> — the same V8 string cap as
+                            jsondiffpatch. A bigger heap does not make it finish sooner.</li>
                         <li><strong>jd 2.5.0</strong> is a Go binary, so the Node flag does not apply — and its
                             limit is structural: memory grows quadratically with array length. Growing one array
                             from 500 to 8,000 elements took it from 0.03 s and 12 MB to 13.4 s and 1.1 GB, and
                             on our test files it exceeded the 6 GB cap from 83 MB inputs upward. Against a
                             quadratic curve, headroom buys very little.</li>
                     </ul>
+
+                    <p>One test-setup note: the NDJSON benchmark pairs were supplied to jd, json-diff, and
+                        jsondiffpatch as JSON-array twins holding the identical records at the same size, because
+                        none of the three can read NDJSON at all; gjxdiff and jq ran the NDJSON form.</p>
 
                     <p>And no heap size helps a Node tool that cannot read the file in the first place — that is
                         the <a href="#v8-string-cap">string cap</a>, covered in its own section.</p>
@@ -324,9 +330,12 @@ json-diff items-a.json items-b.json</code></pre>
 jq -S -c . b.ndjson | sort > b.norm
 diff a.norm b.norm</code></pre>
 
-                    <p>Measured: 5.0 s at 3.4 MB of RAM on the 83 MB pair, 56 s at 3.5 MB on the 837 MB pair.
-                        Memory is flat because jq streams one record at a time — this recipe simply does not
-                        have the out-of-memory problem. Its limits are of a different kind: the output is text
+                    <p>Measured: 5.0 s at 3.4 MB of RAM on the 83 MB NDJSON pair, 56 s at 3.5 MB on the 837 MB
+                        NDJSON pair. On NDJSON/JSONL input, memory is flat because jq streams one record at a
+                        time — there, this recipe simply does not have the out-of-memory problem. On a
+                        single-document JSON file, jq must hold the whole parsed document: 2.3 GB on our 165 MB
+                        GeoJSON and 1.6 GB on a 156 MB document, so the flat-memory property is specific to
+                        newline-delimited input. Its limits are of a different kind: the output is text
                         lines rather than a structural report, and jq preserves number literals, so
                         <code>1.0</code> versus <code>1.00</code> is flagged as a change. The full treatment,
                         including when the recipe is all you need, is in
@@ -345,7 +354,9 @@ diff a.norm b.norm</code></pre>
                     <pre><code>gjxdiff a.json b.json > report.ndjson
 gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre>
 
-                    <p>The same benchmark files, gjxdiff 0.8.0, cold runs:</p>
+                    <p>The same benchmark files, gjxdiff 0.8.0, cold runs — the 1.36 GB row ran without the
+                        6 GB per-tool cap used above, because capping it would mask the memory-budget behavior
+                        being measured:</p>
 
                     <table>
                         <thead>
@@ -379,13 +390,16 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                             <tr>
                                 <td>1.36 GB per side</td>
                                 <td>61 s</td>
-                                <td>—</td>
+                                <td>4.7 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <p>Correctness on the same runs: 20 of 20 planted differences found on every pair, zero
-                        false positives.</p>
+                    <p>Correctness on the same runs: on the three pairs with planted differences (83 MB, 165 MB,
+                        and 837 MB per side), gjxdiff found all 20 planted differences with zero false positives;
+                        a change-dense 156 MB pair in the same benchmark was verified by exact record accounting
+                        (348,685 report records for 174,342 changed records), and the 1.36 GB pair is a scale run
+                        with no planted ground truth.</p>
 
                     <div class="docs-callout">
                         <div class="docs-callout-title">
@@ -406,17 +420,18 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         <a href="../diff-large-json-files-linux/">How to Diff Large JSON Files on
                         Linux</a>.</p>
 
-                    <h2 id="v8-string-cap">The 512 MB Wall More RAM Cannot Fix</h2>
+                    <h2 id="v8-string-cap">The 512 MiB Wall More RAM Cannot Fix</h2>
 
                     <p>One failure in this space is routinely misdiagnosed as an out-of-memory error, and it is
                         not one. V8 — the JavaScript engine inside Node.js — caps a single string at
-                        <code>0x1fffffe8</code> characters, roughly 512 MB.
+                        <code>0x1fffffe8</code> characters, roughly 512 MiB.
                         <code>readFileSync(path, "utf8")</code> must return the entire file as one string, so
                         for any file above the cap it throws <code>ERR_STRING_TOO_LONG</code> immediately,
                         before parsing, before diffing, before memory pressure even begins.</p>
 
-                    <p>We measured exactly this: jsondiffpatch — the strongest Node tool in our tests — failed
-                        on the 837 MB file in under 2 seconds. Not slowly, not after swapping: instantly,
+                    <p>We measured exactly this: on the 837 MB file, jsondiffpatch — the strongest Node tool in
+                        our tests — failed in under a second, and json-diff refused the same file in
+                        1.89 seconds with the same error. Not slowly, not after swapping: instantly,
                         because the file could not be read into a string. A 128 GB workstation fails identically
                         to a laptop, and <code>--max-old-space-size</code> is irrelevant. Every Node-based diff
                         tool that reads whole files in utf8 inherits this wall; the only ways past it are
@@ -450,14 +465,15 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         out-of-memory errors?</h3>
                     <p>Sometimes, and only within a window. On our test machine it is what kept jsondiffpatch
                         working at 83-165 MB per side (at 1.3-3.9 GB of RAM). It does nothing for tools that run
-                        out of time first — json-diff exceeded a 15-minute timeout from 83 MB inputs — and
-                        nothing against V8's roughly 512 MB string cap, which stops Node tools from even reading
-                        larger files regardless of heap size.</p>
+                        out of time first — json-diff exceeded a 15-minute timeout on the 83-165 MB pairs — and
+                        nothing against V8's roughly 512 MiB string cap, which stops Node tools from even reading
+                        larger files regardless of heap size; at 837 MB json-diff refused the input in
+                        1.89 seconds for exactly that reason.</p>
 
                     <h3 id="faq-err-string-too-long">What causes <code>ERR_STRING_TOO_LONG</code> ("Cannot
                         create a string longer than 0x1fffffe8 characters")?</h3>
                     <p>V8 caps a single JavaScript string at <code>0x1fffffe8</code> characters, roughly
-                        512 MB. <code>readFileSync(path, "utf8")</code> must return the whole file as one
+                        512 MiB. <code>readFileSync(path, "utf8")</code> must return the whole file as one
                         string, so any Node tool that reads whole files this way fails with <code>Error: Cannot
                         create a string longer than 0x1fffffe8 characters</code> (code
                         <code>ERR_STRING_TOO_LONG</code>) on larger files. It is an engine limit, not a memory

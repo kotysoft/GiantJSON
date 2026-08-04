@@ -132,7 +132,7 @@
                 "name": "How do I generate a JSON Patch from two very large JSON files?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "In-memory generators (python-jsonpatch, jsondiffpatch) parse both documents into RAM, which sets a size ceiling; Node-based ones cannot read files above V8's roughly 512 MB string cap at all. gjxdiff --patch changes.json a.json b.json builds the patch under the same fixed memory budget as its diff, so it works on files bigger than RAM — measured up to 1.36 GB per side on an 8 GiB container."
+                    "text": "In-memory generators (python-jsonpatch, jsondiffpatch) parse both documents into RAM, which sets a size ceiling; Node-based ones cannot read files above V8's roughly 512 MiB string cap at all. gjxdiff --patch changes.json a.json b.json builds the patch under the same fixed memory budget as its diff, so it works on files bigger than RAM — the engine's measured diff runs reach 1.36 GB per side on an 8 GiB container, and --patch adds the patch-export step on that same engine."
                 }
             },
             {
@@ -301,11 +301,14 @@ print(patch)</code></pre>
                     <h3 id="jsondiffpatch">jsondiffpatch</h3>
 
                     <p>jsondiffpatch computes deltas in its own compact format, and ships a formatter that
-                        converts a delta into RFC 6902 operations:</p>
+                        converts a delta into RFC 6902 operations. An illustrative sketch, per the jsondiffpatch
+                        documentation:</p>
 
                     <pre><code>import * as jsondiffpatch from 'jsondiffpatch';
 import * as jsonpatchFormatter from 'jsondiffpatch/formatters/jsonpatch';
 
+// a and b are already-parsed documents, e.g.:
+// const a = JSON.parse(fs.readFileSync('a.json', 'utf8'));
 const differ = jsondiffpatch.create({ objectHash: (o) => o.id });
 const delta = differ.diff(a, b);
 const ops = jsonpatchFormatter.format(delta);   // RFC 6902 operations</code></pre>
@@ -313,10 +316,13 @@ const ops = jsonpatchFormatter.format(delta);   // RFC 6902 operations</code></p
                     <p>It is a genuinely strong tool in its range. On our benchmark machine — all numbers in
                         this article: an 8 GiB, 4-core Linux container, SATA SSD, cold page cache, single first
                         runs, August 2026 — jsondiffpatch 0.7.6 diffed 83 MB per side in 2.5 seconds (at 1.3 GB
-                        of RAM) and 165 MB per side in 8 seconds (at 3.9 GB). The hard stop comes at roughly
-                        512 MB per file: V8 caps a single string there, <code>readFileSync</code> in utf8 cannot
-                        return a larger file, and the run fails with <code>ERR_STRING_TOO_LONG</code> — on the
-                        837 MB test file, in under 2 seconds. More RAM does not move that wall.</p>
+                        of RAM) and 165 MB per side in 8 seconds (at 3.9 GB). The 83 MB NDJSON benchmark pair was
+                        supplied to it as a JSON-array twin holding the identical records at the same size —
+                        jsondiffpatch, like the other Node diff tools, cannot read NDJSON. The hard stop comes at
+                        roughly 512 MiB per file: V8 caps a single string there, <code>readFileSync</code> in utf8
+                        cannot return a larger file, and the run fails with <code>ERR_STRING_TOO_LONG</code> — on
+                        the 837 MB test file (also supplied as a JSON-array twin), in under a second. More RAM
+                        does not move that wall.</p>
 
                     <h2 id="gjxdiff-patch">gjxdiff --patch: Patches from Files Bigger Than RAM</h2>
 
@@ -405,13 +411,16 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
                             <tr>
                                 <td>1.36 GB per side</td>
                                 <td>61 s</td>
-                                <td>—</td>
+                                <td>4.7 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <p>Correctness on the same runs: 20 of 20 planted differences found on every pair, zero
-                        false positives. The full tool-by-tool story behind these numbers is in
+                    <p>Correctness on the same runs: on the three pairs with planted differences (83 MB, 165 MB,
+                        and 837 MB per side), gjxdiff found all 20 planted differences with zero false positives;
+                        a change-dense 156 MB pair in the same benchmark was verified by exact record accounting
+                        (348,685 report records for 174,342 changed records), and the 1.36 GB pair is a scale run
+                        with no planted ground truth. The full tool-by-tool story behind these numbers is in
                         <a href="../diff-large-json-files-linux/">How to Diff Large JSON Files on Linux</a>;
                         the keyed pairing that decides how NDJSON records line up before a patch is generated is
                         covered in <a href="../compare-ndjson-files/">How to Compare NDJSON Files When the
@@ -450,10 +459,11 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
 
                     <h3 id="faq-large-files">How do I generate a JSON Patch from two very large JSON files?</h3>
                     <p>In-memory generators (python-jsonpatch, jsondiffpatch) parse both documents into RAM,
-                        which sets a size ceiling; Node-based ones cannot read files above V8's roughly 512 MB
+                        which sets a size ceiling; Node-based ones cannot read files above V8's roughly 512 MiB
                         string cap at all. <code>gjxdiff --patch changes.json a.json b.json</code> builds the
                         patch under the same fixed memory budget as its diff, so it works on files bigger than
-                        RAM — measured up to 1.36 GB per side on an 8 GiB container.</p>
+                        RAM — the engine's measured diff runs reach 1.36 GB per side on an 8 GiB container, and
+                        <code>--patch</code> adds the patch-export step on that same engine.</p>
 
                     <h3 id="faq-refusal">Why does gjxdiff sometimes refuse to write a patch?</h3>
                     <p>Because a patch it cannot prove correct is worse than no patch. gjxdiff refuses with exit
@@ -474,7 +484,8 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
                         command line, python-jsonpatch installs a <code>jsonpatch</code> command:
                         <code>jsonpatch a.json changes.json</code> prints the patched document. Libraries exist
                         for every major language, and servers accept these patches directly as HTTP
-                        <code>PATCH</code> bodies.</p>
+                        <code>PATCH</code> bodies with the <code>application/json-patch+json</code> media
+                        type.</p>
 
                     <h3 id="faq-partial">Can I generate a patch for only some of the changes?</h3>
                     <p>Not with gjxdiff, by design. A patch must transform A into B completely, so
@@ -487,7 +498,7 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
 
                     <p>For small files, python-jsonpatch and jsondiffpatch generate correct RFC 6902 patches
                         with minimal ceremony, and they are the right tools at that scale. Past their in-memory
-                        ceilings — the heap for Python, the roughly 512 MB string cap for Node — the job needs
+                        ceilings — the heap for Python, the roughly 512 MiB string cap for Node — the job needs
                         an engine that never loads the documents at all. <code>gjxdiff --patch</code> is that
                         engine's export: a patch built from files bigger than RAM, that transforms A into B or
                         refuses loudly, and never anything in between. The binary and the full manual are at
