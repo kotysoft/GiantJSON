@@ -435,9 +435,11 @@
 
                     <h3 id="storage-usage">How much storage does indexing use?</h3>
 
-                    <p>Each indexed node (object or array) costs exactly <strong>32 bytes</strong> of on-disk storage.
-                        Primitive values (strings, numbers, booleans) are not indexed. During indexing, temporary files
-                        require additional disk space that is automatically cleaned up when indexing completes.</p>
+                    <p>Each indexed node (object or array) costs a <strong>variable 7&ndash;27 bytes</strong> of
+                        on-disk storage &mdash; the app measures the file first and picks the smallest record size
+                        that fits it, so simple files pay less. Primitive values (strings, numbers, booleans) are
+                        not indexed. The index is written directly &mdash; indexing no longer needs temporary
+                        scratch files.</p>
 
                     <table>
                         <thead>
@@ -445,33 +447,28 @@
                                 <th>File description</th>
                                 <th>Indexed nodes</th>
                                 <th>Final index size</th>
-                                <th>Peak temp storage</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Simple API response (50 objects)</td>
                                 <td>50</td>
-                                <td>~1.6 KB</td>
-                                <td>~5 KB</td>
+                                <td>under 2 KB</td>
                             </tr>
                             <tr>
                                 <td>Medium dataset (10,000 arrays/objects)</td>
                                 <td>10,000</td>
-                                <td>~320 KB</td>
-                                <td>~1 MB</td>
+                                <td>~0.1&ndash;0.3 MB</td>
                             </tr>
                             <tr>
                                 <td>Large export (1 million containers)</td>
                                 <td>1,000,000</td>
-                                <td>~32 MB</td>
-                                <td>~100 MB</td>
+                                <td>~7&ndash;27 MB</td>
                             </tr>
                             <tr>
                                 <td>Massive log file (100 million nodes)</td>
                                 <td>100,000,000</td>
-                                <td>~3.2 GB</td>
-                                <td>~10 GB</td>
+                                <td>~0.7&ndash;2.7 GB</td>
                             </tr>
                         </tbody>
                     </table>
