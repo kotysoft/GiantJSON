@@ -124,7 +124,7 @@
                 "name": "How do I compare two NDJSON files if the record order changed?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Either make the order irrelevant or pair records by identity. The jq recipe — jq -S -c . on both files, then sort, then diff — makes order irrelevant and works with tiny memory, but reports whole records as text lines. gjxdiff pairs records by an identity field (autodetected, or forced with --key id), so reordered records are matched and compared field by field, and only real data differences are reported."
+                    "text": "Either make the order irrelevant or pair records by identity. The jq recipe — jq -S -c . on both files, then sort, then diff — makes order irrelevant, but it reports whole records as text lines and it is not memory-light: the closing diff holds both normalized files, which peaked at 2.0 GB on an 837 MB-per-side pair. gjxdiff pairs records by an identity field (autodetected, or forced with --key id), so reordered records are matched and compared field by field, and only real data differences are reported."
                 }
             },
             {
@@ -164,7 +164,7 @@
                 "name": "How large can the compared NDJSON files be?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "gjxdiff memory-maps its inputs and keeps working state in temporary files under a fixed memory budget, so input size is bounded by disk, not RAM. Measured on an 8 GiB Linux container: 83 MB per side (310,000 records) in 2.8 seconds, 837 MB per side (3.1 million records) in 26 seconds, and 1.36 GB per side in 61 seconds."
+                    "text": "gjxdiff memory-maps its inputs and keeps working state in temporary files under a fixed memory budget, so input size is bounded by disk, not RAM. Measured on an 8 GiB Linux container: 83 MB per side (310,000 records) in 1.5 seconds, 837 MB per side (3.1 million records) in 16.5 seconds, and 1.36 GB per side in about 46 seconds."
                 }
             }
         ]
@@ -227,7 +227,7 @@
                     <h1>How to Compare NDJSON Files When the Record Order Changed</h1>
                     <div class="docs-article-meta">
                         <span>9 min read</span>
-                        <span>Updated Aug 4, 2026</span>
+                        <span>Updated Aug 5, 2026</span>
                     </div>
                 </header>
 
@@ -290,14 +290,15 @@ diff a.norm b.norm</code></pre>
                         the order irrelevant, and plain <code>diff</code> shows which records exist only in one
                         file.</p>
 
-                    <p>It is also genuinely cheap. Measured on August 4, 2026 — all numbers in this article come
+                    <p>It is also fast. Measured on August 4-5, 2026 — all numbers in this article come
                         from the same machine: a Linux container with 8 GiB of RAM and 4 cores, a SATA SSD, cold
                         page cache, single first runs — the jq 1.7 recipe processed an 83 MB-per-side keyed NDJSON
-                        pair in 5.0 seconds using 3.4 MB of RAM, and an 837 MB-per-side pair in 56 seconds at
-                        3.5 MB. Because jq streams NDJSON one record at a time, memory stays flat no matter how
-                        large the NDJSON file grows — a property of newline-delimited input specifically. On a
-                        single-document JSON file, jq must hold the whole parsed document: 2.3 GB on a 165 MB
-                        document in the same benchmark.</p>
+                        pair in 5.2 seconds, and an 837 MB-per-side pair in 1 minute 11 seconds. It is not,
+                        however, cheap on memory. <code>jq</code> itself stays near 3 MB on NDJSON, because it
+                        streams one record at a time, but the closing <code>diff</code> holds both normalized
+                        files: the pipeline peaked at 193 MB on the 83 MB pair and 2.0 GB on the 837 MB pair. On a
+                        single-document JSON file, jq must additionally hold the whole parsed document: 2.3 GB on a
+                        165 MB document in the same benchmark.</p>
 
                     <h3 id="jq-when-enough">When This Is All You Need</h3>
 
@@ -387,10 +388,15 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
                     <h2 id="measured">Measured on Real Files</h2>
 
                     <p>Same machine and conditions as the jq numbers above. On the benchmark's three pairs with
-                        planted differences (83 MB, 165 MB, and 837 MB per side), gjxdiff 0.8.0 found all 20
+                        planted differences (83 MB, 165 MB, and 837 MB per side), gjxdiff 0.8.1 found all 20
                         planted differences with zero false positives; the change-dense 156 MB pair was verified by
                         exact record accounting (348,685 report records for 174,342 changed records), and the
                         1.36 GB pair is a scale run with no planted ground truth.</p>
+
+                    <p>The small pair is the exception, and it is worth stating plainly: the 2 MB pair carries five
+                        planted differences and gjxdiff reports four. The planted move is not surfaced at all under
+                        default keyed matching — jsondiffpatch finds all five there and reports the move as a
+                        move.</p>
 
                     <table>
                         <thead>
@@ -403,28 +409,28 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
                         <tbody>
                             <tr>
                                 <td>2 MB pair</td>
-                                <td>0.11 s</td>
+                                <td>0.06 s</td>
                                 <td>14 MB</td>
                             </tr>
                             <tr>
                                 <td>83 MB per side, NDJSON, 310,000 records</td>
-                                <td>2.8 s</td>
+                                <td>1.5 s</td>
                                 <td>478 MB</td>
                             </tr>
                             <tr>
                                 <td>156 MB per side, 30% of records changed</td>
-                                <td>7.5 s (52 MB report)</td>
+                                <td>5.0 s (52 MB report)</td>
                                 <td>924 MB</td>
                             </tr>
                             <tr>
                                 <td>837 MB per side, NDJSON, 3.1 million records</td>
-                                <td>26 s</td>
-                                <td>3.9 GB</td>
+                                <td>16.5 s</td>
+                                <td>3.4-4.7 GB, state-dependent across four runs</td>
                             </tr>
                             <tr>
                                 <td>1.36 GB per side</td>
-                                <td>61 s</td>
-                                <td>4.7 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
+                                <td>about 46 s (32-52 s across repeats)</td>
+                                <td>4.8-8.5 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -465,8 +471,10 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
                     <h3 id="faq-order-changed">How do I compare two NDJSON files if the record order changed?</h3>
                     <p>Either make the order irrelevant or pair records by identity. The jq recipe —
                         <code>jq -S -c .</code> on both files, then <code>sort</code>, then <code>diff</code> —
-                        makes order irrelevant and works with tiny memory, but reports whole records as text
-                        lines. gjxdiff pairs records by an identity field (autodetected, or forced with
+                        makes order irrelevant, but it reports whole records as text lines and it is not
+                        memory-light: the closing <code>diff</code> holds both normalized files, which peaked at
+                        2.0 GB on an 837 MB-per-side pair. gjxdiff pairs records by an identity field
+                        (autodetected, or forced with
                         <code>--key id</code>), so reordered records are matched and compared field by field, and
                         only real data differences are reported.</p>
 
@@ -497,8 +505,8 @@ gjxdiff --key none a.ndjson b.ndjson         # positions are the identity</code>
                     <h3 id="faq-how-large">How large can the compared NDJSON files be?</h3>
                     <p>gjxdiff memory-maps its inputs and keeps working state in temporary files under a fixed
                         memory budget, so input size is bounded by disk, not RAM. Measured on an 8 GiB Linux
-                        container: 83 MB per side (310,000 records) in 2.8 seconds, 837 MB per side (3.1 million
-                        records) in 26 seconds, and 1.36 GB per side in 61 seconds.</p>
+                        container: 83 MB per side (310,000 records) in 1.5 seconds, 837 MB per side (3.1 million
+                        records) in 16.5 seconds, and 1.36 GB per side in about 46 seconds.</p>
 
                     <h2 id="conclusion">Conclusion</h2>
 

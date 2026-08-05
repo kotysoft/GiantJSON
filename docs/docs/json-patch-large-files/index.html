@@ -227,7 +227,7 @@
                     <h1>Generate an RFC 6902 JSON Patch from Large Files</h1>
                     <div class="docs-article-meta">
                         <span>9 min read</span>
-                        <span>Updated Aug 4, 2026</span>
+                        <span>Updated Aug 5, 2026</span>
                     </div>
                 </header>
 
@@ -315,13 +315,13 @@ const ops = jsonpatchFormatter.format(delta);   // RFC 6902 operations</code></p
 
                     <p>It is a genuinely strong tool in its range. On our benchmark machine — all numbers in
                         this article: an 8 GiB, 4-core Linux container, SATA SSD, cold page cache, single first
-                        runs, August 2026 — jsondiffpatch 0.7.6 diffed 83 MB per side in 2.5 seconds (at 1.3 GB
-                        of RAM) and 165 MB per side in 8 seconds (at 3.9 GB). The 83 MB NDJSON benchmark pair was
+                        runs, August 2026 — jsondiffpatch 0.7.6 diffed 83 MB per side in 2.76 seconds (at 1.3 GB
+                        of RAM) and 165 MB per side in 9.17 seconds (at 3.9 GB). The 83 MB NDJSON benchmark pair was
                         supplied to it as a JSON-array twin holding the identical records at the same size —
                         jsondiffpatch, like the other Node diff tools, cannot read NDJSON. The hard stop comes at
                         roughly 512 MiB per file: V8 caps a single string there, <code>readFileSync</code> in utf8
                         cannot return a larger file, and the run fails with <code>ERR_STRING_TOO_LONG</code> — on
-                        the 837 MB test file (also supplied as a JSON-array twin), in under a second. More RAM
+                        the 837 MB test file (also supplied as a JSON-array twin), in 1.00 second. More RAM
                         does not move that wall.</p>
 
                     <h2 id="gjxdiff-patch">gjxdiff --patch: Patches from Files Bigger Than RAM</h2>
@@ -377,7 +377,7 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
 
                     <p>The patch generator runs on the same engine, under the same fixed memory budget, as the
                         diff itself — that is what lets it handle inputs in-memory generators cannot open. These
-                        are the engine's measured diff runs on the benchmark machine, gjxdiff 0.8.0, cold:</p>
+                        are the engine's measured diff runs on the benchmark machine, gjxdiff 0.8.1, cold:</p>
 
                     <table>
                         <thead>
@@ -390,28 +390,28 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
                         <tbody>
                             <tr>
                                 <td>2 MB pair</td>
-                                <td>0.11 s</td>
+                                <td>0.06 s</td>
                                 <td>14 MB</td>
                             </tr>
                             <tr>
                                 <td>83 MB per side, NDJSON, 310,000 records</td>
-                                <td>2.8 s</td>
+                                <td>1.5 s</td>
                                 <td>478 MB</td>
                             </tr>
                             <tr>
                                 <td>165 MB per side, real-world GeoJSON</td>
-                                <td>5.0 s</td>
-                                <td>920 MB</td>
+                                <td>3.2 s</td>
+                                <td>919 MB</td>
                             </tr>
                             <tr>
                                 <td>837 MB per side, NDJSON, 3.1 million records</td>
-                                <td>26 s</td>
-                                <td>3.9 GB</td>
+                                <td>16.5 s</td>
+                                <td>3.4-4.7 GB, state-dependent across four runs</td>
                             </tr>
                             <tr>
                                 <td>1.36 GB per side</td>
-                                <td>61 s</td>
-                                <td>4.7 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
+                                <td>about 46 s (32-52 s across repeats)</td>
+                                <td>4.8-8.5 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -420,7 +420,10 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
                         and 837 MB per side), gjxdiff found all 20 planted differences with zero false positives;
                         a change-dense 156 MB pair in the same benchmark was verified by exact record accounting
                         (348,685 report records for 174,342 changed records), and the 1.36 GB pair is a scale run
-                        with no planted ground truth. The full tool-by-tool story behind these numbers is in
+                        with no planted ground truth. The 2 MB pair is the exception: of its five planted
+                        differences gjxdiff reports four, because the planted move is not surfaced at all under
+                        default keyed matching, while jsondiffpatch finds all five and reports the move as a move.
+                        The full tool-by-tool story behind these numbers is in
                         <a href="../diff-large-json-files-linux/">How to Diff Large JSON Files on Linux</a>;
                         the keyed pairing that decides how NDJSON records line up before a patch is generated is
                         covered in <a href="../compare-ndjson-files/">How to Compare NDJSON Files When the
@@ -496,7 +499,7 @@ gjxdiff --patch - a.json b.json > changes.json  # patch to stdout instead of the
 
                     <h2 id="conclusion">Conclusion</h2>
 
-                    <p>For small files, python-jsonpatch and jsondiffpatch generate correct RFC 6902 patches
+                    <p>For small files, python-jsonpatch and jsondiffpatch generate RFC 6902 patches
                         with minimal ceremony, and they are the right tools at that scale. Past their in-memory
                         ceilings — the heap for Python, the roughly 512 MiB string cap for Node — the job needs
                         an engine that never loads the documents at all. <code>gjxdiff --patch</code> is that

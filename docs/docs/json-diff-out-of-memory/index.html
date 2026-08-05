@@ -124,7 +124,7 @@
                 "name": "Does raising --max-old-space-size fix JSON diff out-of-memory errors?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Sometimes, and only within a window. On our test machine it is what kept jsondiffpatch working at 83-165 MB per side (at 1.3-3.9 GB of RAM). It does nothing for tools that run out of time first — json-diff exceeded a 15-minute timeout on the 83-165 MB pairs — and nothing against V8's roughly 512 MiB string cap, which stops Node tools from even reading larger files regardless of heap size; at 837 MB json-diff refused the input in 1.89 seconds for exactly that reason."
+                    "text": "Sometimes, and only within a window. On our test machine it is what kept jsondiffpatch working at 83-165 MB per side (at 1.3-3.9 GB of RAM). It does nothing for tools that run out of time first — json-diff exceeded a 15-minute timeout on the 83-165 MB pairs — and nothing against V8's roughly 512 MiB string cap, which stops Node tools from even reading larger files regardless of heap size; at 837 MB json-diff refused the input in 2.40 seconds for exactly that reason."
                 }
             },
             {
@@ -140,7 +140,7 @@
                 "name": "How do I diff JSON files that are bigger than my RAM?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Use a diff that does not parse the inputs into memory. gjxdiff memory-maps both files and keeps its working state in temporary files under a fixed memory budget, so input size is bounded by disk. Measured on an 8 GiB Linux container: 837 MB per side in 26 seconds, 1.36 GB per side in 61 seconds, and the same multi-gigabyte pair under --memory-limit 512M in 28 seconds using 42 MB of heap, with the coarser result disclosed."
+                    "text": "Use a diff that does not parse the inputs into memory. gjxdiff memory-maps both files and keeps its working state in temporary files under a fixed memory budget, so input size is bounded by disk. Measured on an 8 GiB Linux container: 837 MB per side in 16.5 seconds, 1.36 GB per side in about 46 seconds, and the same multi-gigabyte pair under --memory-limit 512M in 33-37 seconds using 41 MB of heap, with the coarser result disclosed."
                 }
             },
             {
@@ -148,7 +148,7 @@
                 "name": "Why does a JSON diff crash on one file but work on another of the same size?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Structure matters as much as byte count. Some tools scale with the shape of the data, not just its size: jd's memory grows quadratically with array length in our measurements — growing one array from 500 to 8,000 elements took it from 0.03 seconds and 12 MB to 13.4 seconds and 1.1 GB. A file dominated by one huge array can therefore fail where a larger but flatter file succeeds."
+                    "text": "Structure matters as much as byte count. Some tools scale with the shape of the data, not just its size: jd's memory grows quadratically with array length in our measurements — growing one array from 500 to 8,000 elements took it from 0.168 seconds and 12.7 MB to 14.15 seconds and 1.1 GB. A file dominated by one huge array can therefore fail where a larger but flatter file succeeds."
                 }
             },
             {
@@ -156,7 +156,7 @@
                 "name": "Can I put a hard memory limit on a JSON diff, for CI containers?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "gjxdiff runs under a fixed memory budget of 4 GiB by default, the same on every machine, and --memory-limit sets it explicitly — 512M for a small CI container, more to spend a big machine. The limit is honored as given, and if a tighter budget forces a coarser comparison, every output mode says so; nothing degrades silently. Measured: a multi-gigabyte pair under --memory-limit 512M completed in 28 seconds using 42 MB of heap."
+                    "text": "gjxdiff runs under a fixed memory budget of 4 GiB by default, the same on every machine, and --memory-limit sets it explicitly — 512M for a small CI container, more to spend a big machine. The limit is honored as given, and if a tighter budget forces a coarser comparison, every output mode says so; nothing degrades silently. Measured: a multi-gigabyte pair under --memory-limit 512M completed in 33-37 seconds using 41 MB of heap."
                 }
             }
         ]
@@ -219,7 +219,7 @@
                     <h1>JSON Diff Out of Memory? Why It Happens and What Works</h1>
                     <div class="docs-article-meta">
                         <span>10 min read</span>
-                        <span>Updated Aug 4, 2026</span>
+                        <span>Updated Aug 5, 2026</span>
                     </div>
                 </header>
 
@@ -261,7 +261,7 @@
 
                     <h2 id="escalation-ladder">The Escalation Ladder</h2>
 
-                    <p>Four steps, cheapest first. The measurements referenced below were taken on August 4,
+                    <p>Four steps, cheapest first. The measurements referenced below were taken on August 4-5,
                         2026, on one machine: a Linux container with 8 GiB of RAM and 4 cores, a SATA SSD, cold
                         page cache, single first runs, a 900-second timeout, and a 6 GB memory cap per tool.</p>
 
@@ -278,17 +278,19 @@ NODE_OPTIONS="--max-old-space-size=6144" json-diff a.json b.json</code></pre>
 
                     <ul>
                         <li><strong>jsondiffpatch 0.7.6</strong> (with <code>objectHash</code> configured) is the
-                            tool the bigger heap helps most: 2.5 s on 83 MB per side at 1.3 GB of RAM, 8 s on
-                            165 MB per side at 3.9 GB. Fast and correct — as long as the heap keeps up and the
-                            files stay under the string cap described below.</li>
-                        <li><strong>json-diff 1.0.6</strong> has a different bottleneck: time. It took 2 min 45 s
-                            on a 2 MB pair (at just 193 MB of RAM) and exceeded a 15-minute timeout on the
+                            tool the bigger heap helps most: 2.76 s on 83 MB per side at 1.3 GB of RAM, 9.17 s on
+                            165 MB per side at 3.9 GB. It found all 20 planted differences on both, and on the
+                            165 MB pair also reported one difference that is not there, at index 0. Fast — as
+                            long as the heap keeps up and the files stay under the string cap described
+                            below.</li>
+                        <li><strong>json-diff 1.0.6</strong> has a different bottleneck: time. It took 2 min 46 s
+                            on a 2 MB pair (at just 192 MB of RAM) and exceeded a 15-minute timeout on the
                             83-165 MB pairs. At 837 MB it never got that far: it refused the input in
-                            1.89 seconds with <code>ERR_STRING_TOO_LONG</code> — the same V8 string cap as
+                            2.40 seconds with <code>ERR_STRING_TOO_LONG</code> — the same V8 string cap as
                             jsondiffpatch. A bigger heap does not make it finish sooner.</li>
                         <li><strong>jd 2.5.0</strong> is a Go binary, so the Node flag does not apply — and its
                             limit is structural: memory grows quadratically with array length. Growing one array
-                            from 500 to 8,000 elements took it from 0.03 s and 12 MB to 13.4 s and 1.1 GB, and
+                            from 500 to 8,000 elements took it from 0.168 s and 12.7 MB to 14.15 s and 1.1 GB, and
                             on our test files it exceeded the 6 GB cap from 83 MB inputs upward. Against a
                             quadratic curve, headroom buys very little.</li>
                     </ul>
@@ -324,19 +326,22 @@ json-diff items-a.json items-b.json</code></pre>
                     <h3 id="step-3-jq">Step 3: The jq Recipe for Keyed Data</h3>
 
                     <p>When the inputs are NDJSON (or can be turned into it) and the records carry identity,
-                        normalize-sort-diff answers most questions in almost no memory:</p>
+                        normalize-sort-diff answers most questions in a fraction of the memory a tree diff
+                        needs:</p>
 
                     <pre><code>jq -S -c . a.ndjson | sort > a.norm
 jq -S -c . b.ndjson | sort > b.norm
 diff a.norm b.norm</code></pre>
 
-                    <p>Measured: 5.0 s at 3.4 MB of RAM on the 83 MB NDJSON pair, 56 s at 3.5 MB on the 837 MB
-                        NDJSON pair. On NDJSON/JSONL input, memory is flat because jq streams one record at a
-                        time — there, this recipe simply does not have the out-of-memory problem. On a
-                        single-document JSON file, jq must hold the whole parsed document: 2.3 GB on our 165 MB
-                        GeoJSON and 1.6 GB on a 156 MB document, so the flat-memory property is specific to
-                        newline-delimited input. Its limits are of a different kind: the output is text
-                        lines rather than a structural report, and jq preserves number literals, so
+                    <p>Measured: 5.2 s at 193 MB of RAM on the 83 MB NDJSON pair, 1 min 11 s at 2.0 GB on the
+                        837 MB NDJSON pair. <code>jq</code> itself stays near 3 MB on NDJSON because it streams
+                        one record at a time, but the recipe as a whole does not: the closing <code>diff</code>
+                        holds both normalized files, and that is where the peak comes from. This step lowers the
+                        memory bill substantially; it does not remove it. On a
+                        single-document JSON file, jq must additionally hold the whole parsed document: 2.3 GB on
+                        our 165 MB GeoJSON and 1.6 GB on a 156 MB document. Its limits are of a different kind:
+                        the output is text lines rather than a structural report, and jq preserves number
+                        literals, so
                         <code>1.0</code> versus <code>1.00</code> is flagged as a change. The full treatment,
                         including when the recipe is all you need, is in
                         <a href="../compare-ndjson-files/">How to Compare NDJSON Files When the Record Order
@@ -354,9 +359,10 @@ diff a.norm b.norm</code></pre>
                     <pre><code>gjxdiff a.json b.json > report.ndjson
 gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre>
 
-                    <p>The same benchmark files, gjxdiff 0.8.0, cold runs — the 1.36 GB row ran without the
-                        6 GB per-tool cap used above, because capping it would mask the memory-budget behavior
-                        being measured:</p>
+                    <p>The same benchmark files, gjxdiff 0.8.1, cold runs — the 1.36 GB row ran without the
+                        6 GB per-tool cap used above; its peak sits above that cap. Uncapped control runs of the
+                        other rows produced byte-identical output with times and peaks within noise of the capped
+                        ones:</p>
 
                     <table>
                         <thead>
@@ -369,28 +375,28 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         <tbody>
                             <tr>
                                 <td>2 MB pair</td>
-                                <td>0.11 s</td>
+                                <td>0.06 s</td>
                                 <td>14 MB</td>
                             </tr>
                             <tr>
                                 <td>83 MB per side, NDJSON, 310,000 records</td>
-                                <td>2.8 s</td>
+                                <td>1.5 s</td>
                                 <td>478 MB</td>
                             </tr>
                             <tr>
                                 <td>165 MB per side, real-world GeoJSON</td>
-                                <td>5.0 s</td>
-                                <td>920 MB</td>
+                                <td>3.2 s</td>
+                                <td>919 MB</td>
                             </tr>
                             <tr>
                                 <td>837 MB per side, NDJSON, 3.1 million records</td>
-                                <td>26 s</td>
-                                <td>3.9 GB</td>
+                                <td>16.5 s</td>
+                                <td>3.4-4.7 GB, state-dependent across four runs</td>
                             </tr>
                             <tr>
                                 <td>1.36 GB per side</td>
-                                <td>61 s</td>
-                                <td>4.7 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
+                                <td>about 46 s (32-52 s across repeats)</td>
+                                <td>4.8-8.5 GB (1.4 GB of it heap; the rest is reclaimable file-backed mmap pages the kernel counts)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -399,7 +405,9 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         and 837 MB per side), gjxdiff found all 20 planted differences with zero false positives;
                         a change-dense 156 MB pair in the same benchmark was verified by exact record accounting
                         (348,685 report records for 174,342 changed records), and the 1.36 GB pair is a scale run
-                        with no planted ground truth.</p>
+                        with no planted ground truth. The 2 MB pair is the one it does not clear: of five planted
+                        differences it reports four, because the planted move is not surfaced at all under default
+                        keyed matching. jsondiffpatch finds all five there and reports the move as a move.</p>
 
                     <div class="docs-callout">
                         <div class="docs-callout-title">
@@ -410,7 +418,7 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                             An Explicit Memory Limit, Honored
                         </div>
                         <p>With <code>--memory-limit 512M</code>, the multi-gigabyte pair still completed — in
-                            28 seconds using 42 MB of heap. The tighter budget forces a coarser comparison, and
+                            33-37 seconds using 41 MB of heap. The tighter budget forces a coarser comparison, and
                             the run says so explicitly in every output mode. That is the deal gjxdiff offers: you
                             set the ceiling, it fits under it, and anything the constraint coarsened is
                             disclosed rather than hidden.</p>
@@ -430,8 +438,8 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         before parsing, before diffing, before memory pressure even begins.</p>
 
                     <p>We measured exactly this: on the 837 MB file, jsondiffpatch — the strongest Node tool in
-                        our tests — failed in under a second, and json-diff refused the same file in
-                        1.89 seconds with the same error. Not slowly, not after swapping: instantly,
+                        our tests — failed in 1.00 second, and json-diff refused the same file in
+                        2.40 seconds with the same error. Not slowly, not after swapping: instantly,
                         because the file could not be read into a string. A 128 GB workstation fails identically
                         to a laptop, and <code>--max-old-space-size</code> is irrelevant. Every Node-based diff
                         tool that reads whole files in utf8 inherits this wall; the only ways past it are
@@ -468,7 +476,7 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         out of time first — json-diff exceeded a 15-minute timeout on the 83-165 MB pairs — and
                         nothing against V8's roughly 512 MiB string cap, which stops Node tools from even reading
                         larger files regardless of heap size; at 837 MB json-diff refused the input in
-                        1.89 seconds for exactly that reason.</p>
+                        2.40 seconds for exactly that reason.</p>
 
                     <h3 id="faq-err-string-too-long">What causes <code>ERR_STRING_TOO_LONG</code> ("Cannot
                         create a string longer than 0x1fffffe8 characters")?</h3>
@@ -482,17 +490,17 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                     <h3 id="faq-bigger-than-ram">How do I diff JSON files that are bigger than my RAM?</h3>
                     <p>Use a diff that does not parse the inputs into memory. gjxdiff memory-maps both files and
                         keeps its working state in temporary files under a fixed memory budget, so input size is
-                        bounded by disk. Measured on an 8 GiB Linux container: 837 MB per side in 26 seconds,
-                        1.36 GB per side in 61 seconds, and the same multi-gigabyte pair under
-                        <code>--memory-limit 512M</code> in 28 seconds using 42 MB of heap, with the coarser
+                        bounded by disk. Measured on an 8 GiB Linux container: 837 MB per side in 16.5 seconds,
+                        1.36 GB per side in about 46 seconds, and the same multi-gigabyte pair under
+                        <code>--memory-limit 512M</code> in 33-37 seconds using 41 MB of heap, with the coarser
                         result disclosed.</p>
 
                     <h3 id="faq-same-size-different-result">Why does a JSON diff crash on one file but work on
                         another of the same size?</h3>
                     <p>Structure matters as much as byte count. Some tools scale with the shape of the data, not
                         just its size: jd's memory grows quadratically with array length in our measurements —
-                        growing one array from 500 to 8,000 elements took it from 0.03 seconds and 12 MB to
-                        13.4 seconds and 1.1 GB. A file dominated by one huge array can therefore fail where a
+                        growing one array from 500 to 8,000 elements took it from 0.168 seconds and 12.7 MB to
+                        14.15 seconds and 1.1 GB. A file dominated by one huge array can therefore fail where a
                         larger but flatter file succeeds.</p>
 
                     <h3 id="faq-memory-limit">Can I put a hard memory limit on a JSON diff, for CI
@@ -502,7 +510,7 @@ gjxdiff --memory-limit 512M a.json b.json    # fit a small container</code></pre
                         container, more to spend a big machine. The limit is honored as given, and if a tighter
                         budget forces a coarser comparison, every output mode says so; nothing degrades
                         silently. Measured: a multi-gigabyte pair under <code>--memory-limit 512M</code>
-                        completed in 28 seconds using 42 MB of heap.</p>
+                        completed in 33-37 seconds using 41 MB of heap.</p>
 
                     <h2 id="conclusion">Conclusion</h2>
 
