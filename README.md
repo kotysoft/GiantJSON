@@ -32,7 +32,7 @@ A native Rust core with SIMD acceleration handles what JavaScript-based viewers 
 | **HAR** | `.har` | HTTP Archive files from Chrome DevTools, Firefox, etc. |
 | **Markdown** | `.md` `.markdown` `.mdown` | Full formatting, up to 50 MB |
 
-Text must be **UTF-8**. JSON and NDJSON have no size limit.
+Text must be **UTF-8**. The index format sets the outer bounds for JSON and NDJSON — up to **1 TB** per file, 255 levels of nesting and ~4.3 billion objects and arrays — and the index itself needs free space on the device. See [Known Limitations](https://giantjson.com/docs/known-limitations/).
 
 Files also come in from the clipboard, a direct URL, the API Client, or drag-and-drop from your computer over WiFi.
 
