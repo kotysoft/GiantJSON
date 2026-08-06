@@ -498,17 +498,21 @@
 
                     <h3 id="install">Install</h3>
 
-                    <p>Download the tarball from the repository's
-                        <a href="https://github.com/kotysoft/gjxdiff/tree/main/dist/0.8.1" target="_blank"
-                        rel="noopener">dist/0.8.1/</a> directory, verify its SHA-256 against the
-                        <code>SHA256SUMS</code> file published next to it, and put the binary on your
-                        <code>PATH</code> — full steps are in
+                    <p>Download the tarball from the
+                        <a href="https://github.com/kotysoft/gjxdiff/releases/latest" target="_blank"
+                        rel="noopener">latest release</a>, verify its SHA-256 against the
+                        <code>SHA256SUMS</code> published beside it, and put the binary on your
+                        <code>PATH</code>. The filenames do not change between releases, so these
+                        commands keep working — full steps are in
                         <a href="https://github.com/kotysoft/gjxdiff/blob/main/INSTALL.md" target="_blank"
                         rel="noopener">INSTALL.md</a>:</p>
 
-                    <pre><code>sha256sum gjxdiff-0.8.1-x86_64-linux-musl.tar.gz   # compare against SHA256SUMS in dist/0.8.1/
-tar xzf gjxdiff-0.8.1-x86_64-linux-musl.tar.gz     # extracts into gjxdiff-0.8.1-x86_64-linux-musl/
-sudo install -m 0755 gjxdiff-0.8.1-x86_64-linux-musl/gjxdiff /usr/local/bin/gjxdiff
+                    <pre><code>curl -LO https://github.com/kotysoft/gjxdiff/releases/latest/download/gjxdiff-x86_64-linux-musl.tar.gz
+curl -LO https://github.com/kotysoft/gjxdiff/releases/latest/download/SHA256SUMS
+sha256sum -c SHA256SUMS
+mkdir -p gjxdiff-dist
+tar xzf gjxdiff-x86_64-linux-musl.tar.gz -C gjxdiff-dist --strip-components=1
+sudo install -m 0755 gjxdiff-dist/gjxdiff /usr/local/bin/gjxdiff
 gjxdiff --version</code></pre>
 
                     <h3 id="basic-diff">Basic Diff</h3>
